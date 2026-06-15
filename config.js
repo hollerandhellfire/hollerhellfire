@@ -1,56 +1,254 @@
 /* =======================================================================
-   Holler & Hellfire — Site & Blog Configuration
+   Holler & Hellfire — Full Site Configuration
    -----------------------------------------------------------------------
-   Central config for the author site. Add new blog posts by appending an
-   object to the BLOG_POSTS array. Each post can be rendered by a template
-   page (blog.html) that reads from this file, or used to build an index.
+   Single source of truth for hollerandhellfire.net
+   Covers: site identity, navigation, music, books, merch, social,
+           email capture, blog posts, and page-level helpers.
 
-   Usage in a page:
-     <script src="config.js"></script>
-     <script> renderPostList(document.getElementById('post-list')); </script>
+   Usage on any page:
+     <script src="/config.js"></script>
+   Then call any helper or read any constant below.
    ======================================================================= */
 
+
+/* -----------------------------------------------------------------------
+   SITE IDENTITY
+   ----------------------------------------------------------------------- */
+
 const SITE = {
-  title: "Holler & Hellfire",
-  tagline: "Southern gothic folk horror from the Appalachian hills.",
-  author: "[Your Name]",
-  baseUrl: "https://your-domain.com",     // no trailing slash
-  // Email capture — same endpoint used on the landing page.
-  // Paste your MailerLite / Kit (ConvertKit) form POST URL here.
+  title:      "Holler & Hellfire",
+  tagline:    "Appalachian Gothic. Outlaw Country. Pike County, Kentucky.",
+  author:     "Kaylin Renea",
+  artistName: "Dixie Deadshot",
+  label:      "Holler & Hellfire Records",
+  baseUrl:    "https://hollerandhellfire.net",   // no trailing slash
+  logoPath:   "/assets/images/logo.png",          // update path as needed
+  faviconPath:"/assets/images/favicon.ico",
+
+  // Email capture — paste your MailerLite / Kit (ConvertKit) form POST URL
   emailEndpoint: "",
-  // Where the free-offer landing page lives, for CTAs in blog posts.
-  freeOfferUrl: "/index.html",
-  social: {
-    tiktok:    "https://tiktok.com/@yourhandle",
-    instagram: "https://instagram.com/yourhandle",
-    goodreads: "https://goodreads.com/yourprofile",
-    amazon:    "https://amazon.com/author/yourpage"
+
+  // Landing page / free prequel offer (used in blog CTAs and nav)
+  freeOfferUrl:  "/free-story.html",
+
+  // GoFundMe campaign
+  gofundmeUrl: "https://www.gofundme.com/",  // paste full URL when live
+
+  // Default SEO fallback (individual pages should override)
+  seo: {
+    description: "Holler & Hellfire is an Appalachian Gothic multimedia universe spanning 39 original novels, an outlaw country music catalog, and a streaming series in development.",
+    keywords:    "holler and hellfire, dixie deadshot, appalachian gothic, outlaw country, folk horror, pike county, kaylin renea, southern gothic, original novels, holler and hellfire records"
   }
 };
+
+
+/* -----------------------------------------------------------------------
+   NAVIGATION
+   Links used to build the header/footer nav on every page.
+   ----------------------------------------------------------------------- */
+
+const NAV = [
+  { label: "Home",     href: "/index.html" },
+  { label: "Music",    href: "/music.html" },
+  { label: "Books",    href: "/books.html" },
+  { label: "Merch",    href: "/merch.html" },
+  { label: "Blog",     href: "/blog.html" },
+  { label: "About",    href: "/about.html" },
+  { label: "Support",  href: "/support.html" }
+];
+
+
+/* -----------------------------------------------------------------------
+   SOCIAL LINKS
+   ----------------------------------------------------------------------- */
+
+const SOCIAL = {
+  youtube:    "https://www.youtube.com/@dixiedeadshot",   // update handle
+  tiktok:     "https://www.tiktok.com/@dixiedeadshot",
+  instagram:  "https://www.instagram.com/dixiedeadshot",
+  facebook:   "",
+  spotify:    "",     // add when distributed
+  appleMusic: "",
+  amazon:     "",     // amazon music / author page
+  goodreads:  ""
+};
+
+
+/* -----------------------------------------------------------------------
+   MUSIC CATALOG
+   Albums appear in the order listed. Tracks list under each album.
+   status: "released" | "unreleased" | "presale"
+   ----------------------------------------------------------------------- */
+
+const MUSIC = [
+  {
+    id:          "dead-reckoning-ep",
+    title:       "Dead Reckoning EP",
+    artist:      "Dixie Deadshot",
+    year:        2026,
+    status:      "released",          // primary publicly releasable album
+    cover:       "/assets/images/music/dead-reckoning-cover.jpg",
+    description: "Five tracks of outlaw grit and hellfire truth from Pike County.",
+    tracks: [
+      { n: 1, title: "Fuck Around & Find Out" },
+      { n: 2, title: "Whiskey & Warrants" },
+      { n: 3, title: "Gravel Road Gangster" },
+      { n: 4, title: "Dolly Never Packed a Strap" },
+      { n: 5, title: "Coal Dust & Casings" }
+    ],
+    links: {
+      youtube:    "",   // playlist or album video
+      spotify:    "",
+      appleMusic: "",
+      amazon:     ""
+    }
+  },
+  {
+    id:     "outlaw-heaven",
+    title:  "Outlaw Heaven",
+    artist: "Dixie Deadshot",
+    year:   2025,
+    status: "unreleased",
+    cover:  "/assets/images/music/outlaw-heaven-cover.jpg",
+    description: "",
+    tracks: [],
+    links:  { youtube: "", spotify: "", appleMusic: "", amazon: "" }
+  },
+  {
+    id:     "strike-me-down",
+    title:  "Strike Me Down",
+    artist: "Dixie Deadshot",
+    year:   2025,
+    status: "unreleased",
+    cover:  "/assets/images/music/strike-me-down-cover.jpg",
+    description: "",
+    tracks: [],
+    links:  { youtube: "", spotify: "", appleMusic: "", amazon: "" }
+  },
+  {
+    id:     "written-in-the-stars",
+    title:  "Written in the Stars",
+    artist: "Dixie Deadshot",
+    year:   2025,
+    status: "unreleased",
+    cover:  "/assets/images/music/written-in-the-stars-cover.jpg",
+    description: "",
+    tracks: [],
+    links:  { youtube: "", spotify: "", appleMusic: "", amazon: "" }
+  },
+  {
+    id:     "reflection",
+    title:  "Reflection",
+    artist: "Dixie Deadshot",
+    year:   2025,
+    status: "unreleased",
+    cover:  "/assets/images/music/reflection-cover.jpg",
+    description: "",
+    tracks: [],
+    links:  { youtube: "", spotify: "", appleMusic: "", amazon: "" }
+  }
+  // Add remaining albums as needed
+];
+
+
+/* -----------------------------------------------------------------------
+   BOOKS / NOVELS
+   The H&H Universe spans 39 novels. List them here.
+   status: "available" | "preorder" | "upcoming"
+   vol: volume number within the series
+   ----------------------------------------------------------------------- */
+
+const BOOKS = [
+  {
+    id:          "fallin-for-a-fallen",
+    vol:         1,
+    title:       "Fallin' For A Fallen",
+    series:      "Holler & Hellfire Universe",
+    author:      "Kaylin Renea",
+    year:        2026,
+    status:      "preorder",        // launching at end of 30-day campaign
+    cover:       "/assets/images/books/fallin-for-a-fallen-cover.jpg",
+    description: "The novel that started it all. Pike County, Kentucky — where the Veil runs thin and the Calhoun women have always known why.",
+    isbn:        "",
+    links: {
+      amazon:    "",
+      goodreads: "",
+      direct:    ""     // your own store/Gumroad if applicable
+    }
+  }
+  // Add Vol. 2–39 here as they become available
+];
+
+
+/* -----------------------------------------------------------------------
+   KEY CHARACTERS
+   Used for About/Universe pages, press kits, etc.
+   ----------------------------------------------------------------------- */
+
+const CHARACTERS = [
+  { name: "Raelee Calhoun",  alias: "Dixie Deadshot",  role: "Protagonist" },
+  { name: "Brian Lee",       alias: "",                 role: "Core cast" },
+  { name: "Azazel",          alias: "",                 role: "Antagonist / force" },
+  { name: "Bone Mother",     alias: "",                 role: "Mythic figure" },
+  { name: "Samyaza",         alias: "",                 role: "Core cast" },
+  { name: "Saraquel",        alias: "",                 role: "Core cast" },
+  { name: "Mreza",           alias: "",                 role: "Core cast" },
+  { name: "Leviathan",       alias: "",                 role: "Antagonist / force" }
+];
+
+
+/* -----------------------------------------------------------------------
+   MERCH
+   Add products as they go live.
+   ----------------------------------------------------------------------- */
+
+const MERCH = [
+  // {
+  //   id:       "deadshot-tee",
+  //   title:    "Dixie Deadshot Logo Tee",
+  //   price:    25.00,
+  //   image:    "/assets/images/merch/deadshot-tee.jpg",
+  //   storeUrl: "https://your-store.com/products/deadshot-tee",
+  //   status:   "available"   // "available" | "sold-out" | "coming-soon"
+  // }
+];
+
+
+/* -----------------------------------------------------------------------
+   STREAMING SERIES
+   Pre-production info block for the landing/about pages.
+   ----------------------------------------------------------------------- */
+
+const SERIES = {
+  title:       "Holler & Hellfire",
+  logline:     "An Appalachian Gothic streaming series set in Pike County, Kentucky — where the Veil is breaking and the women who've kept it shut are running out of time.",
+  status:      "Pre-production",
+  updatesUrl:  ""   // link to newsletter, mailing list, or press page
+};
+
 
 /* -----------------------------------------------------------------------
    BLOG POSTS
    Each entry:
-     slug         unique url-safe id (becomes ?post=slug or /blog/slug)
+     slug         unique url-safe id (becomes ?post=slug)
      title        H1 + <title>
-     description  meta description for SEO (~150 chars)
-     date         ISO date "YYYY-MM-DD"
-     keywords     comma string for <meta name="keywords"> + internal search
-     cover        path to header image (optional, "" if none)
+     description  meta description (~150 chars)
+     date         ISO "YYYY-MM-DD"
+     keywords     comma string
+     cover        path to header image ("" if none)
      readMins     estimated read time
-     body         HTML string of the post content
-   Add new posts by copying the last object and editing it.
+     body         HTML string of post content
    ----------------------------------------------------------------------- */
 
 const BLOG_POSTS = [
   {
-    slug: "appalachian-folk-magic-behind-holler-and-hellfire",
-    title: "The Real Appalachian Folk Magic Behind Holler & Hellfire",
+    slug:        "appalachian-folk-magic-behind-holler-and-hellfire",
+    title:       "The Real Appalachian Folk Magic Behind Holler & Hellfire",
     description: "The Southern gothic world of Holler & Hellfire is built on real Appalachian folk magic and mountain belief. What's true, what's invented, and where to start reading.",
-    date: "2026-05-28",
-    keywords: "appalachian folk magic, southern gothic, folk horror, mountain folklore, holler and hellfire, fantasy books",
-    cover: "",
-    readMins: 5,
+    date:        "2026-05-28",
+    keywords:    "appalachian folk magic, southern gothic, folk horror, mountain folklore, holler and hellfire, fantasy books",
+    cover:       "",
+    readMins:    5,
     body: `
       <p>People who read the first pages of <em>Holler &amp; Hellfire</em> tend to ask the same question: how much of this is real?</p>
       <p>The honest answer is that the places are invented but the beliefs are not. The mountain culture that runs through these books&mdash;the women who read the signs, the porch knowledge passed grandmother to granddaughter, the sense that some doors are better left shut&mdash;comes from a tradition that genuinely shaped life across the Appalachian region for generations.</p>
@@ -78,11 +276,81 @@ const BLOG_POSTS = [
   //    keywords: "...", cover: "", readMins: 4, body: `...` }
 ];
 
+
 /* -----------------------------------------------------------------------
-   Helpers — small renderers a blog template page can call.
+   HELPERS
+   Small functions any page can call after loading this file.
    ----------------------------------------------------------------------- */
 
-// Return a post by slug (from ?post=slug in the URL, or passed in).
+// --- Nav ---
+// Inject a <nav> into `el`, marking the current page active.
+function renderNav(el) {
+  if (!el) return;
+  const current = window.location.pathname.split("/").pop() || "index.html";
+  el.innerHTML = NAV.map(item => {
+    const active = item.href.includes(current) ? ' class="active"' : "";
+    return `<a href="${item.href}"${active}>${item.label}</a>`;
+  }).join("");
+}
+
+// --- Social icons (text links fallback) ---
+function renderSocialLinks(el) {
+  if (!el) return;
+  const labels = {
+    youtube:"YouTube", tiktok:"TikTok", instagram:"Instagram",
+    facebook:"Facebook", spotify:"Spotify", appleMusic:"Apple Music",
+    amazon:"Amazon Music", goodreads:"Goodreads"
+  };
+  el.innerHTML = Object.entries(SOCIAL)
+    .filter(([, url]) => url)
+    .map(([key, url]) => `<a class="social-link social-${key}" href="${url}" target="_blank" rel="noopener">${labels[key] || key}</a>`)
+    .join("");
+}
+
+// --- Music ---
+// Render album cards (released only by default; pass true to show all)
+function renderAlbums(el, showAll = false) {
+  if (!el) return;
+  const list = showAll ? MUSIC : MUSIC.filter(a => a.status === "released");
+  el.innerHTML = list.map(a => `
+    <div class="album-card" id="album-${a.id}">
+      ${a.cover ? `<img class="album-cover" src="${a.cover}" alt="${a.title} cover">` : ""}
+      <div class="album-title">${a.title}</div>
+      <div class="album-meta">${a.artist} &middot; ${a.year}</div>
+      ${a.description ? `<p class="album-desc">${a.description}</p>` : ""}
+      ${a.tracks.length ? `<ol class="track-list">${a.tracks.map(t => `<li>${t.title}</li>`).join("")}</ol>` : ""}
+      <div class="album-links">
+        ${a.links.youtube    ? `<a href="${a.links.youtube}"    target="_blank" rel="noopener">YouTube</a>` : ""}
+        ${a.links.spotify    ? `<a href="${a.links.spotify}"    target="_blank" rel="noopener">Spotify</a>` : ""}
+        ${a.links.appleMusic ? `<a href="${a.links.appleMusic}" target="_blank" rel="noopener">Apple Music</a>` : ""}
+        ${a.links.amazon     ? `<a href="${a.links.amazon}"     target="_blank" rel="noopener">Amazon Music</a>` : ""}
+      </div>
+    </div>
+  `).join("");
+}
+
+// --- Books ---
+function renderBooks(el, showAll = false) {
+  if (!el) return;
+  const list = showAll ? BOOKS : BOOKS.filter(b => b.status !== "upcoming");
+  el.innerHTML = list.map(b => `
+    <div class="book-card" id="book-${b.id}">
+      ${b.cover ? `<img class="book-cover" src="${b.cover}" alt="${b.title} cover">` : ""}
+      <div class="book-vol">Vol. ${b.vol}</div>
+      <div class="book-title">${b.title}</div>
+      <div class="book-meta">${b.author} &middot; ${b.year}</div>
+      ${b.description ? `<p class="book-desc">${b.description}</p>` : ""}
+      <div class="book-status">${b.status.charAt(0).toUpperCase() + b.status.slice(1)}</div>
+      <div class="book-links">
+        ${b.links.amazon    ? `<a href="${b.links.amazon}"    target="_blank" rel="noopener">Amazon</a>` : ""}
+        ${b.links.goodreads ? `<a href="${b.links.goodreads}" target="_blank" rel="noopener">Goodreads</a>` : ""}
+        ${b.links.direct    ? `<a href="${b.links.direct}"    target="_blank" rel="noopener">Buy Direct</a>` : ""}
+      </div>
+    </div>
+  `).join("");
+}
+
+// --- Blog ---
 function getPost(slug) {
   if (!slug) {
     const params = new URLSearchParams(window.location.search);
@@ -91,7 +359,6 @@ function getPost(slug) {
   return BLOG_POSTS.find(p => p.slug === slug) || null;
 }
 
-// Render a list of post cards (newest first) into a container element.
 function renderPostList(el) {
   if (!el) return;
   const posts = [...BLOG_POSTS].sort((a, b) => b.date.localeCompare(a.date));
@@ -104,13 +371,11 @@ function renderPostList(el) {
   `).join("");
 }
 
-// Render a single post (title, meta, body, CTA) into a container element.
 function renderPost(el, slug) {
   if (!el) return;
   const p = getPost(slug);
   if (!p) { el.innerHTML = "<p>Post not found.</p>"; return; }
 
-  // SEO: set document title + meta description dynamically
   document.title = `${p.title} — ${SITE.title}`;
   setMeta("description", p.description);
   setMeta("keywords", p.keywords);
@@ -130,18 +395,53 @@ function renderPost(el, slug) {
   `;
 }
 
+// --- Email capture ---
+async function submitEmail(email, successEl, errorEl) {
+  if (!SITE.emailEndpoint) return;
+  try {
+    const res = await fetch(SITE.emailEndpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email })
+    });
+    if (res.ok) {
+      if (successEl) successEl.style.display = "block";
+    } else {
+      throw new Error("Server error");
+    }
+  } catch {
+    if (errorEl) errorEl.style.display = "block";
+  }
+}
+
+// --- SEO helpers ---
+function setPageSEO(title, description, keywords) {
+  document.title = title ? `${title} — ${SITE.title}` : SITE.title;
+  setMeta("description", description || SITE.seo.description);
+  setMeta("keywords",    keywords    || SITE.seo.keywords);
+}
+
+function setMeta(name, content) {
+  let tag = document.querySelector(`meta[name="${name}"]`);
+  if (!tag) {
+    tag = document.createElement("meta");
+    tag.name = name;
+    document.head.appendChild(tag);
+  }
+  tag.content = content;
+}
+
 function formatDate(iso) {
   const d = new Date(iso + "T00:00:00");
   return d.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" });
 }
 
-function setMeta(name, content) {
-  let tag = document.querySelector(`meta[name="${name}"]`);
-  if (!tag) { tag = document.createElement("meta"); tag.name = name; document.head.appendChild(tag); }
-  tag.content = content;
-}
-
-// Make available if loaded as a module elsewhere.
+// --- Module export (Node / build tools) ---
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { SITE, BLOG_POSTS, getPost, renderPostList, renderPost };
+  module.exports = {
+    SITE, NAV, SOCIAL, MUSIC, BOOKS, CHARACTERS, MERCH, SERIES, BLOG_POSTS,
+    renderNav, renderSocialLinks, renderAlbums, renderBooks,
+    getPost, renderPostList, renderPost,
+    submitEmail, setPageSEO, setMeta, formatDate
+  };
 }
