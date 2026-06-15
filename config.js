@@ -49,12 +49,14 @@ const SITE = {
 
 const NAV = [
   { label: "Home",     href: "/index.html" },
-  { label: "Music",    href: "/music.html" },
+  { label: "Music",    href: "/holler_hellfire_records.html" },
   { label: "Books",    href: "/books.html" },
-  { label: "Merch",    href: "/merch.html" },
+  { label: "Author",   href: "/kaylin_renea_author.html" },
+  { label: "Merch",    href: "/store.html" },
   { label: "Blog",     href: "/blog.html" },
-  { label: "About",    href: "/about.html" },
-  { label: "Support",  href: "/support.html" }
+  { label: "EPK",      href: "/epk.html" },
+  { label: "WEBBS ENTREPENURESHIP",   href: "/webbs_entrepenureship.html" },
+  { label: "Brian Lee - Founder",  href: "/brian_lee_webb_website.html" }
 ];
 
 
