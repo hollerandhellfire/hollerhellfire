@@ -49,6 +49,7 @@ const SITE = {
 
 const NAV = [
   { label: "Home",     href: "/index.html" },
+  { label: "Universe", href: "/bible.html" },
   { label: "Music",    href: "/holler_hellfire_records.html" },
   { label: "Books",    href: "/books.html" },
   { label: "Author",   href: "/kaylin_renea_author.html" },
