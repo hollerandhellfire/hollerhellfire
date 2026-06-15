@@ -22,7 +22,7 @@ const SITE = {
   artistName: "Dixie Deadshot",
   label:      "Holler & Hellfire Records",
   baseUrl:    "https://hollerandhellfire.net",   // no trailing slash
-  logoPath:   "/assets/images/logo.png",          // update path as needed
+  logoPath:   "/assets/images/banners_logos/main.png",          // update path as needed
   faviconPath:"/assets/images/favicon.ico",
 
   // Email capture — paste your MailerLite / Kit (ConvertKit) form POST URL
@@ -89,7 +89,7 @@ const MUSIC = [
     artist:      "Dixie Deadshot",
     year:        2026,
     status:      "released",          // primary publicly releasable album
-    cover:       "/assets/images/music/dead-reckoning-cover.jpg",
+    cover:       "/assets/images/album_art/deadreckoning.jpeg",
     description: "Five tracks of outlaw grit and hellfire truth from Pike County.",
     tracks: [
       { n: 1, title: "Fuck Around & Find Out" },
@@ -111,7 +111,7 @@ const MUSIC = [
     artist: "Dixie Deadshot",
     year:   2025,
     status: "unreleased",
-    cover:  "/assets/images/music/outlaw-heaven-cover.jpg",
+    cover:  "/assets/images/album_art/outtlaw_heaven.png",
     description: "",
     tracks: [],
     links:  { youtube: "", spotify: "", appleMusic: "", amazon: "" }
@@ -122,7 +122,7 @@ const MUSIC = [
     artist: "Dixie Deadshot",
     year:   2025,
     status: "unreleased",
-    cover:  "/assets/images/music/strike-me-down-cover.jpg",
+    cover:  "/assets/images/album_art/strike_album.png",
     description: "",
     tracks: [],
     links:  { youtube: "", spotify: "", appleMusic: "", amazon: "" }
@@ -133,7 +133,7 @@ const MUSIC = [
     artist: "Dixie Deadshot",
     year:   2025,
     status: "unreleased",
-    cover:  "/assets/images/music/written-in-the-stars-cover.jpg",
+    cover:  "/assets/images/album_art/written_album.png",
     description: "",
     tracks: [],
     links:  { youtube: "", spotify: "", appleMusic: "", amazon: "" }
@@ -144,7 +144,7 @@ const MUSIC = [
     artist: "Dixie Deadshot",
     year:   2025,
     status: "unreleased",
-    cover:  "/assets/images/music/reflection-cover.jpg",
+    cover:  "/assets/images/album_art/reflection_album.png",
     description: "",
     tracks: [],
     links:  { youtube: "", spotify: "", appleMusic: "", amazon: "" }
@@ -169,7 +169,7 @@ const BOOKS = [
     author:      "Kaylin Renea",
     year:        2026,
     status:      "preorder",        // launching at end of 30-day campaign
-    cover:       "/assets/images/books/fallin-for-a-fallen-cover.jpg",
+    cover:       "/assets/images/book art/fallinforafallen.png",
     description: "The novel that started it all. Pike County, Kentucky — where the Veil runs thin and the Calhoun women have always known why.",
     isbn:        "",
     links: {
