@@ -1,0 +1,39 @@
+# ─── NETLIFY DEPLOYMENT CONFIG ────────────────────────────────────────
+# Static HTML/CSS/JS site — no build step required.
+# Just push this folder to GitHub and connect the repo to Netlify.
+
+[build]
+  publish = "."
+
+# ─── HTTP HEADERS ─────────────────────────────────────────────────────
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options          = "SAMEORIGIN"
+    X-Content-Type-Options   = "nosniff"
+    Referrer-Policy          = "strict-origin-when-cross-origin"
+    Permissions-Policy       = "geolocation=(), microphone=(), camera=()"
+
+# ─── CACHE STRATEGY ───────────────────────────────────────────────────
+# HTML: no cache (so config.js edits show immediately)
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# config.js: no cache (the file the user actively edits)
+[[headers]]
+  for = "/config.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# Static assets: long cache
+[[headers]]
+  for = "/images/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/styles.css"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

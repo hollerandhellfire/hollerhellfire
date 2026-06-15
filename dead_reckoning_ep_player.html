@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Dead Reckoning — Dixie Deadshot · Holler &amp; Hellfire Records</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=IM+Fell+English:ital@0;1&family=Oswald:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+
+  :root{
+    --bg:#080808; --bg2:#0e0e0e;
+    --parchment:#f0ddb0; --parchment2:#c8a96e;
+    --crimson:#8b0000; --crimson2:#b30000;
+    --gold:#c9922a; --gold2:#e8b84b;
+    --ash:#a09080; --dim:#5a5040;
+  }
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'IM Fell English',Georgia,serif;
+    background:var(--bg); color:var(--parchment); min-height:100vh;
+  }
+  nav{
+    position:sticky;top:0;z-index:200;
+    background:rgba(5,2,0,0.97);
+    border-bottom:1px solid rgba(201,146,42,0.2);
+    padding:0 1.5rem;
+  }
+  .nav-inner{
+    max-width:1000px;margin:0 auto;
+    display:flex;align-items:center;gap:1rem;height:54px;
+  }
+  .nav-logo{
+    font-family:'Cinzel',serif;font-weight:900;font-size:0.9rem;
+    letter-spacing:0.12em;color:var(--gold);text-decoration:none;
+  }
+  .nav-logo span{color:var(--crimson2)}
+  .nav-crumb{
+    font-family:'Oswald',sans-serif;font-size:0.72rem;
+    letter-spacing:0.08em;color:var(--dim);
+  }
+  .nav-back{
+    margin-left:auto;
+    font-family:'Oswald',sans-serif;font-size:0.72rem;
+    letter-spacing:0.1em;text-transform:uppercase;
+    color:var(--ash);text-decoration:none;transition:color 0.2s;
+  }
+  .nav-back:hover{color:var(--gold)}
+  .hero{
+    padding:3.5rem 2rem 3rem;
+    border-bottom:1px solid rgba(201,146,42,0.12);
+  }
+  .hero-inner{
+    max-width:1000px;margin:0 auto;
+    display:grid;grid-template-columns:300px 1fr;
+    gap:3rem;align-items:start;
+  }
+  .cover-wrap{position:relative}
+  .cover-img{
+    width:100%;border-radius:4px;display:block;
+    box-shadow:0 8px 48px rgba(0,0,0,0.85),0 0 0 1px rgba(201,146,42,0.22);
+    transition:transform 0.3s,box-shadow 0.3s;
+  }
+  .cover-img:hover{
+    transform:scale(1.015) translateY(-3px);
+    box-shadow:0 16px 60px rgba(0,0,0,0.9),0 0 0 1px rgba(201,146,42,0.4);
+  }
+  .cover-placeholder{
+    width:100%;aspect-ratio:1;
+    background:linear-gradient(135deg,#1a0800 0%,#0a0000 100%);
+    border:1px solid rgba(201,146,42,0.2);border-radius:4px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.5rem;
+  }
+  .cover-badge{
+    position:absolute;top:10px;left:10px;
+    background:rgba(0,0,0,0.8);border:1px solid rgba(201,146,42,0.3);
+    font-family:'Oswald',sans-serif;font-size:0.62rem;
+    letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);
+    padding:0.22rem 0.55rem;border-radius:2px;
+  }
+  .album-info{padding-top:0.25rem}
+  .album-eyebrow{
+    font-family:'Oswald',sans-serif;font-size:0.68rem;
+    letter-spacing:0.25em;text-transform:uppercase;
+    color:var(--crimson2);margin-bottom:0.5rem;
+  }
+  .album-title{
+    font-family:'Cinzel',serif;font-weight:900;
+    font-size:clamp(1.8rem,3.5vw,3rem);
+    color:var(--gold2);line-height:1.05;
+    text-shadow:0 2px 20px rgba(201,146,42,0.25);
+    margin-bottom:0.2rem;
+  }
+  .album-artist{
+    font-family:'Oswald',sans-serif;font-size:0.82rem;
+    letter-spacing:0.2em;text-transform:uppercase;
+    color:var(--crimson2);margin-bottom:0.4rem;
+  }
+  .album-meta-line{
+    font-family:'Oswald',sans-serif;font-size:0.72rem;
+    letter-spacing:0.07em;color:var(--dim);margin-bottom:1.1rem;
+  }
+  .album-desc{
+    font-size:0.9rem;color:var(--parchment2);
+    line-height:1.82;margin-bottom:1.2rem;max-width:520px;
+  }
+  .album-dedication{
+    font-style:italic;font-size:0.8rem;color:var(--ash);
+    border-left:2px solid rgba(201,146,42,0.22);padding-left:0.75rem;
+    line-height:1.7;
+  }
+  /* PLAYER */
+  .main-player{
+    background:rgba(0,0,0,0.45);
+    border:1px solid rgba(201,146,42,0.18);
+    border-radius:3px;padding:0.9rem 1.1rem;margin-top:1.4rem;
+  }
+  .player-now-title{
+    font-size:0.82rem;color:var(--parchment2);
+    font-style:italic;margin-bottom:0.1rem;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  .player-now-sub{
+    font-family:'Oswald',sans-serif;font-size:0.63rem;
+    letter-spacing:0.07em;color:var(--dim);margin-bottom:0.6rem;
+  }
+  .prog-area{cursor:pointer;padding:5px 0;margin-bottom:0.65rem;}
+  .prog-track{height:3px;background:rgba(255,255,255,0.09);border-radius:2px;overflow:hidden;}
+  .prog-fill{
+    height:100%;width:0%;
+    background:linear-gradient(90deg,var(--crimson),var(--gold));
+    border-radius:2px;transition:width 0.25s linear;
+  }
+  .player-controls{display:flex;align-items:center;gap:0.65rem;}
+  .ctrl{
+    background:none;border:1px solid rgba(201,146,42,0.22);
+    border-radius:50%;color:var(--gold);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;
+    transition:background 0.15s,border-color 0.15s;flex-shrink:0;
+  }
+  .ctrl:hover{background:rgba(201,146,42,0.12);border-color:var(--gold)}
+  .ctrl.play-btn{width:40px;height:40px;font-size:0.95rem;}
+  .ctrl.sm{width:30px;height:30px;font-size:0.68rem;}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.35}}
+  .ctrl.loading{animation:pulse 0.9s infinite;}
+  .time-disp{
+    font-family:'Oswald',sans-serif;font-size:0.7rem;
+    color:var(--dim);white-space:nowrap;margin-left:auto;
+  }
+  .vol-wrap{display:flex;align-items:center;gap:0.35rem;}
+  .vol-icon{font-size:0.78rem;}
+  input.vol-range{
+    -webkit-appearance:none;width:58px;height:3px;
+    background:rgba(255,255,255,0.13);border-radius:2px;
+    outline:none;cursor:pointer;
+  }
+  input.vol-range::-webkit-slider-thumb{
+    -webkit-appearance:none;width:11px;height:11px;
+    border-radius:50%;background:var(--gold);cursor:pointer;
+  }
+  /* TRACKLIST */
+  .tl-wrap{max-width:1000px;margin:0 auto;padding:2.5rem 2rem 3rem;}
+  .orn{text-align:center;color:var(--gold);font-size:0.9rem;letter-spacing:0.4em;margin:0.8rem 0;opacity:0.55;}
+  .tl-head{
+    display:grid;grid-template-columns:40px 28px 1fr 190px 62px;
+    padding:0.45rem 0.9rem;
+    font-family:'Oswald',sans-serif;font-size:0.62rem;
+    letter-spacing:0.14em;text-transform:uppercase;color:var(--dim);
+    border-bottom:1px solid rgba(201,146,42,0.1);margin-bottom:0.25rem;
+  }
+  .tl-head.no-sub{grid-template-columns:40px 28px 1fr 62px;}
+  .tr{
+    display:grid;grid-template-columns:40px 28px 1fr 190px 62px;
+    align-items:center;padding:0.6rem 0.9rem;
+    border-radius:3px;cursor:pointer;
+    transition:background 0.15s;
+    border-bottom:1px solid rgba(255,255,255,0.03);
+  }
+  .tr.no-sub{grid-template-columns:40px 28px 1fr 62px;}
+  .tr:hover{background:rgba(201,146,42,0.055);}
+  .tr.active{background:rgba(139,0,0,0.13);}
+  .tr.pending{cursor:default;opacity:0.4;}
+  .tr.pending:hover{background:transparent;}
+  .tr-num{
+    font-family:'Oswald',sans-serif;font-size:0.7rem;
+    color:var(--dim);text-align:center;
+  }
+  .tr.active .tr-num{color:var(--gold);}
+  .tr-play{font-size:0.72rem;color:var(--gold);display:none;}
+  .tr:not(.pending):hover .tr-num{display:none;}
+  .tr:not(.pending):hover .tr-play{display:block;}
+  .tr.active .tr-num{display:none;}
+  .tr.active .tr-play{display:block;color:var(--crimson2);}
+  .tr-name{
+    font-size:0.88rem;color:var(--parchment);
+    padding:0 0.4rem;transition:color 0.15s;
+  }
+  .tr.active .tr-name{color:var(--gold2);}
+  .tr-book{
+    font-family:'Oswald',sans-serif;font-size:0.65rem;
+    letter-spacing:0.04em;color:var(--dim);padding:0 0.3rem;
+  }
+  .tr-badge{
+    font-family:'Oswald',sans-serif;font-size:0.58rem;
+    letter-spacing:0.08em;text-transform:uppercase;color:var(--crimson);
+    border:1px solid rgba(139,0,0,0.3);border-radius:2px;
+    padding:0.08rem 0.35rem;display:inline-block;
+  }
+  .tr-dur{
+    font-family:'Oswald',sans-serif;font-size:0.72rem;
+    color:var(--dim);text-align:right;
+  }
+  /* FOOTER */
+  footer{
+    background:#040404;
+    border-top:1px solid rgba(201,146,42,0.12);
+    padding:2rem;text-align:center;
+  }
+  .footer-logo{
+    font-family:'Cinzel',serif;font-size:0.95rem;font-weight:900;
+    letter-spacing:0.15em;color:var(--gold);margin-bottom:0.4rem;
+  }
+  .footer-copy{font-size:0.73rem;color:var(--dim);font-style:italic;line-height:1.9;}
+  .footer-copy a{color:var(--ash);text-decoration:none;}
+  .footer-copy a:hover{color:var(--gold);}
+  @media(max-width:700px){
+    .hero-inner{grid-template-columns:1fr;gap:1.8rem;}
+    .cover-wrap{max-width:260px;margin:0 auto;}
+    .tl-head,.tr{grid-template-columns:36px 24px 1fr 56px!important;}
+    .tr-book{display:none;} .tl-head>:nth-child(4){display:none;}
+  }
+
+.hero{background:linear-gradient(155deg,#100000 0%,#0a0000 55%,#080808 100%);}
+.explicit-badge{
+  display:inline-block;margin-bottom:0.7rem;
+  font-family:'Oswald',sans-serif;font-size:0.6rem;letter-spacing:0.12em;
+  text-transform:uppercase;color:white;
+  background:rgba(139,0,0,0.7);border:1px solid var(--crimson2);
+  padding:0.18rem 0.55rem;border-radius:2px;
+}
+</style>
+</head>
+<body>
+<div data-familybar="1" style="background:#0a1f2e;display:flex;align-items:center;justify-content:center;gap:0.4rem;flex-wrap:wrap;padding:0.1rem 1rem;border-bottom:1px solid rgba(201,146,42,0.25);"><a href="index.html" style="font-family:'Inter',Arial,sans-serif;font-size:0.71rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;padding:0.55rem 1rem;white-space:nowrap;display:inline-block;color:#8fb0c8;">Webbs Entrepreneurship</a><span style="color:#2a4255;">&bull;</span><a href="brian_lee_webb_website.html" style="font-family:'Inter',Arial,sans-serif;font-size:0.71rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;padding:0.55rem 1rem;white-space:nowrap;display:inline-block;color:#8fb0c8;">Brian Lee Webb</a><span style="color:#2a4255;">&bull;</span><a href="kaylin_renea_author.html" style="font-family:'Inter',Arial,sans-serif;font-size:0.71rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;padding:0.55rem 1rem;white-space:nowrap;display:inline-block;color:#8fb0c8;">Kaylin Renea — Author</a><span style="color:#2a4255;">&bull;</span><a href="holler_hellfire_records.html" style="font-family:'Inter',Arial,sans-serif;font-size:0.71rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;text-decoration:none;padding:0.55rem 1rem;white-space:nowrap;display:inline-block;color:#C9922A;border-bottom:2px solid #C9922A;">Holler &amp; Hellfire Records</a></div>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="holler_hellfire_records.html">H<span>&amp;</span>H RECORDS</a>
+    <span class="nav-crumb">/ DEAD RECKONING EP</span>
+    <a class="nav-back" href="holler_hellfire_records.html">← Full Catalog</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="cover-wrap">
+      <span class="cover-badge">EP</span>
+      <div class="cover-placeholder">
+  <div style="font-family:Cinzel,serif;font-size:2rem;color:rgba(201,146,42,0.5);">🎯</div>
+  <div style="font-family:Cinzel,serif;font-size:0.75rem;letter-spacing:0.12em;color:rgba(201,146,42,0.4);text-align:center;padding:0 1rem;">DEAD RECKONING<br/><span style="font-family:Oswald,sans-serif;font-size:0.6rem;color:rgba(160,144,128,0.5);">Cover Art Coming Soon</span></div>
+</div>
+    </div>
+    <div class="album-info">
+      <p class="album-eyebrow">⚜ Holler &amp; Hellfire Records · Standalone EP ⚜</p>
+      <h1 class="album-title">Dead Reckoning</h1>
+      <p class="album-artist">Dixie Deadshot</p>
+      <p class="album-meta-line">5 Tracks · Standalone · Before the Watcher Showed Up · Outlaw Country Rap · Pike County, KY</p>
+      <span class="explicit-badge">⚠ Explicit Content · 18+</span>
+      <p class="album-desc">The EP that named her. Five tracks of outlaw country rap from the back roads of Pike County — before any Watcher showed up, before the Thinning opened, before any of it. This is where Raelee Calhoun became Dixie Deadshot. The rawest record in the catalog.</p>
+      <p class="album-dedication">Not a book companion — Dixie's own story, in her own voice, before the universe had a name.</p>
+      <div class="main-player">
+        <div class="player-now-title" id="nowTitle">Select a track to begin</div>
+        <div class="prog-area" onclick="seekAudio(event)">
+          <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+        </div>
+        <div class="player-controls">
+          <button class="ctrl sm" onclick="prevTrack()">⏮</button>
+          <button class="ctrl play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+          <button class="ctrl sm" onclick="nextTrack()">⏭</button>
+          <span class="time-disp" id="timeDisp">0:00 / 0:00</span>
+          <div class="vol-wrap">
+            <span class="vol-icon">🔊</span>
+            <input type="range" class="vol-range" min="0" max="1" step="0.02" value="0.85"/>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="orn">✦ ✦ ✦</div>
+
+<div class="tl-wrap">
+  <div class="tl-head no-sub">
+    <span>#</span><span></span><span>Title</span><span style="text-align:right">Dur</span>
+  </div>
+  <div class="tr no-sub" id="tr_0" onclick="loadAndPlay(0)">
+  <span class="tr-num">01<span class="tr-play">▶</span></span>
+  <span></span>
+  <span class="tr-name">Fuck Around & Find Out</span>
+  
+  <span class="tr-dur">—</span>
+</div>
+<div class="tr no-sub" id="tr_1" onclick="loadAndPlay(1)">
+  <span class="tr-num">02<span class="tr-play">▶</span></span>
+  <span></span>
+  <span class="tr-name">Whiskey & Warrants</span>
+  
+  <span class="tr-dur">—</span>
+</div>
+<div class="tr no-sub" id="tr_2" onclick="loadAndPlay(2)">
+  <span class="tr-num">03<span class="tr-play">▶</span></span>
+  <span></span>
+  <span class="tr-name">Gravel Road Gangster</span>
+  
+  <span class="tr-dur">—</span>
+</div>
+<div class="tr no-sub" id="tr_3" onclick="loadAndPlay(3)">
+  <span class="tr-num">04<span class="tr-play">▶</span></span>
+  <span></span>
+  <span class="tr-name">Dolly Never Packed a Strap</span>
+  
+  <span class="tr-dur">—</span>
+</div>
+<div class="tr no-sub" id="tr_4" onclick="loadAndPlay(4)">
+  <span class="tr-num">05<span class="tr-play">▶</span></span>
+  <span></span>
+  <span class="tr-name">Coal Dust & Casings</span>
+  
+  <span class="tr-dur">—</span>
+</div>
+</div>
+
+<footer>
+  <div class="footer-logo">HOLLER &amp; HELLFIRE RECORDS</div>
+  <div class="footer-copy">
+    © 2026 Holler &amp; Hellfire Records · All compositions written by Kaylin Renea<br/>
+    Performed as Dixie Deadshot · A <a href="#">Webbs Entrepreneurship</a> Company<br/>
+    ⚠ Explicit Content · 18+ Only<br/>
+    <a href="holler_hellfire_records.html">← Return to Full Catalog</a>
+  </div>
+</footer>
+
+<audio id="audioEl" preload="none"></audio>
+<script>
+const TRACKS = [
+  {num:"01",title:"Fuck Around & Find Out",sub:"Standalone \u00b7 Explicit",src:"audio/dead_reckoning_01.mp3"},
+  {num:"02",title:"Whiskey & Warrants",sub:"Standalone",src:"audio/dead_reckoning_02.mp3"},
+  {num:"03",title:"Gravel Road Gangster",sub:"Standalone",src:"audio/dead_reckoning_03.mp3"},
+  {num:"04",title:"Dolly Never Packed a Strap",sub:"Standalone",src:"audio/dead_reckoning_04.mp3"},
+  {num:"05",title:"Coal Dust & Casings",sub:"Standalone",src:"audio/dead_reckoning_05.mp3"},
+];
+
+let curIdx = -1;
+let blobUrls = {};
+const audio = document.getElementById('audioEl');
+const volEl = document.querySelector('.vol-range');
+
+function fmt(s){
+  if(!s||isNaN(s)) return '0:00';
+  return Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+}
+function setActive(i){
+  document.querySelectorAll('.tr').forEach(r=>r.classList.remove('active'));
+  const row=document.getElementById('tr_'+i);
+  if(row){row.classList.add('active');row.scrollIntoView({block:'nearest',behavior:'smooth'});}
+  document.getElementById('nowTitle').textContent='♪ '+TRACKS[i].title;
+  const sub=document.getElementById('nowSub');
+  if(sub) sub.textContent=TRACKS[i].sub||'';
+  curIdx=i;
+}
+async function loadAndPlay(i){
+  const t=TRACKS[i];
+  if(!t.src) return;
+  const btn=document.getElementById('playBtn');
+  btn.classList.add('loading'); btn.textContent='⏳';
+  setActive(i);
+  audio.src=t.src;
+  audio.volume=parseFloat(volEl.value);
+  try{ await audio.play(); }catch(e){console.warn(e);}
+  btn.classList.remove('loading');
+}
+function togglePlay(){
+  if(curIdx<0){
+    const first=TRACKS.findIndex(t=>t.src);
+    if(first>=0) loadAndPlay(first);
+    return;
+  }
+  if(audio.paused) audio.play(); else audio.pause();
+}
+function prevTrack(){
+  let p=curIdx-1;
+  while(p>=0&&!TRACKS[p].b64) p--;
+  if(p>=0) loadAndPlay(p);
+}
+function nextTrack(){
+  let n=curIdx+1;
+  while(n<TRACKS.length&&!TRACKS[n].b64) n++;
+  if(n<TRACKS.length) loadAndPlay(n); else{audio.pause();}
+}
+function seekAudio(e){
+  if(!audio.duration) return;
+  const r=e.currentTarget.getBoundingClientRect();
+  audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration;
+}
+audio.addEventListener('timeupdate',()=>{
+  const fill=document.getElementById('progFill');
+  const td=document.getElementById('timeDisp');
+  if(audio.duration) fill.style.width=(audio.currentTime/audio.duration*100)+'%';
+  td.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);
+  const row=document.getElementById('tr_'+curIdx);
+  if(row&&audio.duration){
+    const d=row.querySelector('.tr-dur');
+    if(d) d.textContent=fmt(audio.duration);
+  }
+});
+audio.addEventListener('ended',nextTrack);
+audio.addEventListener('play',()=>{document.getElementById('playBtn').textContent='⏸';});
+audio.addEventListener('pause',()=>{document.getElementById('playBtn').textContent='▶';});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+# ─── NETLIFY REDIRECTS ─────────────────────────────────────
+# Clean URLs without .html extension
+/books     /books.html    200
+/music     /music.html    200
+/epk       /epk.html      200
+/press     /epk.html      200
+
+# 404 fallback
+/*         /index.html    404
