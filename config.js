@@ -189,14 +189,33 @@ const BOOKS = [
    ----------------------------------------------------------------------- */
 
 const CHARACTERS = [
-  { name: "Raelee Calhoun",  alias: "Dixie Deadshot",  role: "Protagonist" },
-  { name: "Brian Lee",       alias: "",                 role: "Core cast" },
-  { name: "Azazel",          alias: "",                 role: "Antagonist / force" },
+  { name: "Raelee Calhoun",  alias: "Dixie Deadshot",  role: "Protagonist/ Mortal Practioner" },
+  { name: "Brian Lee",       alias: "",                 role: "Core cast/ Nephilim" },
+  { name: "Azazel",          alias: "",                 role: "Protagonist/ Watcher" },
   { name: "Bone Mother",     alias: "",                 role: "Mythic figure" },
-  { name: "Samyaza",         alias: "",                 role: "Core cast" },
-  { name: "Saraquel",        alias: "",                 role: "Core cast" },
+  { name: "Samyaza",         alias: "",                 role: "Protagonist/ Watcher" },
+  { name: "Saraquel",        alias: "",                 role: "Protagonist/ Watcher" },
   { name: "Mreza",           alias: "",                 role: "Core cast" },
-  { name: "Leviathan",       alias: "",                 role: "Antagonist / force" }
+  { name: "Leviathan",       alias: "",                 role: "Force/ Horde" },
+  { name: "Della Combs",     alias: "",                 role: "Protagonist/ Mortal Practioner" },
+  { name: "Carla June",      alias: "",                 role: "Protagonist/ Mortal Practioner" },
+  { name: "Mercy Tackett",   alias: "",                 role: "Protagonist/ Mortal Practioner" },
+  { name: "June Tackett",    alias: "",                 role: "Protagonist/ Mortal Practioner" },
+  { name: "Baraqiel",        alias: "",                 role: "Protagonst/ Watcher" },
+  { name: "Aramoras",        alias: "",                 role: "Protagonst/ Watcher" },
+  { name: "Kokabiel",        alias: "",                 role: "Protagonst/ Watcher" },
+  { name: "Velvet",          alias: "",                 role: "Protagonist/ Mortal Practioner" },
+  { name: "Kasdeja",         alias: "",                 role: "Proagonsist/ Watcher" },
+  { name: "Aria Webb",       alias: "",                 role: "Protagonist/ Mortal Practioner" },
+  { name: "Tamiel",          alias: "",                 role: "Protagonist/ Watcher" },
+  { name: "Carolyn Roberts", alias: "",                 role: "Protagonist/ Mortal Practioner" },
+  { name: "Ramiel",          alias: "",                 role: "Protagonist/ Watcher" },
+  { name: "Abigail",         alias: "",                 role: "Protagonist/ Mortal Practioner" },
+  { name: "Danel",           alias: "",                 role: "Protagonist/ Watcher" },
+  { name: "Diana Coale",     alias: "D",                role: "Protagonist/ Mortal Practioner" },
+  { name: "Ezeqeel",         alias: "",                 role: "Prottagonist/ Watcher" },
+  { name: "Emily",           alias: "",                 role: "Protagonist/ Mortal Practioner" },
+  { name: "Penemue",         alias: "",                 role: "Protagonist/ Watcher" },
 ];
 
 
