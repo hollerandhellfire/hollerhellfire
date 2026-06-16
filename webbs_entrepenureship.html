@@ -23,15 +23,26 @@
     html { scroll-behavior: smooth; }
     body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--ink); line-height: 1.65; }
 
-
-    /* ── FAMILY BAR ── */
-    .family-bar { background:#0a1f2e; display:flex; align-items:center; justify-content:center; gap:0; flex-wrap:wrap; padding:0 1rem; border-bottom:1px solid rgba(201,146,42,0.25); }
-    .family-bar a { font-family:'Inter',sans-serif; font-size:0.72rem; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#7fa8c4; text-decoration:none; padding:0.6rem 1.1rem; transition:color 0.2s,background 0.2s; white-space:nowrap; }
-    .family-bar a:hover { color:#e8b84b; background:rgba(255,255,255,0.04); }
-    .family-bar a.fb-active { color:#C9922A; border-bottom:2px solid #C9922A; margin-bottom:-1px; }
-    .family-bar .fb-sep { color:#2a4255; font-size:0.7rem; }
-    @media(max-width:600px){ .family-bar a{padding:0.5rem 0.7rem;font-size:0.65rem;} .family-bar .fb-sep{display:none;} }
-
+   /* ── FAM BAR ── */
+<div class="fbar">
+  <a href="index.html" class="active">The Universe</a>
+  <span class="sep">&bull;</span>
+  <a href="kaylin_renea_author.html">Books &middot; Kaylin Renea</a>
+  <span class="sep">&bull;</span>
+  <a href="holler_hellfire_records.html">Music &middot; H&amp;H Records</a>
+  <span class="sep">&bull;</span>
+  <a href="brian_lee_webb_website.html">Brian Lee Webb</a>
+  <span class="sep">&bull;</span>
+  <a href="webbs_entrepenureship.html">Webbs Entrepreneurship</a>
+  <span class="sep">&bull;</span>
+  <a href="blog.html">The Hollow</a>
+  <span class="sep">&bull;</span>
+  <a href="store.html">Merch</a>
+  <span class="sep">&bull;</span>
+  <a href="epk.html">EPK</a>
+  <span class="sep">&bull;</span>
+  <a href="bible.html">The Codex</a>
+</div>
     /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 200;
