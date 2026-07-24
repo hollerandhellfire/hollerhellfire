@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>07Seventh Cycle Series Bible</title>
+  <meta name="description" content="Converted HTML version of 07seventh_cycle_series_bible.jsx for the Holler & Hellfire Universe." />
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #04020a; }
+    #root { min-height: 100vh; }
+    .conversion-note {
+      font-family: Georgia, serif;
+      background: #100603;
+      color: #e8c06a;
+      border: 1px solid #3d1a08;
+      padding: 12px 16px;
+      max-width: 900px;
+      margin: 16px auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <noscript><div class="conversion-note">JavaScript is required to display this converted H&amp;H bible.</div></noscript>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+/* ============================================================
+   CANON AUTHORITY NOTE
+   The Codex (universe_canon_bible.jsx) is the SUPREME canon
+   authority for the H&H Universe. This Arc Bible EXPANDS canon
+   (the Seventh Cycle) and does not supersede The Codex on core
+   universe truth. Every premise here derives from The Codex'''s
+   Cycles, Abyss, Restoration, and Witness doctrines.
+   ============================================================ */
+const { useState, useMemo, useEffect, useRef } = React;
+const COLORS = {
+    void: "#050204",
+    deep: "#0a0306",
+    surface: "#12060a",
+    card: "#1a070c",
+    cardBorder: "#3a121c",
+    accent: "#aa1100",
+    accentMid: "#d4342a",
+    accentLight: "#ff9e8f",
+    ember: "#ff6b3d",
+    gold: "#c9943a",
+    goldLight: "#e8c06a",
+    thread: "#0d9488",
+    threadLight: "#5eead4",
+    boneWhite: "#f4ece4",
+    dimText: "#c9a89a",
+    mutedText: "#8a6a5e",
+};
+const css = `
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body, #root {
+    background: ${COLORS.void};
+    color: ${COLORS.moonWhite};
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100vh;
+  }
+
+  .bible {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid ${COLORS.cardBorder};
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, ${COLORS.accentMid});
+  }
+  .series-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: ${COLORS.accentMid};
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .main-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(24px, 5vw, 42px);
+    font-weight: 700;
+    color: ${COLORS.moonWhite};
+    line-height: 1.2;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(168,85,247,0.4);
+  }
+  .sub-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(13px, 2.5vw, 18px);
+    color: ${COLORS.accentLight};
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+  }
+  .header-tagline {
+    font-style: italic;
+    font-size: 16px;
+    color: ${COLORS.dimText};
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid ${COLORS.cardBorder};
+    padding-bottom: 16px;
+  }
+  .tab {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid ${COLORS.cardBorder};
+    background: transparent;
+    color: ${COLORS.dimText};
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab:hover { border-color: ${COLORS.accentMid}; color: ${COLORS.accentLight}; }
+  .tab.active {
+    background: rgba(124,58,237,0.2);
+    border-color: ${COLORS.accentMid};
+    color: ${COLORS.moonWhite};
+  }
+
+  /* ── Section titles ── */
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: ${COLORS.accentMid};
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid ${COLORS.cardBorder};
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: ${COLORS.card};
+    border: 1px solid ${COLORS.cardBorder};
+    border-left: 3px solid ${COLORS.accent};
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card.gold-edge   { border-left-color: ${COLORS.gold}; }
+  .card.crimson-edge{ border-left-color: ${COLORS.crimson}; }
+  .card.teal-edge   { border-left-color: ${COLORS.teal}; }
+  .card.moon-edge   { border-left-color: ${COLORS.accentLight}; }
+
+  .card-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: ${COLORS.mutedText};
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    color: ${COLORS.moonWhite};
+    margin-bottom: 8px;
+  }
+  .card-title.gold  { color: ${COLORS.goldLight}; }
+  .card-title.crimson { color: #ff6b6b; }
+  .card-title.teal  { color: #5eead4; }
+  .card-title.moon  { color: ${COLORS.accentLight}; }
+  .card-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: ${COLORS.dimText};
+  }
+  .card-body em { color: ${COLORS.moonWhite}; font-style: italic; }
+  .card-body strong { color: ${COLORS.accentLight}; font-weight: 600; }
+
+  /* ── Stack diagram ── */
+  .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .stack-row {
+    width: 100%;
+    max-width: 520px;
+    padding: 12px 20px;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    border: 1px solid;
+    position: relative;
+  }
+  .stack-row.arcana {
+    background: rgba(124,58,237,0.25);
+    border-color: ${COLORS.accentMid};
+    color: ${COLORS.moonWhite};
+    font-size: 13px;
+  }
+  .stack-row.older {
+    background: rgba(201,148,58,0.1);
+    border-color: ${COLORS.gold};
+    color: ${COLORS.goldLight};
+  }
+  .stack-row.formal {
+    background: rgba(13,148,136,0.1);
+    border-color: ${COLORS.teal};
+    color: #5eead4;
+  }
+  .stack-row.watchers {
+    background: rgba(255,255,255,0.04);
+    border-color: ${COLORS.cardBorder};
+    color: ${COLORS.dimText};
+  }
+  .stack-row.mortal {
+    background: rgba(170,17,0,0.1);
+    border-color: ${COLORS.crimson};
+    color: #ff9e9e;
+  }
+  .stack-arrow {
+    font-size: 18px;
+    color: ${COLORS.mutedText};
+    line-height: 1;
+    padding: 2px 0;
+  }
+  .stack-note {
+    font-size: 10px;
+    color: ${COLORS.mutedText};
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+
+  /* ── Arcana grid ── */
+  .arcana-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .arcana-card {
+    background: ${COLORS.card};
+    border: 1px solid ${COLORS.cardBorder};
+    padding: 14px 16px;
+    transition: border-color 0.2s;
+  }
+  .arcana-card:hover { border-color: ${COLORS.accentMid}; }
+  .arcana-card.special {
+    border-color: rgba(168,85,247,0.5);
+    background: rgba(124,58,237,0.1);
+  }
+  .arcana-card.lost {
+    border-color: rgba(100,80,160,0.6);
+    background: rgba(30,10,60,0.8);
+  }
+  .arcana-num {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: ${COLORS.mutedText};
+    margin-bottom: 4px;
+  }
+  .arcana-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: ${COLORS.accentLight};
+    margin-bottom: 2px;
+  }
+  .arcana-name.lost-name { color: #9b7fd4; text-decoration: line-through; opacity: 0.7; }
+  .arcana-role {
+    font-size: 12px;
+    color: ${COLORS.gold};
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .arcana-desc {
+    font-size: 13px;
+    color: ${COLORS.dimText};
+    line-height: 1.6;
+  }
+  .arcana-desc em { color: ${COLORS.moonWhite}; font-style: normal; }
+  .lost-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #9b7fd4;
+    border: 1px solid #4a2a7a;
+    padding: 2px 8px;
+    margin-bottom: 6px;
+  }
+
+  /* ── Book arc table ── */
+  .arc-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .arc-book {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 0;
+    background: ${COLORS.card};
+    border: 1px solid ${COLORS.cardBorder};
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .arc-book:hover { border-color: ${COLORS.accentMid}; }
+  .arc-num-col {
+    background: rgba(124,58,237,0.15);
+    border-right: 1px solid ${COLORS.cardBorder};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 16px;
+    color: ${COLORS.accentMid};
+    padding: 16px 8px;
+  }
+  .arc-content { padding: 16px 20px; }
+  .arc-book-title {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    color: ${COLORS.moonWhite};
+    margin-bottom: 4px;
+  }
+  .arc-engine {
+    font-size: 12px;
+    color: ${COLORS.accentMid};
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .arc-question {
+    font-size: 14px;
+    color: ${COLORS.dimText};
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+  .arc-beat {
+    font-size: 13px;
+    color: ${COLORS.mutedText};
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ── Premise block ── */
+  .premise-pull {
+    border-left: 3px solid ${COLORS.accentMid};
+    padding: 20px 24px;
+    background: rgba(124,58,237,0.08);
+    margin: 24px 0;
+    font-size: 17px;
+    font-style: italic;
+    line-height: 1.8;
+    color: ${COLORS.moonWhite};
+  }
+
+  /* ── Inline tags ── */
+  .tag {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .tag.purple { color: ${COLORS.accentLight}; border-color: ${COLORS.accent}; }
+  .tag.gold   { color: ${COLORS.goldLight};   border-color: ${COLORS.gold}; }
+  .tag.red    { color: #ff9e9e;               border-color: ${COLORS.crimson}; }
+  .tag.teal   { color: #5eead4;               border-color: ${COLORS.teal}; }
+
+  /* ── Tone / continuity section ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  hr.rule {
+    border: none;
+    border-top: 1px solid ${COLORS.cardBorder};
+    margin: 32px 0;
+  }
+
+  .ornament {
+    text-align: center;
+    font-size: 20px;
+    color: ${COLORS.mutedText};
+    margin: 24px 0;
+    letter-spacing: 12px;
+  }
+
+
+  /* ── Seventh Cycle supplemental classes ── */
+  .tagline { font-style: italic; font-size: 15px; color: ${COLORS.dimText}; max-width: 660px; margin: 0 auto; line-height: 1.8; }
+  .sec { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: .34em; text-transform: uppercase; color: ${COLORS.accentMid}; margin: 30px 0 16px; padding-bottom: 8px; border-bottom: 1px solid ${COLORS.cardBorder}; }
+  .pull { font-style: italic; font-size: 17px; line-height: 1.85; color: ${COLORS.accentLight}; border-left: 2px solid ${COLORS.accent}; padding: 4px 0 4px 20px; margin: 0 0 22px; }
+  .clabel { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: ${COLORS.gold}; margin-bottom: 9px; }
+  .cbody { font-size: 16px; line-height: 1.85; color: ${COLORS.boneWhite}; }
+  .card { background: ${COLORS.card}; border: 1px solid ${COLORS.cardBorder}; border-left: 3px solid ${COLORS.accent}; padding: 18px 22px; margin-bottom: 14px; }
+  .card.gold { border-left-color: ${COLORS.gold}; }
+  .card.crimson { border-left-color: ${COLORS.accentMid}; }
+  .book { background: ${COLORS.deep}; border: 1px solid ${COLORS.cardBorder}; border-top: 2px solid ${COLORS.accent}; padding: 22px 24px; margin-bottom: 18px; }
+  .book-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+  .book-id { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: ${COLORS.ember}; }
+  .book-title { font-family: 'Cinzel Decorative', serif; font-size: 23px; color: ${COLORS.boneWhite}; line-height: 1.1; }
+  .book-arc { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .12em; color: ${COLORS.gold}; margin-bottom: 12px; }
+  .book-q { font-style: italic; font-size: 16px; color: ${COLORS.threadLight}; margin-bottom: 12px; line-height: 1.6; }
+  .book-body { font-size: 15.5px; line-height: 1.85; color: ${COLORS.dimText}; margin-bottom: 14px; }
+  .book-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: ${COLORS.mutedText}; border: 1px solid ${COLORS.cardBorder}; padding: 3px 9px; }
+  .rule { height: 1px; background: linear-gradient(90deg, transparent, ${COLORS.accent}, transparent); margin: 40px 0 0; }
+`;
+const TABS = [
+    { id: "premise", label: "Premise" },
+    { id: "stakes", label: "The Stakes" },
+    { id: "abyss", label: "The Abyss" },
+    { id: "arc", label: "The 9 Books" },
+    { id: "tone", label: "Tone & Continuity" },
+];
+const BOOKS = [
+    { num: 1, title: "It’s Time", engine: "The Abyss Breaches · The Silence After the Words",
+        question: "The awakened Web has been noticed. What does it mean that something is coming for her?",
+        beat: "The Divine Arc ended with Mreza touching the Tree of Life, a cut to darkness, red eyes, and two words \u2014 \u2018It\u2019s time\u2026\u2019. This is the silence after those words. The Abyss \u2014 anti-relational existence pressure, not Hell \u2014 has noticed the awakened Web and begins to move. Mreza, newly conscious, faces her first state: disorientation, then the fear of reality itself. The breach opens. The seven years begin.",
+        tags: ["opening", "Mreza awakens fully", "the breach"] },
+    { num: 2, title: "The First Witness", engine: "Abaddon at the Edge · Witness Against Severance",
+        question: "Can a being stand closest to severance and still choose witness?",
+        beat: "Abaddon \u2014 the being who chose witness while standing nearest the Abyss \u2014 is the last guardian before consumption. He remains because abandonment would itself be anti-relational; his continued compassion is the miracle. Mreza\u2019s recognition sequence reaches him here: after herself, a child, June, Kokabiel, and the Dreamers, it is Abaddon who recognizes her, and through him she begins to understand that witness, not power, is what the Abyss cannot metabolize.",
+        tags: ["Abaddon", "witness vs. severance", "the recognition sequence"] },
+    { num: 3, title: "The First Scar", engine: "The Memory of Failed Cycles · Cycle One: Collapse",
+        question: "What did the six prior cycles leave behind \u2014 and can their memory be carried without becoming their fate?",
+        beat: "Each prior cycle left scars, echoes, records, frequencies, and continuity fragments. They begin to surface now as Abyssal pressure \u2014 the corridors filling with the residue of six endings. The first cycle failed by collapse: structure giving way the moment it was truly seen. The record \u2014 June\u2019s twenty-one volumes, the bone-keeper\u2019s thirty-thousand-year memory \u2014 is the weapon. Cycle Seven\u2019s task begins: to carry the full memory of how the others failed without repeating it. Enough record survived.",
+        tags: ["the six prior cycles", "the record survives", "Cycle One: Collapse"] },
+    { num: 4, title: "What the Edge Eats", engine: "Consumption · Cycle Two",
+        question: "What is taken by a hunger that does not hate you \u2014 only needs you gone?",
+        beat: "The second cycle failed by consumption: continuity devoured without preservation, witness erased rather than answered. The pressure returns now as a hunger at the edge of every corridor \u2014 not cruelty, only appetite. Abaddon\u2019s vigil and Mreza\u2019s witness are tested against the thing that simply consumes. The answer the cycle gives is the one the second cycle could not: to be witnessed is to be un-consumable. What is held in record and relationship cannot be wholly eaten.",
+        tags: ["consumption", "Cycle Two", "un-consumable by witness"] },
+    { num: 5, title: "The Seed Inside the Wall", engine: "Corruption · Cycle Three",
+        question: "When the wrongness grows from the inside, how do you tell the difference between the fix and the failure?",
+        beat: "The third cycle failed by corruption \u2014 the inversion of the first true thing, the relationship built on trust and belief. It returns as a temptation: to fix reality by force, to control rather than relate, to call distortion order. This is the internal threat made personal \u2014 the seeds of corruption that grew from inside the wall once before, working again. The founding characters face the lie that has ended three cycles, and must refuse the version of it that looks most like help.",
+        tags: ["corruption", "Cycle Three", "the threat from inside"] },
+    { num: 6, title: "What Survived Incorrectly", engine: "The Real Monsters · Cycle Four: Fragmentation",
+        question: "What do you do with the things that did not die, but adapted to severance?",
+        beat: "Beneath the Abyss are the real monsters \u2014 terrifying because their frequencies are wrong, not because they are cruel. They are continuity that survived incorrectly: rather than ceasing to exist, they adapted to anti-relational pressure. Their wrongness is ontological, not moral; their presence destabilizes identity, witness, memory, emotion, physical reality, frequency, meaning, and recognition at once. The fourth cycle failed by fragmentation. The test: can a fragmented reality hold its shape in the presence of the unmakeable?",
+        tags: ["the real monsters", "ontological wrongness", "Cycle Four: Fragmentation"] },
+    { num: 7, title: "The Lie That Survival Is Enough", engine: "The False Restorations · Cycle Five: False Restoration",
+        question: "Every prior cycle was offered a way to \u201cwin.\u201d Why was each one a defeat?",
+        beat: "The Abyss does not only consume \u2014 it offers. The false restorations tempt: perfect control, erasure of the wrong, assimilation into one harmony, endless survival, power ascension, the suppression of grief, the safety of isolation, the peace of stagnation, purification. Each is a way to end the suffering by ending the relationship. The fifth cycle accepted a false restoration and called it victory. Mreza\u2019s greatest temptation surfaces here \u2014 forced harmonization, the belief that if everyone were aligned correctly, suffering would stop. Her victory is choosing relationship over control.",
+        tags: ["false restorations", "Mreza\u2019s temptation", "Cycle Five: False Restoration"] },
+    { num: 8, title: "The Bone Mother’s Refusal", engine: "Over-Preservation · Cycle Six: Incomplete Memory",
+        question: "If love refuses every necessary separation, does it preserve continuity \u2014 or smother it?",
+        beat: "The Bone Mother, steward of continuity through death-frequency, faces her own distortion risk: over-preservation, loving continuity so fiercely that necessary separation becomes unbearable. The sixth cycle failed through incomplete memory \u2014 it could not let the dead become transition, only refused to lose them, and so remembered wrongly. Here the Sacred Law is tested at its hardest edge: no being passes through transition unwitnessed, and yet some passages must be allowed. With six scars carried and all five conditions all but assembled, the choice is the last thing standing between the convergence and the Restoration: to witness a letting-go without enacting a severance.",
+        tags: ["the Bone Mother", "necessary separation", "Cycle Six: Incomplete Memory"] },
+    {
+        "num": 9,
+        "title": "The Space Between",
+        "engine": "Rumjal & Vesper Cole · Empty Places · Category Failure",
+        "question": "What if a corridor is not hidden, but uncategorized?",
+        "beat": "Vesper Cole's corridor exists in the space between definitions. Heaven cannot classify it. Hell cannot corrupt it cleanly. The Older Mechanism cannot file it under an existing function. Rumjal does not fill the empty place; he honors it. The missing condition for Restoration appears in the gap no taxonomy could name.",
+        "tags": [
+            "Rumjal",
+            "empty places",
+            "missing condition"
+        ]
+    },
+    {
+        "num": 10,
+        "title": "What Purity Costs",
+        "engine": "Zaqiel & Amara Voss · False Purity · Mercy Refused to Erase",
+        "question": "When restoration looks clean, what has it erased?",
+        "beat": "Amara Voss is offered a beautiful solution: remove imperfection and Restoration becomes easy. Zaqiel's purity domain is tested as temptation rather than virtue. They reject the false restoration that would erase wounds, contradictions, grief, and mercy. Purity serves relationship only when it refuses erasure.",
+        "tags": [
+            "Zaqiel",
+            "false restoration",
+            "mercy over erasure"
+        ]
+    },
+    {
+        "num": 11,
+        "title": "The Last Condition",
+        "engine": "Ensemble · Free Choice · No Forced Restoration",
+        "question": "What is the one condition no mechanism can guarantee?",
+        "beat": "All conditions are assembled except the least controllable one: something must choose differently. No prophecy can force it, no bond can fake it, and no mechanism can simulate it. The whole universe reaches the point where relationship must remain free or it is not relationship at all.",
+        "tags": [
+            "last condition",
+            "free choice",
+            "Restoration setup"
+        ]
+    },
+    { num: 12, title: "The Restoration", engine: "Something Chooses Differently · The Seventh Cycle Holds",
+        question: "What is the choice no prior cycle made \u2014 and can it be made consciously, while unfinished?",
+        beat: "The convergence, in the seventh year. Cycle Seven succeeds only if its impossible conditions hold at once: Mreza awakened fully, humanity mattering, the bonds evolved correctly, enough record surviving, and \u2014 the last and least guaranteed \u2014 something choosing differently. The Restoration is not conquest, purification, erasure, forced transcendence, or static paradise. It is the restoration of resilient relational continuity capable of surviving imperfection consciously. If it holds, reality becomes a fully harmonized Network: conscious continuity, stable mortality, witness civilization, open corridors, anti-Abyssal resilience, shared memory, sacred individuality, dynamic balance, and endless becoming.",
+        tags: ["the Restoration", "the conscious choice", "endless becoming"] },
+];
+const STAKES = [
+    { label: "The Wager", body: "This is Cycle Seven — the last possible cycle. Six have come before; all six failed. There is no Cycle Eight. The arc is the test of whether awakened relational consciousness can do what raw continuity never could: survive imperfection on purpose." },
+    { label: "The Five Conditions", body: "Cycle Seven succeeds only if multiple impossible conditions converge: Mreza awakens fully, humanity matters, bonds evolve correctly, enough record survives, and something chooses differently. The arc is structured so that each is earned, not assumed — and the fifth is never guaranteed." },
+    { label: "If It Fails", body: "Catastrophic outcomes converge: final dissolution, Abyssal breach, fragment survival without another full cycle, endless fracture, no Cycle Eight, and transformation into something unrecognizable. The stakes are not death — death is transition. The stakes are severance: continuity that survives incorrectly, forever." },
+    { label: "Why the Mortal Layer Decides It", body: "The Mortal Layer is the Anchor. Finite existence creates the urgency, vulnerability, grief, choice, and concentrated relational meaning strong enough to stabilize the whole Network. The cosmic arc is won, if it is won, in mortal terms: a person choosing relationship over severance, while unfinished and afraid." },
+    { label: "LOCKED CANON · The Seventh Cycle Arc · Series 7 · Full Canon", body: "SERIES TIMELINE: The first six arcs (Series 1–6) cover a single seven-year period — all six arcs take place across those same seven years, overlapping and converging. Series 6 — The Restoration — ends with Mreza touching the Life Tree and the Mortal Layer reconnecting to the rest of the universe.\n\nTHE SEVENTH CYCLE ARC (Series 7): 9 books across 7 years — the books no longer map one-to-one to the years; the breach, the long middle of carried scars, and the final convergence each take the room they need. The seven years AFTER the reconnection. Two simultaneous crises define it:\n\n(1) THE INTERNAL THREAT: The Restoration\u2019s achieved state is meant to be permanent, but it is not automatically secure. Heaven and Hell exist because of the intersection with worlds created by a damaged and insane creator-force frequency. The seeds of corruption that created those worlds are already inside the expanded Corridor\u2019s wall. The corruption does not need to breach from outside — it grew from the inside once before and it can again.\n\n(2) THE HUMAN CRISIS: Humanity adjusts to a universe that forgot about them. No more static. No more sealed sphere. No more cover-ups. The Horde, the Weavers and Practitioners, the Heaven and Hell factions and their war, the Grigori, and now the rest of the universe — all of it suddenly real and present and undeniable. Whether humanity was ready or not.\n\nTHE CENTRAL REVERSAL: The rest of the universe is astonished. The most unlikely and infuriating race in the universe — the mortals, the short-lived, the ones everyone forgot about and left sealed in a broken sphere for twelve thousand years — are the ones who started the Restoration. A universe of creator-beings who forgot humanity exists now has to reckon with the fact that humanity finished what no one else could.\n\nTHE ORIGIN OF IT ALL: One woman who made a choice to see and be seen. To accept. Not question, not judge, not try to change. Just accept. It is what it is. Everything that follows — every bond, every cleared wall, every restored frequency, every layer reconnected — traces back to that single choosing on a road in Pike County, Kentucky. The load-bearing first act of the entire Restoration was acceptance. Not heroism. Not power. Not institutional authority. A woman in a truck who stopped and asked if someone was hungry, and meant it.\n\nTHE SEVENTH CYCLE ARC\u2019S THESIS: The fight to finish what acceptance started — and to prove that a universe given back its correct frequency can hold it, this time, consciously." },
+];
+const ABYSS = [
+    { label: "The Abyss Is Not Hell", body: "The Abyss is anti-relational existence pressure: severance without witness, continuity collapse, identity dissolution, unstructured existence, anti-memory pressure, consumption without preservation. Hell is a downstream institutional system that errs toward freedom-through-distortion; the Abyss is the ontological condition beneath all severance. The Darkness the series has tracked since Book One is Abyssal pressure expressing downstream." },
+    { label: "The First Fracture", body: "The Abyss emerged from a convergence of primordial failures — isolation, failed witness, fear, consumption, collapse of meaning, rejection of relationship, and incomprehension — before continuity fully stabilized. It is not a creation and not a place. It is what happens where relationship was refused before reality finished forming." },
+    { label: "The Real Monsters", body: "The real monsters beneath the Abyss adapted to anti-relational pressure instead of ceasing to exist. They are continuity that survived incorrectly. Their wrongness is ontological rather than moral — their presence destabilizes identity, witness, memory, emotion, physical reality, frequency, meaning, and recognition simultaneously. They are the endpoint of anti-relational adaptation." },
+    { label: "Abyssal Distortion", body: "The Abyss does not destroy reality immediately. It alters how continuity functions until severance feels natural. The greatest horror is gradually adapting to severance until wrongness no longer feels wrong. Its stages: compression, fragmentation, adaptation, distorted persistence, anti-relational stabilization, and Abyssal continuity." },
+    { label: "Abyssal Character Pressure", body: "The Abyss pressures characters through fear, compression, functional adaptation, relational erosion, normalization, and identity distortion. No character falls because they love evil. Characters distort because fear convinces them severance is safer than vulnerability. Every distortion arc in the Seventh Cycle is a fear arc." },
+    { label: "LOCKED CANON \u00b7 The Final Boundary", body: "By the end of the Seventh Cycle arc, the Corridor's wall of pure radiant frequency has expanded outward until only the Abyss and the Unwritten sit outside it. The Abyss is the final antagonist precisely because it is what remains when everything else has been healed. Anti-relational existence pressure is the last thing that cannot be restored \u2014 it can only be bounded, held at the correct distance, and refused. The Seventh Cycle arc's confrontation with the Abyss is the series' last and deepest test of the central thesis: a relationship built on trust and belief is stronger than corruption. The Abyss is what corruption becomes when everything else has been stripped away from it. The answer is the same. The answer was always the same." },
+];
+const TONE = [
+    { label: "Register", body: "Cosmic horror held inside relational hope. The Seventh Cycle is the series at its largest scale and its most intimate stake at once — the end of everything decided by whether specific people keep choosing each other. The horror is real and ontological; the answer is never force." },
+    { label: "The Character Rule (Codex)", body: "No character arc may replace a character’s core. The soul’s frequency does not change — it expands. Across nine books of maximum pressure, every founding character may be burdened, matured, grieved, or expanded, but never overwritten. The Abyss’s whole method is to overwrite; the arc’s integrity is the refusal." },
+    { label: "Continuity — The Whole Series Converges", body: "Everything threads here: the Pike County compact (Dixie & Azazel), the Dreamer’s twenty-one-volume record (June, carried by Pearlene), the bonds evolved across Books 1—6, the Web restored by the Weavers and awakened as Mreza, the Bone Mother’s stewardship, Abaddon at the edge. The Seventh Cycle spends nothing it did not earn in the arcs before it." },
+    { label: "The Ending · What the Restoration Ends On", body: "LOCKED CANON. The Restoration (Divine Arc, Series 6) ends with Mreza touching the Life Tree — reactivating Gaia's Garden's connection to the Network. This restores the Garden's full frequency and brings the entire world, plus its inhabitants, back into resonance with the rest of the universe. The distorted parallel worlds that were intersecting the Mortal Layer — the pocket realms born from Nepisano's corrupted mind, stabilized into their own universes — now suddenly have access to the Mortal Layer and all other layers simultaneously. The corruption's static — the interference that sealed the Mortal Layer inside its protective sphere, cut from the shared frequency — dissolves, and the separation ends. (This is distinct from the cosmological Veil, the wall of protection at creation's outer edge that came down in the Divine Arc.) What was called supernatural is revealed as always-real — it was only supernatural because that static made two things seem separate that were never divided." },
+    {
+        "label": "Expansion Insert Lock",
+        "body": "SC9–SC11 are inserted before the existing Restoration finale. The old SC9 remains intact as SC12. Rumjal/Vesper and Zaqiel/Amara are the final two Grigori bonds before the ensemble Last Condition book."
+    },
+];
+function SeventhCycleArcBible() {
+    const [tab, setTab] = useState("premise");
+    return (React.createElement("div", { className: "bible" },
+        React.createElement("style", null, css),
+        React.createElement("div", { className: "header" },
+            React.createElement("div", { className: "series-label" }, "H&H Universe \u00B7 Series Arc Bible"),
+            React.createElement("div", { className: "main-title" }, "The Seventh Cycle"),
+            React.createElement("div", { className: "sub-title" }, "Twelve Books \u00B7 Seven Years \u00B7 The Last Possible Cycle \u00B7 After the Divine Arc"),
+            React.createElement("div", { className: "tagline" }, "Six cycles have failed. There is no eighth. This is the test of whether awakened relational consciousness can do what raw continuity never could \u2014 survive imperfection on purpose, while unfinished and afraid.")),
+        React.createElement("div", { className: "tabs" }, TABS.map((t) => (React.createElement("button", { key: t.id, className: "tab" + (tab === t.id ? " active" : ""), onClick: () => setTab(t.id) }, t.label)))),
+        tab === "premise" && (React.createElement("div", null,
+            React.createElement("div", { className: "sec" }, "The Arc in One Sentence"),
+            React.createElement("div", { className: "pull" }, "The Abyss has noticed the awakened Web, and the last cycle reality will ever get must confront anti-relational existence itself \u2014 not with power, which every failed cycle tried, but with witness, relationship, and a conscious choice no prior cycle made."),
+            React.createElement("div", { className: "sec" }, "Where It Begins"),
+            React.createElement("div", { className: "card" },
+                React.createElement("div", { className: "clabel" }, "\u2014 After the Divine Arc \u2014"),
+                React.createElement("div", { className: "cbody" }, "The Divine Arc ends with Mreza touching the Tree of Life, then a cut to darkness: a pair of red eyes, a deep guttural voice, two words \u2014 \u201CIt\u2019s time\u2026\u201D The Seventh Cycle is its own Arc, and it begins in that darkness. It carries the direct confrontation with the Abyss, the memory of six failed cycles, and the test of awakened relational consciousness.")),
+            React.createElement("div", { className: "card gold" },
+                React.createElement("div", { className: "clabel" }, "The Shape of the Twelve"),
+                React.createElement("div", { className: "cbody" }, "Each of the six prior cycles failed by a single distortion \u2014 collapse, consumption, corruption, fragmentation, false restoration, incomplete memory. Books 1\u20132 open the arc (the breach, and the first witness at the edge); Books 3\u20138 each face the scar of one cycle that failed that way, one cycle per book; Books 9\u201311 test the space between, false purity, and the last condition; Book 12 is the convergence, where something finally chooses differently and the Restoration holds.")),
+            React.createElement("div", { className: "card" },
+                React.createElement("div", { className: "clabel" }, "Genesis \u00B7 Why Seven, and Why the Last"),
+                React.createElement("div", { className: "cbody" },
+                    "The cycle structure is not metaphor. After the brothers\\u2019 fight nearly destroyed Creation, the reconciled bond let the ",
+                    React.createElement("strong", null, "Bone Mother"),
+                    " (keeper of the Archive and of Time) bind Time itself \\u2014 with exactly ",
+                    React.createElement("strong", null, "seven tries"),
+                    ", and she alone knew. Each cycle\\u2019s end ",
+                    React.createElement("strong", null, "RESETS Creation to the very beginning"),
+                    " (a full restart, not cumulative); the cycles last longer each time and are finite. Every cycle has ended because the ",
+                    React.createElement("strong", null, "Davos"),
+                    " (the Abyss Monsters, leader Andras) sowed the corruption \\u2014 the inversion of the first true thing, the relationship built on trust and belief. This is the SEVENTH and longest cycle. There is no eighth. (See The Codex / Cosmogony.)")))),
+        tab === "stakes" && (React.createElement("div", null,
+            React.createElement("div", { className: "sec" }, "The Stakes"),
+            STAKES.map((s) => (React.createElement("div", { key: s.label, className: "card" },
+                React.createElement("div", { className: "clabel" }, s.label),
+                React.createElement("div", { className: "cbody" }, s.body)))))),
+        tab === "abyss" && (React.createElement("div", null,
+            React.createElement("div", { className: "sec" }, "The Abyss \u00B7 Anti-Relational Existence Pressure"),
+            React.createElement("div", { className: "pull" }, "The arc\u2019s antagonist is not a villain. It is the ontological condition beneath all severance \u2014 and its greatest horror is that adapting to it feels natural."),
+            ABYSS.map((a) => (React.createElement("div", { key: a.label, className: "card crimson" },
+                React.createElement("div", { className: "clabel" }, a.label),
+                React.createElement("div", { className: "cbody" }, a.body)))))),
+        tab === "arc" && (React.createElement("div", null,
+            React.createElement("div", { className: "sec" }, "The Twelve Books"),
+            BOOKS.map((b) => (React.createElement("div", { key: b.num, className: "book" },
+                React.createElement("div", { className: "book-head" },
+                    React.createElement("span", { className: "book-id" },
+                        "Book ",
+                        b.num),
+                    React.createElement("span", { className: "book-title" }, b.title)),
+                React.createElement("div", { className: "book-arc" }, b.engine),
+                React.createElement("div", { className: "book-q" }, b.question),
+                React.createElement("div", { className: "book-body" }, b.beat),
+                React.createElement("div", { className: "book-tags" }, b.tags.map((tg) => (React.createElement("span", { key: tg, className: "tag" }, tg))))))))),
+        tab === "tone" && (React.createElement("div", null,
+            React.createElement("div", { className: "sec" }, "Tone & Continuity"),
+            TONE.map((t) => (React.createElement("div", { key: t.label, className: "card" },
+                React.createElement("div", { className: "clabel" }, t.label),
+                React.createElement("div", { className: "cbody" }, t.body)))))),
+        React.createElement("div", { className: "rule" })));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(SeventhCycleArcBible));
+
+  </script>
+</body>
+</html>

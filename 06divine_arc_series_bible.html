@@ -1,0 +1,741 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>06Divine Arc Series Bible</title>
+  <meta name="description" content="Converted HTML version of 06divine_arc_series_bible.jsx for the Holler & Hellfire Universe." />
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #04020a; }
+    #root { min-height: 100vh; }
+    .conversion-note {
+      font-family: Georgia, serif;
+      background: #100603;
+      color: #e8c06a;
+      border: 1px solid #3d1a08;
+      padding: 12px 16px;
+      max-width: 900px;
+      margin: 16px auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <noscript><div class="conversion-note">JavaScript is required to display this converted H&amp;H bible.</div></noscript>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+/* ============================================================
+   CANON AUTHORITY NOTE
+   The Codex (universe_canon_bible.jsx) is the SUPREME canon
+   authority for the H&H Universe. This file SPECIALIZES /
+   EXPANDS / ORGANIZES / DISPLAYS canon and does not supersede
+   The Codex on core universe truth. Objective metaphysical
+   truth lives in The Codex; perceived/in-world truth may differ.
+   ============================================================ */
+const { useState, useMemo, useEffect, useRef } = React;
+const COLORS = {
+    void: "#04020a",
+    deep: "#080412",
+    surface: "#0e0820",
+    card: "#130c28",
+    cardBorder: "#2a1a4a",
+    accent: "#7c3aed",
+    accentMid: "#a855f7",
+    accentLight: "#d8b4fe",
+    gold: "#c9943a",
+    goldLight: "#e8c06a",
+    crimson: "#aa1100",
+    teal: "#0d9488",
+    moonWhite: "#f0eaff",
+    dimText: "#9d8ec0",
+    mutedText: "#6b5a8a",
+};
+const css = `
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body, #root {
+    background: ${COLORS.void};
+    color: ${COLORS.moonWhite};
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100vh;
+  }
+
+  .bible {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid ${COLORS.cardBorder};
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, ${COLORS.accentMid});
+  }
+  .series-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: ${COLORS.accentMid};
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .main-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(24px, 5vw, 42px);
+    font-weight: 700;
+    color: ${COLORS.moonWhite};
+    line-height: 1.2;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(168,85,247,0.4);
+  }
+  .sub-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(13px, 2.5vw, 18px);
+    color: ${COLORS.accentLight};
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+  }
+  .header-tagline {
+    font-style: italic;
+    font-size: 16px;
+    color: ${COLORS.dimText};
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid ${COLORS.cardBorder};
+    padding-bottom: 16px;
+  }
+  .tab {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid ${COLORS.cardBorder};
+    background: transparent;
+    color: ${COLORS.dimText};
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab:hover { border-color: ${COLORS.accentMid}; color: ${COLORS.accentLight}; }
+  .tab.active {
+    background: rgba(124,58,237,0.2);
+    border-color: ${COLORS.accentMid};
+    color: ${COLORS.moonWhite};
+  }
+
+  /* ── Section titles ── */
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: ${COLORS.accentMid};
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid ${COLORS.cardBorder};
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: ${COLORS.card};
+    border: 1px solid ${COLORS.cardBorder};
+    border-left: 3px solid ${COLORS.accent};
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card.gold-edge   { border-left-color: ${COLORS.gold}; }
+  .card.crimson-edge{ border-left-color: ${COLORS.crimson}; }
+  .card.teal-edge   { border-left-color: ${COLORS.teal}; }
+  .card.moon-edge   { border-left-color: ${COLORS.accentLight}; }
+
+  .card-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: ${COLORS.mutedText};
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    color: ${COLORS.moonWhite};
+    margin-bottom: 8px;
+  }
+  .card-title.gold  { color: ${COLORS.goldLight}; }
+  .card-title.crimson { color: #ff6b6b; }
+  .card-title.teal  { color: #5eead4; }
+  .card-title.moon  { color: ${COLORS.accentLight}; }
+  .card-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: ${COLORS.dimText};
+  }
+  .card-body em { color: ${COLORS.moonWhite}; font-style: italic; }
+  .card-body strong { color: ${COLORS.accentLight}; font-weight: 600; }
+
+  /* ── Stack diagram ── */
+  .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .stack-row {
+    width: 100%;
+    max-width: 520px;
+    padding: 12px 20px;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    border: 1px solid;
+    position: relative;
+  }
+  .stack-row.arcana {
+    background: rgba(124,58,237,0.25);
+    border-color: ${COLORS.accentMid};
+    color: ${COLORS.moonWhite};
+    font-size: 13px;
+  }
+  .stack-row.older {
+    background: rgba(201,148,58,0.1);
+    border-color: ${COLORS.gold};
+    color: ${COLORS.goldLight};
+  }
+  .stack-row.formal {
+    background: rgba(13,148,136,0.1);
+    border-color: ${COLORS.teal};
+    color: #5eead4;
+  }
+  .stack-row.watchers {
+    background: rgba(255,255,255,0.04);
+    border-color: ${COLORS.cardBorder};
+    color: ${COLORS.dimText};
+  }
+  .stack-row.mortal {
+    background: rgba(170,17,0,0.1);
+    border-color: ${COLORS.crimson};
+    color: #ff9e9e;
+  }
+  .stack-arrow {
+    font-size: 18px;
+    color: ${COLORS.mutedText};
+    line-height: 1;
+    padding: 2px 0;
+  }
+  .stack-note {
+    font-size: 10px;
+    color: ${COLORS.mutedText};
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+
+  /* ── Arcana grid ── */
+  .arcana-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .arcana-card {
+    background: ${COLORS.card};
+    border: 1px solid ${COLORS.cardBorder};
+    padding: 14px 16px;
+    transition: border-color 0.2s;
+  }
+  .arcana-card:hover { border-color: ${COLORS.accentMid}; }
+  .arcana-card.special {
+    border-color: rgba(168,85,247,0.5);
+    background: rgba(124,58,237,0.1);
+  }
+  .arcana-card.lost {
+    border-color: rgba(100,80,160,0.6);
+    background: rgba(30,10,60,0.8);
+  }
+  .arcana-num {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: ${COLORS.mutedText};
+    margin-bottom: 4px;
+  }
+  .arcana-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: ${COLORS.accentLight};
+    margin-bottom: 2px;
+  }
+  .arcana-name.lost-name { color: #9b7fd4; text-decoration: line-through; opacity: 0.7; }
+  .arcana-primordial {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 11px; font-style: italic; letter-spacing: 0.04em;
+    color: ${COLORS.accentMid}; margin-bottom: 4px;
+  }
+  .arcana-role {
+    font-size: 12px;
+    color: ${COLORS.gold};
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .arcana-desc {
+    font-size: 13px;
+    color: ${COLORS.dimText};
+    line-height: 1.6;
+  }
+  .arcana-desc em { color: ${COLORS.moonWhite}; font-style: normal; }
+  .lost-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #9b7fd4;
+    border: 1px solid #4a2a7a;
+    padding: 2px 8px;
+    margin-bottom: 6px;
+  }
+
+  /* ── Book arc table ── */
+  .arc-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .arc-book {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 0;
+    background: ${COLORS.card};
+    border: 1px solid ${COLORS.cardBorder};
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .arc-book:hover { border-color: ${COLORS.accentMid}; }
+  .arc-num-col {
+    background: rgba(124,58,237,0.15);
+    border-right: 1px solid ${COLORS.cardBorder};
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 16px;
+    color: ${COLORS.accentMid};
+    padding: 16px 8px;
+  }
+  .arc-content { padding: 16px 20px; }
+  .arc-book-title {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    color: ${COLORS.moonWhite};
+    margin-bottom: 4px;
+  }
+  .arc-engine {
+    font-size: 12px;
+    color: ${COLORS.accentMid};
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .arc-question {
+    font-size: 14px;
+    color: ${COLORS.dimText};
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+  .arc-beat {
+    font-size: 13px;
+    color: ${COLORS.mutedText};
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ── Premise block ── */
+  .premise-pull {
+    border-left: 3px solid ${COLORS.accentMid};
+    padding: 20px 24px;
+    background: rgba(124,58,237,0.08);
+    margin: 24px 0;
+    font-size: 17px;
+    font-style: italic;
+    line-height: 1.8;
+    color: ${COLORS.moonWhite};
+  }
+
+  /* ── Inline tags ── */
+  .tag {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .tag.purple { color: ${COLORS.accentLight}; border-color: ${COLORS.accent}; }
+  .tag.gold   { color: ${COLORS.goldLight};   border-color: ${COLORS.gold}; }
+  .tag.red    { color: #ff9e9e;               border-color: ${COLORS.crimson}; }
+  .tag.teal   { color: #5eead4;               border-color: ${COLORS.teal}; }
+
+  /* ── Tone / continuity section ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  hr.rule {
+    border: none;
+    border-top: 1px solid ${COLORS.cardBorder};
+    margin: 32px 0;
+  }
+
+  .ornament {
+    text-align: center;
+    font-size: 20px;
+    color: ${COLORS.mutedText};
+    margin: 24px 0;
+    letter-spacing: 12px;
+  }
+`;
+// ═══════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════
+const ARCANA = [
+    { num: "0", primordial: "Rusvja", name: "The Fool", role: "The Unwritten", special: false, lost: false,
+        desc: "Chaos without malice. The state everything returns to when structure fails. <em>The arc opens in his territory.</em> The Veil's destruction released The Unwritten into every layer simultaneously." },
+    { num: "I", primordial: "Rijec", name: "The Magician", role: "The First Word", special: true, lost: false,
+        desc: "The one who named things into existence before the Older Mechanism had a framework to receive them. <em>Older than every archive.</em> His attention on the arc is the first sign that something has been broken that was never supposed to break." },
+    { num: "II", primordial: "Arhiva", name: "The High Priestess", role: "The Archive", special: true, lost: false,
+        desc: "Keeper of what was, what is, what will be. <em>June Tackett's gift traces here.</em> The Dreamer's line is the High Priestess's thread in the mortal world. She speaks through the prophetic record when the Archive needs to be heard." },
+    { num: "III", primordial: "Izobilije", name: "The Empress", role: "Abundance / Gaia's Twin", special: false, lost: false,
+        desc: "Not Gaia herself — her twin expression. The force of creation-as-generosity. <em>When Hecate is severed, the Empress is the first Arcana to feel it.</em> Abundance turns to weight without the boundary that the Moon maintained." },
+    { num: "IV", primordial: "Zakon", name: "The Emperor", role: "The First Law", special: false, lost: false,
+        desc: "The original framework before Heaven's Council formalized it. <em>The formal framework is his great-grandchild.</em> He does not involve himself lightly. His involvement in The War marks the arc's first truly cosmic-scale confrontation." },
+    { num: "V", primordial: "Savez", name: "The Hierophant", role: "The Covenant", special: false, lost: false,
+        desc: "The one who ratified the first agreements between layers. <em>Every compact ever made — including the Pike County compact — echoes his original work.</em> Central to The Deal. The terms of the exchange must pass through him." },
+    { num: "VI", primordial: "Svaler & Ljubanica", name: "The Lovers", role: "The Bond", special: true, lost: false,
+        desc: "The force that all Watcher-witch compacts were unknowingly invoking. <em>The oldest law.</em> The Bond is why love works as a mechanism in this universe — it isn't metaphor, it's architecture. Central to The Claiming." },
+    { num: "VII", primordial: "Snaga", name: "The Chariot", role: "The War-Driver", special: false, lost: false,
+        desc: "Not a warrior — the force that makes war purposeful rather than simply destructive. <em>Without him, The War is just chaos.</em> He arrives to give the conflict shape. His absence in the early arc is why The Confusion follows The Destruction." },
+    { num: "VIII", primordial: "Drazti", name: "Strength", role: "The Long Hold", special: true, lost: false,
+        desc: "Endurance as divine principle. <em>The force Mama Calhoun was drawing on for 53 years</em> without knowing its name. Strength is the Arcana most present in the mortal layer. The heroines of H&H were its instruments before anyone knew the arc existed." },
+    { num: "IX", primordial: "Svjedok", name: "The Hermit", role: "The Witness", special: false, lost: false,
+        desc: "Has been watching everything since before the Watchers were commissioned. <em>He knows where Hecate is.</em> He has always known. He will not say it freely — the information must be earned. Central to The Search." },
+    { num: "X", primordial: "Okret", name: "Wheel of Fortune", role: "The Turn", special: false, lost: false,
+        desc: "The mechanism by which ages end and begin. <em>Its turning is what made Satan's destruction possible.</em> The Wheel doesn't cause events — it determines when they were always going to happen. The arc is a Turn. The question is what the next rotation brings." },
+    { num: "XI", primordial: "Pravoda", name: "Justice", role: "The Balance", special: false, lost: false,
+        desc: "What the Veil's destruction has thrown catastrophically off. <em>Justice is not at rest.</em> She is not a passive principle — she is actively working to restore equilibrium and the imbalance is costing her. Her distress is measurable across layers." },
+    { num: "XII", primordial: "Zrtua", name: "The Hanged Man", role: "The Sacrifice", special: false, lost: false,
+        desc: "The force governing necessary surrender — <em>what must be given up to move through.</em> Appears twice in the arc: in The Occupancy (survival requires surrendering what you thought was permanent) and in The Repentance (the reckoning requires it of every layer)." },
+    { num: "XIII", primordial: "Projena", name: "Death", role: "Transformation", special: false, lost: false,
+        desc: "Not destruction — <em>the force that governs what changes and cannot return to what it was.</em> Death is not the antagonist. Death has been trying to reach Hecate. The Darkness is holding the Moon in a state that prevents transformation, which is an affront to Death itself." },
+    { num: "XIV", primordial: "Mjera", name: "Temperance", role: "The Measure", special: false, lost: false,
+        desc: "What governed the boundary between Darkness and Light before Hecate kept it. <em>Temperance set the measure of the threshold; Hecate kept the watch over it.</em> Temperance has been trying to hold a temporary measure since the wall came down. It is insufficient. It was always meant to be temporary." },
+    { num: "XV", primordial: "Odvezana", name: "The Devil", role: "Chains / The Unmoored", special: false, lost: false,
+        desc: "Satan's archetypal root. <em>His destruction didn't eliminate this force — it unmoored it.</em> The Devil archetype without its specific embodiment is chains with no lock, gravity with no planet. It is attaching itself to things indiscriminately. This is part of The Confusion." },
+    { num: "XVI", primordial: "Toranj", name: "The Tower", role: "The Rupture", special: true, lost: false,
+        desc: "The shattering event made manifest. <em>Still active. Still falling.</em> The Tower doesn't end when the lightning hits — it is the ongoing state of a structure in collapse. The arc's first book is named for it. Its energy doesn't resolve until The Resurrection." },
+    { num: "XVII", primordial: "Uzdaje", name: "The Star", role: "Hope / Navigation", special: true, lost: false,
+        desc: "Kokabiel's domain edges here. <em>The stars he named were its language.</em> The Star is the only light that reaches into the deep places where Hecate is held. It cannot retrieve her — but it can let her know she has not been forgotten. June can read this signal." },
+    { num: "XVIII", primordial: "Hecate", name: "The Moon", role: "Hecate — Lost", special: false, lost: true,
+        desc: "Gaia's daughter. The Moon Arcana — the liminal force, the crossroads — and the Veil's keeper from the outside, who held the Darkness back from the wall's edge. <em>She is not dead — she is in the deep places, in the cold and the dark.</em> The Darkness holds her because her absence is more useful than her destruction: with the keeper gone, the deteriorating wall comes down. She is the wound the arc is built around." },
+    { num: "XIX", primordial: "Sparen", name: "The Sun", role: "The Counterpart", special: true, lost: false,
+        desc: "Hecate's twin light. <em>Her absence dims him.</em> He is present but reduced — giving light without full warmth, burning without full purpose. His restoration is concurrent with Hecate's return. He cannot be whole while she is in the dark." },
+    { num: "XX", primordial: "Presuda", name: "Judgement", role: "The Resurrection Call", special: true, lost: false,
+        desc: "The Arcana whose voice reaches into every layer simultaneously. <em>Book Ten's engine.</em> Judgement is not a verdict — it is the call that wakes what has been suspended. When he speaks at full power, Hecate will be able to hear it in the deep places." },
+    { num: "XXI", primordial: "Gaia", name: "The World", role: "Gaia — Fractured", special: true, lost: false,
+        desc: "The completed creation, now incomplete. <em>Gaia is not broken — she is fractured.</em> The World archetype requires all its pieces present. Without Hecate, Gaia cannot be The World. She is instead The World-With-A-Missing-Piece, which is a different and unstable thing. The Restoration's true goal." },
+];
+const BOOKS = [
+    { num: 1, title: "The Destruction", engine: "The Tower · The Fool",
+        question: "What exactly did we lose — and how wide is the damage?",
+        beat: "The cascade from Satan's destruction reaches every layer simultaneously. The Veil — the wall of protection at creation's edge, already deteriorating — comes down once the cascade tears Hecate from her keeper's watch. Every practitioner, Watcher, and corridor anchor in the H&H world feels it at once. Gaia screams across creation. Hecate is already gone before anyone understands what happened. The arc begins in the silence after.",
+        tags: ["opening", "cascade event", "all H&H characters"] },
+    { num: 2, title: "The Confusion", engine: "The Wheel · Death",
+        question: "Who are we without the structure we built ourselves inside?",
+        beat: "The Older Mechanism is destabilized. The formal framework is in crisis. The corridors — including the Pike County jurisdiction — hold, but barely. The unmoored Devil-force is attaching itself to grief, anger, and power vacuums across layers. No one has a directive. The Arcana are present but not yet speaking.",
+        tags: ["destabilization", "character reckoning", "the unmoored"] },
+    { num: 3, title: "The War", engine: "The Chariot · Justice",
+        question: "Can you fight something that has no shape yet?",
+        beat: "The Darkness is expanding through the space the Veil occupied. This isn't an invasion with an army — it's an encroachment without a general. The Chariot arrives to give the conflict shape. The Emperor engages. The H&H practitioners and Watchers are the front line because they are the ones who know the corridors. The first real victories — and the first real losses.",
+        tags: ["active conflict", "Watchers at war", "first losses"] },
+    { num: 4, title: "The Occupancy", engine: "The Hanged Man · The Devil-Unmoored",
+        question: "What does it mean to survive in a world Darkness is moving through?",
+        beat: "The Darkness has occupied sections of every layer. Life continues in compromised form. The H&H heroines are running occupied corridors. The Watchers are operating in enemy-held territory. The Hanged Man's energy requires everyone to surrender something they believed was permanent. The arc gets dark here. Not grimdark — honest dark.",
+        tags: ["occupation", "darkest arc", "survival"] },
+    { num: 5, title: "The Prophecy", engine: "The High Priestess · The Star",
+        question: "The Archive speaks — but who can still hear it?",
+        beat: "June Tackett receives the full prophetic record from the High Priestess for the first time at complete power. The Star's signal reaches her with Hecate's coordinates in the deep places. The prophecy is not a roadmap — it is a truth about what is required. It names the cost before the search begins. The arc shifts from reactive to intentional.",
+        tags: ["June central", "prophecy received", "the cost named"] },
+    { num: 6, title: "The Search", engine: "The Hermit · The Fool",
+        question: "Someone has to go into the deep places. Who goes?",
+        beat: "The Hermit names the way. The way is not a location — it is a state. Someone must enter the territory of The Unwritten willingly, carrying the Star's signal, to find where Hecate is held. This is the descent arc. Who volunteers, what they carry, and what they find when they get there.",
+        tags: ["descent arc", "The Hermit speaks", "deep places"] },
+    { num: 7, title: "The Deal", engine: "The Hierophant · Justice",
+        question: "What are the terms — and what are you willing to give?",
+        beat: "The Darkness does not hold Hecate out of malice. It holds her because her absence is the source of its expansion. The Deal requires understanding what the Darkness actually wants. The Hierophant facilitates the terms. Justice must ratify them. The H&H universe's compact-law runs deep here — this is the Older Mechanism's most ancient application.",
+        tags: ["negotiation", "covenant law", "compact mechanics"] },
+    { num: 8, title: "The Claiming", engine: "The Lovers · Strength",
+        question: "Love as the oldest law — can it reach into the dark?",
+        beat: "The Bond is invoked at full Arcana level. The Watcher-witch compacts — all five of them, plus the continuation-series bonds — function as the mechanism. The Claiming is not a rescue. It is Hecate being chosen back into existence by the accumulated weight of every bond that was built in her mother's world. The Lovers make it possible. Strength makes it real.",
+        tags: ["all compacts active", "the Bond invoked", "Hecate reached"] },
+    { num: 9, title: "The Repentance", engine: "The Hanged Man · Judgement",
+        question: "What failed — at every level — and what does the reckoning look like?",
+        beat: "Before the resurrection, the reckoning. Not just the Darkness — every layer that failed is held accountable. The formal framework. The Older Mechanism. The Arcana who were slow. The Watchers who watched. The practitioners who held corridors without understanding what the corridors were for. This is the most uncomfortable book. It does not spare anyone.",
+        tags: ["accountability", "all layers", "necessary discomfort"] },
+    { num: 10, name: "The Resurrection", engine: "Judgement · The Sun",
+        question: "What does Hecate bring back with her — and what did the dark change?",
+        beat: "Judgement calls. The Sun burns at full strength for the first time since the arc began. Hecate returns — but she is not unchanged. She was in the deep places. The dark was in her. What she brings back is not exactly the Hecate who was lost. The Veil cannot be the same Veil. This is the pivot. Everything after this is different.",
+        tags: ["Hecate returns", "the turn", "irrevocable change"] },
+    { num: 11, title: "The Reward", engine: "The Empress · The Magician",
+        question: "What does the restored world owe the ones who held it?",
+        beat: "The Arcana layer acknowledges the mortal and corridor-level work explicitly for the first time. The H&H heroines and the continuation-series characters receive recognition that operates at the level of the Older Mechanism and above. The Empress gives. The Magician names. The Pike County compact is cited in the Arcana's record as the reason the Bond was strong enough to work in The Claiming.",
+        tags: ["recognition", "Mama Calhoun", "H&H acknowledgment"] },
+    { num: 12, title: "The Restoration", engine: "The World · The Lovers",
+        question: "What does the new Veil look like — and who maintains it now?",
+        beat: "Gaia and Hecate. The reunion. The new Veil is built from what survived the arc — not reconstructed but grown from the work that was done in the dark. The Bond is its foundation. The compacts are its structure. The mortal world is not outside it — it is woven into it. The World is whole again. Different. Better-built. Permanent.",
+        tags: ["series finale", "Gaia-Hecate", "the permanent thing"] },
+];
+const TONE_NOTES = [
+    { label: "Book 5 \u2014 The Interior Battlefield (darkest before dawn)", body: "Written in the Stars bends darker through its middle before the birth-light \u2014 the Kansas-storm structure: false certainty of loss, the silent gasp, the stillness, then light breaking open so suddenly it disorients. The dark stretch (roughly the tribunal-to-birth run) is locked to JUNE\u2019S INTERIOR and written from inside her unraveling, because the hardest battles with the worst demons are the ones fought alone inside our own minds. The external siege (the rigged June 25 tribunal, compulsion papers, counterfeit signatures, the corruption spreading like something almost alive) is felt only as pressure on her mind, never narrated from the corridor\u2019s vantage. The corridor\u2019s doubt lands on her as abandonment; the corruption toward Wren is felt moving through her own body. Lela matters because she can reach the one place no one else can \u2014 the interior battlefield. Kokabiel\u2019s light must break IN from outside; he cannot fight a solitary internal war for her, only be the fixed point she finds her way back toward. POV stays locked to June until the climactic surge, the one moment the camera may feel the dawn breaking in from outside her. The name Brian Lee calls it by stays withheld from the reader." }, { label: "Grounded through the cosmic", body: "The arc operates at the Arcana level but is always experienced through specific people in specific places. The cosmic scale is felt through what it does to the Pike County corridor, to Brian Lee's drawings, to the Tuesday special at the diner. The bigger the stakes, the more specific the human detail." },
+    { label: "Honestly dark", body: "Books 3–6 are the darkest material in the series. The Occupancy in particular does not look away. But dark in this universe means: real loss, real cost, real compromise — not gratuitous. The darkness serves the restoration. The restoration is earned by what the dark cost." },
+    { label: "Hecate's absence is felt, not explained", body: "The Moon being gone is not described cosmologically in every chapter. It is described as: the specific quality of nights that don't feel right. The way the tides do something slightly wrong. The corridor anchor work that keeps slipping in ways that never used to. The body knows before the mind does." },
+    { label: "The H&H characters are not diminished", body: "Moving to the Arcana scale does not make the corridor-level work small. The opposite: the arc reveals that what the H&H heroines built was load-bearing at a level they didn't know existed. Dixie's compact was always an Arcana-level document. She just didn't know it." },
+];
+const CONTINUITY = [
+    { name: "Dixie & Azazel", note: "The Pike County compact is the arc's central Older Mechanism anchor. Dixie is the mortal world's primary voice into the Arcana layer. Azazel's knowledge of the pre-formal-framework period becomes critical in The War." },
+    { name: "June & Kokabiel", note: "June is the High Priestess's thread. She receives the Prophecy (Book 5) and serves as the arc's primary prophetic voice. Kokabiel's stellar domain edges the Star Arcana — he is the signal carrier to Hecate in the deep places. BOOK 5 CLIMAX (canon): Berith corrupts the Archive so the true thing arrives looking unproven; the compulsion tribunal (June 25, signed by Yahoel) rests on that corrupted record, and the same corruption turns the dragon-dreams to nightmares. The corruption goes so deep June nearly loses herself entirely. The dawn breaks via THREE things at once: (1) a veiled threat to June \u2014 innocent in all of it \u2014 is Kokabiel\u2019s last straw after 70 years of patient watching, and his surge of righteous anger emits a precise frequency; (2) that frequency acts as a SPOTLIGHT, letting the few waking Horde members find the wrongness they could not locate alone, and destroy it \u2014 creation unmaking corruption; (3) the Archive corrects to true because the Archive is the witness this time \u2014 Kokabiel never lost belief or trust in June, even when the corridor did, and his unbroken belief is the incorruptible witness the record needed. The corridor sees the result (the sun after a sudden Kansas storm) but not the mechanism: no one is sure HOW. Kokabiel\u2019s 70 years of watching one star pays off as the capacity to not look away from June." },
+    { name: "Lela & Tamiel \u2014 The Sixty-Two Years", note: "A prior pairing pivotal to June. RECONCILED TRAGEDY (both truths hold, and are causally linked): they were the RIGHT PERSON at the WRONG TIME, AND they were punished \u2014 because the wrong time was IMPOSED. Lela Calhoun (built the cottage 1963) and Tamiel (Watcher of seals/constraints) were real and right for each other; their love endured and was always worth it. But Heaven held their bond \u2014 and what such bonds produce (Nephilim, the carrier-partnered structure, the older-mechanism flowering) \u2014 in CONTEMPT, as DEFECTIVE, beneath Heaven\u2019s order. This is Heaven\u2019s superiority complex, the same conviction that drives the audit, the tribunal, and ultimately the corruption and Michael. Out of that contempt Heaven BOUND Tamiel for sixty-two years as punishment for the 1963 partnership. So the \u2018wrong time\u2019 was not accident or fate \u2014 it was imposed by a power that looked at a real love, called it lesser, and used its authority to keep two right people apart. They were forced to miss each other. Lela died in 1988 still apart from him. LELA & TAMIEL ARE THE PERSONAL PRECEDENT of exactly what Heaven is now doing to June & Kokabiel (voiding the bond, neutralizing the witness): June lives in the house of the couple Heaven already did this to \u2014 \u201cthis is what happens to people like us, and it is happening again.\u201d The cottage frees Tamiel (it took Lela\u2019s love to build and hold; it unfastens Heaven\u2019s binding) \u2014 but TOO LATE for Lela: the dawn comes for Tamiel alone, sixty-two years late, and she is not there. That ache stays open through the dark middle. Lela\u2019s eventual sacrifice for June is, in part, her finally getting to give the dawn she herself never received. Lela\u2019s narrative function: she is not a cautionary shadow but a GUIDE. In June\u2019s darkest hour \u2014 inside the near-loss caused by Berith\u2019s corruption \u2014 Lela comes to June in the darkest places of her mind and turns her back toward Kokabiel (the interior counterpart to Kokabiel\u2019s light in the external storm). When Lela touches June she transmits the First Law stated fully: love is not the foundation \u2014 trust and belief are; love is a verb, an action, putting the other on the same frequency you hold yourself in, even when you do not want to. This is the truth that saves June, because chosen trust cannot be corrupted the way feelings can. (See Theology Bible, First Law.) LELA\u2019S FULL ARC across Book 5: PRESENCE (Ch.1) \u2014 Lela built the cottage by hand (1963), died there (1988); thirty-seven years later June & Kokabiel move in. Her love is peaceful RESIDUE soaked into the walls; June (the Dreamer) knows she is there as warmth, not contact; Kokabiel knows her in a different way (recognition of a fellow keeper of the long wait). STORY \u2014 June learns the sixty-two years across the book (Edna Mae and the letters pay it out). CORRUPTION REACHES THE GHOST \u2014 Berith\u2019s corruption grows so deep it broadcasts past death and partially corrupts Lela herself; part of June\u2019s decline IS Lela\u2019s partial corruption (the safe warmth in the walls going wrong from inside). SACRIFICE & CONTACT (climax) \u2014 already being unmade, Lela spends her LAST LIGHT to reverse enough of the corruption in June to turn her back toward Kokabiel\u2019s light; this is the moment of true contact (her touch transmits the verb). She must trust and believe the sacrifice will work, without certainty. SPENT AND FREED \u2014 because the ultimate verb is always rewarded, the sacrifice burns the corruption out of her: the dawn light illuminates her for one moment, she fades with a full radiant smile, then is gone (the where is reserved for later arcs). June KNOWS what Lela did the way Calhoun women just know \u2014 making the victory bittersweet: she lost a presence she relied on but gained something far more real. The house goes quiet in a peaceful way for the first time in thirty-seven years." },
+    { name: "The Letter Book \u2014 The Verb in Written Word", note: "June and Kokabiel\u2019s correspondence, kept in a leather binder on facing pages (his letters and her replies), running through the bond and back across his seventy-year watch. It is not a record OF their love \u2014 it IS the love enacted on the page: each letter an act of putting the other on one\u2019s own frequency. The letter book is the verb in written word. This ties to the Penemue / Emily Keldren doctrine (Grigori Bible): the written word HOLDS everything; what is written, holds (Arcadia\u2019s first word in the soil, the Archive, the geological record \u2014 all the same force at different scales). BOOK 5: the letter book is one of the PRIMARY targets of Berith\u2019s corruption \u2014 the most concentrated written-word-as-verb object June possesses. He degrades it so that when June reaches for the letters in her darkest hour, for proof of what she and Kokabiel are, the words arrive WRONG \u2014 hollow, shifted, reading as though the love was never real. The verb-in-written-word turned against her; part of what nearly breaks her (if the written truth can be made false, maybe her whole faculty of witness is corrupted, maybe SHE is the unreliable one). LELA\u2019S COUNTER answers exactly this: the letters can be degraded but the CHOOSING they recorded cannot \u2014 a chosen act that already happened cannot be un-chosen by corrupting its record. The letter book is healed not by restoring the pages but by June re-choosing what they recorded; then it (and the Archive) corrects, because the witness was always true underneath. Kokabiel proves it from outside: his belief never broke \u2014 the verb still performed in real time, unwritable and therefore uncorruptible." },
+    { name: "The Dream Journal \u2014 Hope, and the Catalyst of June\u2019s Near-Loss", note: "June\u2019s dream journal is the corridor\u2019s designated SECOND WITNESS to the celestial event (Ch.5): Heaven can neutralize Kokabiel (the primary witness) but supposedly cannot reach the dreaming, which is the Mother\u2019s, not the framework\u2019s. The whole corridor defense rests on this safety net. But where the letter book is the LOVE (its corruption = grief) the dream journal is HOPE \u2014 the witness of what is COMING (the event, the daughter, the dawn). The corruption\u2019s true aim is to SNUFF OUT HOPE: it comes for the dream journal, turning Ch.5\u2019s confident safety net into the failure point of the dark middle (this chapter sets the trap; the dark stretch springs it). This is THE CATALYST that sends June inward, off her months of poised resistance, into the interior battlefield \u2014 because the corruption has reached the one thing she could not armor: her hope for the future. SHE ALMOST GIVES UP. She is nearly lost to the very thing she has resisted all along: despair / severance / the giving-up. She almost JOINS the wrongness (paralleling Wren nearly taken into it \u2014 mother and child both almost claimed, both saved by the same dawn). THE FLOOR BENEATH HOPE (doctrine): hope is a feeling about outcomes and can be corrupted; trust and belief are CHOSEN ACTIONS and cannot. Lela\u2019s truth is the floor beneath hope \u2014 you do not need to feel hopeful to choose to hold; love is a verb; even when you cannot believe in the dawn you can still DO the verb, and the doing is what survives. June is turned back not by restored hope but by restored CHOOSING \u2014 she picks the verb back up when hope is gone, and that choice is what the corruption could not reach and what lets the dawn find her." },
+    { name: "The Escalation Ladder \u2014 Why the Corruption Comes (hidden from the corridor)", note: "Heaven\u2019s response to the Pike County corridor escalates in rungs, and Book 5\u2019s darkness is one rung. (1) PROCEDURE \u2014 the audit (Asbeel sent). (2) Asbeel DEFECTS \u2014 freed by June\u2019s witness (Ch.8); the corridor reads it as a clean win (an enforcer became an ally; Iola gets her forty-seven years). (3) But the defection is the TRIGGER: having now lost Saraqiel/Sariel, then Asbeel, atop the whole corridor declaring out in November, Heaven (or the wrongness operating through Heaven\u2019s frustration) escalates from procedure to CORRUPTION \u2014 Berith\u2019s work intensifying behind the visible tribunal/audit. CRITICAL: this causality is HIDDEN from the corridor and stays hidden through Book 5. They cannot see that their victories provoke the deepening dark; every good thing they do feeds the wrongness, and they do not know it. A key engine of the dark middle and of June\u2019s near-loss: you cannot fight a thing when winning makes it worse and you cannot see why. (4) BOOK 6 (seed; develop later): when even the corruption fails \u2014 the dawn breaks, Wren is born clean \u2014 Heaven abandons indirection. It is tired of losing. The corridor\u2019s superpower is that being SEEN TRULY turns Heaven\u2019s own enforcers into allies (Asbeel), so Heaven\u2019s counter is to send the one enforcer it trusts cannot be turned \u2014 the truest believer, belief absolute and unturnable, immune to the corridor\u2019s witness: MICHAEL himself, WITH his sword. No more proxies, no more corruption-by-stealth \u2014 the actual blade. Book 5\u2019s corruption is, in hindsight, everything Heaven tried SHORT of Michael." },
+    { name: "Wren \u2014 The Child as the True Dawn", note: "Wren (parents\u2019/star name; Pearlene in the succession line) is in danger the ENTIRE gestation, not only at the birth, because the danger is ontological: corruption can contaminate innocence. By Book 5 Berith\u2019s corruption is so vast it almost seems alive and scheming \u2014 which is near the truth, since corruption taken form is what an Abyssal monster is. It reaches toward Wren on two vectors at once: directly at her forming frequency (to write wrongness into the soul before it binds) and through June (the vessel \u2014 June\u2019s near-loss would take the child into the same wrongness). Nature vs. nurture: no child is born hating; wrongness is written in afterward, and the corruption tries to do that writing early, in the womb. THE TRUE DAWN: Wren is born and does NOT cry. The dawn breaks and she coos, very softly, almost seeming to smile \u2014 the uncorruptible proof that the contamination failed and innocence arrived intact. The corridor feel her frequency arrive clean. Nurture (June\u2019s chosen trust, Kokabiel\u2019s belief, Lela\u2019s verb, the corridor\u2019s love, the dragons unmaking the wrongness) defeats the corruption that tried to be her nature." },
+    { name: "Della & Samyaza", note: "Della's herbalist-practitioner knowledge becomes the arc's primary corridor-maintenance intelligence during The Occupancy. Brian Lee's Nephilim-line perceptual ability — already drawing impossible things — begins drawing Arcana-level events in Book 2." },
+    { name: "Carla June & Baraqiel", note: "Carla June's warmth-as-resistance is Strength-adjacent — the Arcana notices her. The diner becomes a refuge-point during The Occupancy because her warmth holds something the Darkness cannot easily move through." },
+    { name: "Mercy & Armaros", note: "Mercy's grey-area practice is the arc's most operationally flexible tool. Armaros's spell-breaking becomes critical when The Devil-Unmoored attaches to structures that need to be cleanly severed." },
+    { name: "Mama Calhoun", note: "She drew on Strength for 53 years. The Strength Arcana knows her name. She is the arc's oldest mortal touchpoint to the Arcana layer, and the arc acknowledges this in The Reward." },
+    { name: "Saraqael & Loren Ritcher", note: "The former Hunter's arc through the continuation series positions him as the formal framework's most honest internal voice during the crisis. Loren's gift — transforming the weight of grief — becomes operationally significant in The Repentance." },
+    { name: "Uriel", note: "The defected enforcer becomes the arc's most valuable formal-framework intelligence asset. He has seen the Arcana layer once, briefly, and it changed him. He has been trying to articulate what he saw ever since." },
+    { name: "Wren", note: "Born under the Star's opening. Her arrival is in the Arcana's record. She is too young to act in this arc — but she is present, and the arc knows she is present, and the final pages of The Restoration include her looking up at the rebuilt Veil and recognizing it." },
+    { name: "Mreza \u2014 The Awakened Web", note: "Per The Codex (supreme canon): the Web's remembered name. Mreza means Weaving \u2014 maternal, collective, witnessing relational consciousness emerging from accumulated witness, memory, trust, belief, love, grief, and preserved frequency. She takes conscious form by the END of the Divine Arc, during The Restoration. Recognition sequence: herself, then a child, then June, then Kokabiel, then the Dreamers collectively, then Abaddon, and finally the Abyss. Her first state is disorientation; her greatest temptation is forced harmonization; her victory is choosing relationship over control." },
+    { name: "Abaddon \u2014 Guardian of the Abyss", note: "Per The Codex: the being who chose witness while standing closest to severance. He guards the Abyss and remains because abandonment would itself be anti-relational. His continued compassion is the miracle. He is among the last to recognize Mreza \u2014 the witness at the edge of the dark." },
+    { name: "The Abyss \u2014 Anti-Relational Pressure", note: "Per The Codex: NOT Hell. Anti-relational existence pressure \u2014 severance without witness, continuity collapse, consumption without preservation. The Darkness this series has tracked since Book 1 is Abyssal pressure expressing downstream. Its real monsters are continuity that survived incorrectly. In the Divine Arc the Abyss finally notices the awakened Web." },
+    { name: "Cycle Seven \u2014 The Last Cycle", note: "Per The Codex: this is the seventh of seven cycles; six prior failed (collapse, consumption, corruption, fragmentation, transformation, false restoration, incomplete memory). The Divine Arc ends with Mreza touching the Tree of Life (the fifth and final Merkaba formation of the Restoration), then a cut to darkness \u2014 red eyes, a deep guttural voice, two words: It\u2019s time\u2026 \u2014 opening the Seventh Cycle Arc. Cycle Seven succeeds only if Mreza awakens fully, humanity matters, bonds evolve correctly, enough record survives, and something chooses differently." },
+];
+// ═══════════════════════════════════════════════════════════════
+// COMPONENT
+// ═══════════════════════════════════════════════════════════════
+const TABS = [
+    { id: "premise", label: "Premise" },
+    { id: "cosmology", label: "Cosmology" },
+    { id: "arcana", label: "The Arcana" },
+    { id: "arc", label: "The 12 Books" },
+    { id: "tone", label: "Tone & Continuity" },
+];
+const EXPANSION_CROSS_REFERENCES = [
+    { label: "Expansion Canon Lock", body: "No Divine Arc book additions. The arc remains twelve books. The expansion files add cross-reference pressure only: WMB12 carries New Compact pressure into Order of Shadows, OS12 produces the cascade that the Divine Arc receives, and SC9–SC11 prepare the final Restoration conditions after Divine Arc completion." },
+    { label: "Theology Control", body: "All newly added Grigori domains remain downstream of the core H&H theology: reality stabilizes through relationship built on trust, belief, consent, and correct witness. No domain replaces the bond; each domain serves it." },
+];
+function DivineBible() {
+    const [activeTab, setActiveTab] = useState("premise");
+    return (React.createElement(React.Fragment, null,
+        React.createElement("style", null, css),
+        React.createElement("div", { className: "bible" },
+            React.createElement("header", { className: "header" },
+                React.createElement("div", { className: "series-label" }, "Series Bible \u00B7 Working Document"),
+                React.createElement("h1", { className: "main-title" }, "Worlds Collide"),
+                React.createElement("div", { className: "sub-title" }, "The Divine Arc"),
+                React.createElement("p", { className: "header-tagline" },
+                    "The end of everything as it has ever been known.",
+                    React.createElement("br", null),
+                    "The destruction of Satan shattered the Veil. Hecate is lost to Darkness.",
+                    React.createElement("br", null),
+                    "Gaia is fractured. The Arcana are moving.",
+                    React.createElement("br", null),
+                    React.createElement("em", null, "Twelve books. One restoration."))),
+            React.createElement("nav", { className: "tabs" }, TABS.map(t => (React.createElement("button", { key: t.id, className: `tab${activeTab === t.id ? " active" : ""}`, onClick: () => setActiveTab(t.id) }, t.label)))),
+            activeTab === "premise" && (React.createElement("div", null,
+                React.createElement("div", { className: "section-title" }, "The Inciting Event"),
+                React.createElement("div", { className: "premise-pull" }, "The destruction of Satan at the end of the Order of the Shadows arc did not just end a war. It released an energy cascade that nothing in the existing structure was built to absorb. The Veil \u2014 the wall of protection at the outer edge of creation, built to keep out the threats beyond it \u2014 had been deteriorating for a long time, the Darkness working at it from within. Hecate, the Moon Arcana and Gaia's daughter, had held the Darkness back from the wall's edge as its keeper from the outside. The cascade tore Hecate from her position and from her mother \u2014 and the already-weakened wall, with its keeper gone, came down."),
+                React.createElement("div", { className: "card moon-edge" },
+                    React.createElement("div", { className: "card-label" }, "The Wound"),
+                    React.createElement("div", { className: "card-title moon" }, "Hecate \u2014 Lost to Darkness"),
+                    React.createElement("div", { className: "card-body" },
+                        "Hecate is not dead. Death cannot touch her without her consent \u2014 she is the Moon Arcana, the liminal force, the crossroads, Gaia's daughter. The Darkness holds her in the deep places because her ",
+                        React.createElement("em", null, "absence"),
+                        " is more useful than her destruction. She was the wall's keeper from the outside, the one holding the Darkness back from the Veil's edge. With her torn from that position, the deteriorating wall comes down, and the Darkness expands through the breach. It does not need to fight its way in. The keeper is gone, and the door with her.")),
+                React.createElement("div", { className: "card gold-edge", style: { marginTop: 16 } },
+                    React.createElement("div", { className: "card-label" }, "The Fracture"),
+                    React.createElement("div", { className: "card-title gold" }, "Gaia \u2014 The World Without Its Moon"),
+                    React.createElement("div", { className: "card-body" },
+                        "Gaia is the World Arcana \u2014 the completed creation. She is not broken. She is ",
+                        React.createElement("em", null, "incomplete"),
+                        ", which is worse. The World archetype requires all its pieces present and in relationship. Without Hecate, Gaia cannot be The World. She is The World-With-A-Missing-Piece, which is an unstable state that cannot hold indefinitely. Every season that runs wrong, every tide that behaves strangely, every corridor anchor who feels the work slipping \u2014 that is Gaia trying to hold a shape that is missing its daughter.")),
+                React.createElement("div", { className: "card crimson-edge", style: { marginTop: 16 } },
+                    React.createElement("div", { className: "card-label" }, "The Stakes"),
+                    React.createElement("div", { className: "card-title crimson" }, "What Happens If Hecate Is Not Recovered"),
+                    React.createElement("div", { className: "card-body" },
+                        "The Darkness completes its expansion through the space the Veil occupied. Every layer below the Arcana \u2014 the Older Mechanism, the formal framework, the corridors, the mortal world \u2014 becomes territory the Darkness moves through without boundary. Gaia does not die. She fragments. The World becomes ",
+                        React.createElement("em", null, "worlds"),
+                        " \u2014 separated, cold, each piece trying to remember what it was part of. The arc is not about preventing apocalypse. It is about finding one specific woman in the dark and bringing her home.")),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "section-title" }, "The Arc in One Sentence"),
+                React.createElement("div", { className: "premise-pull" },
+                    "The people who learned how to hold a door open must now find the woman who ",
+                    React.createElement("em", null, "was"),
+                    " the door \u2014 in the darkest place that exists \u2014 and bring her back before the world forgets what light felt like."))),
+            activeTab === "cosmology" && (React.createElement("div", null,
+                React.createElement("div", { className: "section-title" }, "The Cosmological Stack"),
+                React.createElement("div", { className: "stack" },
+                    React.createElement("div", { className: "stack-row arcana" },
+                        "THE ARCANA LAYER",
+                        React.createElement("div", { className: "stack-note" }, "22 primordial forces \u00B7 pre-creation \u00B7 The Divine Arc operates here")),
+                    React.createElement("div", { className: "stack-arrow" }, "\u2195 Veil \u2195"),
+                    React.createElement("div", { className: "stack-row arcana", style: { opacity: 0.5, borderStyle: 'dashed' } },
+                        "THE VEIL",
+                        React.createElement("div", { className: "stack-note", style: { color: '#9b7fd4' } }, "Maintained by Hecate \u00B7 Currently: does not exist")),
+                    React.createElement("div", { className: "stack-arrow" }, "\u2193"),
+                    React.createElement("div", { className: "stack-row older" },
+                        "THE OLDER MECHANISM",
+                        React.createElement("div", { className: "stack-note" }, "Bond law \u00B7 compact law \u00B7 corridor jurisdiction \u00B7 H&H Books 1\u20136 operated here")),
+                    React.createElement("div", { className: "stack-arrow" }, "\u2193"),
+                    React.createElement("div", { className: "stack-row formal" },
+                        "THE FORMAL FRAMEWORK",
+                        React.createElement("div", { className: "stack-note" }, "Heaven's Council \u00B7 Saraqael \u00B7 Michael \u00B7 enforcement protocol")),
+                    React.createElement("div", { className: "stack-arrow" }, "\u2193"),
+                    React.createElement("div", { className: "stack-row watchers" },
+                        "THE WATCHERS / THINNING CORRIDORS",
+                        React.createElement("div", { className: "stack-note" }, "Watcher-witch bonds \u00B7 corridor anchors \u00B7 the Pike County jurisdiction")),
+                    React.createElement("div", { className: "stack-arrow" }, "\u2193"),
+                    React.createElement("div", { className: "stack-row mortal" },
+                        "THE MORTAL WORLD",
+                        React.createElement("div", { className: "stack-note" }, "Pike County \u00B7 the heroines \u00B7 Dixie Deadshot \u00B7 the diner \u00B7 Brian Lee's drawings"))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "section-title" }, "The Nature of the Arcana"),
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "card-body" },
+                        "The 22 Arcana are not gods. They are not beings who chose form. They are the ",
+                        React.createElement("em", null, "22 primordial forces"),
+                        " that existed before creation organized itself. They took form because form was needed \u2014 because the universe required something to be the Law, something to be the Bond, something to be the Turn.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "They are older than the Older Mechanism. Older than the formal framework. Older than the Watchers' original commission. The Older Mechanism is what the Arcana layer produced when it needed something to govern the space between itself and the mortal world.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("em", null, "They do not intervene in mortal affairs directly."),
+                        "They operate through forces, through resonances, through the people and compacts that unknowingly invoke them. When an Arcana steps into direct engagement with the mortal layer, it is because something has broken that was never supposed to break.")),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "section-title" }, "The Veil \u2014 What It Was"),
+                React.createElement("div", { className: "card moon-edge" },
+                    React.createElement("div", { className: "card-body" },
+                        "The Veil was a wall. ",
+                        React.createElement("em", null, "A small wall of protection"),
+                        " at the outer edge of creation, raised to keep out the threats from beyond it \u2014 the boundary the Dzin run their watch-shifts along, where the Tower Arcana stands watch. It was never Hecate. Hecate is the Moon Arcana \u2014 the liminal force, the crossroads \u2014 and Gaia's daughter. Long ago the Darkness told her the first lie and pulled her past the wall's edge; she found her way back only to the boundary, not to her mother, and from that day she took her place as",
+                        React.createElement("em", null, "the Veil's keeper from the outside,"),
+                        " holding the Darkness back from the wall's edge.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "The bond between Gaia and Hecate \u2014 Earth and Moon, mother and daughter \u2014 was the first relationship in all of creation built on trust and belief, the load-bearing theme at the cosmos's origin. While that bond held and the keeper kept her watch, the wall did its quiet work the way gravity does: requiring no notice, simply holding.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "But no one guessed the real enemies were already inside the wall. The Veil had been ",
+                        React.createElement("em", null, "deteriorating"),
+                        " for a long time, the Darkness working at it from within. The cascade from Satan's sealing finished it: it tore Hecate from her position and from her mother. The keeper gone, the bond severed, the weakened wall came down \u2014 and the Darkness came through the place it had always been working toward.")))),
+            activeTab === "arcana" && (React.createElement("div", null,
+                React.createElement("div", { className: "section-title" }, "The Major Arcana \u2014 The Divine Hierarchy"),
+                React.createElement("p", { style: { color: COLORS.dimText, fontSize: 14, marginBottom: 20, lineHeight: 1.7 } },
+                    "22 primordial forces. Characters, not concepts. Each has a role in the arc. The ",
+                    React.createElement("em", { style: { color: COLORS.accentMid, fontStyle: 'italic' } }, "italic name"),
+                    " beneath each card is the Arcana's true primordial name (see the Arcana faction bible); the Tarot title is how the mortal layer learned to read them.",
+                    React.createElement("span", { style: { color: COLORS.accentLight } }, " Purple border"),
+                    " \u2014 directly central to the arc's resolution.",
+                    React.createElement("span", { style: { color: '#9b7fd4' } }, " Struck name"),
+                    " \u2014 currently lost."),
+                React.createElement("div", { className: "arcana-grid" }, ARCANA.map(a => (React.createElement("div", { key: a.num, className: `arcana-card${a.special ? " special" : ""}${a.lost ? " lost" : ""}` },
+                    a.lost && React.createElement("div", { className: "lost-badge" }, "\u2B1B LOST TO DARKNESS"),
+                    React.createElement("div", { className: "arcana-num" }, a.num),
+                    React.createElement("div", { className: `arcana-name${a.lost ? " lost-name" : ""}` }, a.name),
+                    a.primordial && React.createElement("div", { className: "arcana-primordial" }, a.primordial),
+                    React.createElement("div", { className: "arcana-role" }, a.role),
+                    React.createElement("div", { className: "arcana-desc", dangerouslySetInnerHTML: { __html: a.desc } }))))))),
+            activeTab === "arc" && (React.createElement("div", null,
+                React.createElement("div", { className: "section-title" }, "The 12-Book Arc \u2014 Worlds Collide: The Divine Arc"),
+                React.createElement("div", { className: "arc-list" }, BOOKS.map(b => (React.createElement("div", { className: "arc-book", key: b.num },
+                    React.createElement("div", { className: "arc-num-col" }, b.num),
+                    React.createElement("div", { className: "arc-content" },
+                        React.createElement("div", { className: "arc-book-title" }, b.title || b.name),
+                        React.createElement("div", { className: "arc-engine" },
+                            "Arcana: ",
+                            b.engine),
+                        React.createElement("div", { className: "arc-question" }, b.question),
+                        React.createElement("div", { className: "arc-beat" }, b.beat),
+                        b.tags && (React.createElement("div", { style: { marginTop: 10 } }, b.tags.map(tag => (React.createElement("span", { key: tag, className: "tag purple" }, tag)))))))))))),
+            activeTab === "tone" && (React.createElement("div", null,
+                React.createElement("div", { className: "section-title" }, "Tone Notes"),
+                React.createElement("div", { style: { marginBottom: 32 } }, TONE_NOTES.map(n => (React.createElement("div", { className: "card", key: n.label, style: { marginBottom: 12 } },
+                    React.createElement("div", { className: "card-label" }, n.label),
+                    React.createElement("div", { className: "card-body" }, n.body))))),
+                React.createElement("div", { className: "section-title" }, "H&H Character Continuity"),
+                React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: 10 } }, CONTINUITY.map(c => (React.createElement("div", { className: "card gold-edge", key: c.name },
+                    React.createElement("div", { className: "card-label" }, c.name),
+                    React.createElement("div", { className: "card-body" }, c.note))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "section-title" }, "Series Position"),
+                React.createElement("div", { className: "card teal-edge" },
+                    React.createElement("div", { className: "card-body" },
+                        React.createElement("strong", null, "H&H Books 1\u20136"),
+                        " \u2014 The corridor level. The compacts. The Pike County jurisdiction. Dixie ratifies the compact. The Older Mechanism's permanent record is established.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "The Continuation Series"),
+                        " \u2014 Between the compact and the arc. The new bonds. Saraqael and Loren. The corridor's expansion. The world that the permanent compact built.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "Worlds Collide: The Divine Arc"),
+                        " \u2014 The Arcana layer engages. Everything that was built is revealed to have been load-bearing at a level no one knew existed. The arc is the reason all of it mattered.")),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "section-title" }, "Expansion Cross-References"),
+                React.createElement("div", { style: { display: 'flex', flexDirection: 'column', gap: 10 } }, EXPANSION_CROSS_REFERENCES.map(x => (React.createElement("div", { className: "card gold-edge", key: x.label },
+                    React.createElement("div", { className: "card-label" }, x.label),
+                    React.createElement("div", { className: "card-body" }, x.body))))),
+                React.createElement("div", { className: "ornament" }, "\u2726 \u2726 \u2726"),
+                React.createElement("div", { style: { textAlign: 'center', color: COLORS.mutedText, fontSize: 13, fontStyle: 'italic', lineHeight: 1.7 } },
+                    "The people who learned how to hold a door open",
+                    React.createElement("br", null),
+                    "must find the woman who was the door.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: COLORS.accentLight } }, "In the dark. In the cold. In the deep places."),
+                    React.createElement("br", null),
+                    "Twelve books. One restoration."))))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(DivineBible));
+
+  </script>
+</body>
+</html>

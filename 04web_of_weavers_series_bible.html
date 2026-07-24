@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>04Web Of Weavers Series Bible</title>
+  <meta name="description" content="Converted HTML version of 04web_of_weavers_series_bible.jsx for the Holler & Hellfire Universe." />
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #04020a; }
+    #root { min-height: 100vh; }
+    .conversion-note {
+      font-family: Georgia, serif;
+      background: #100603;
+      color: #e8c06a;
+      border: 1px solid #3d1a08;
+      padding: 12px 16px;
+      max-width: 900px;
+      margin: 16px auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <noscript><div class="conversion-note">JavaScript is required to display this converted H&amp;H bible.</div></noscript>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+/* ============================================================
+   CANON AUTHORITY NOTE
+   The Codex (universe_canon_bible.jsx) is the SUPREME canon
+   authority for the H&H Universe. This file SPECIALIZES /
+   EXPANDS / ORGANIZES / DISPLAYS canon and does not supersede
+   The Codex on core universe truth. Objective metaphysical
+   truth lives in The Codex; perceived/in-world truth may differ.
+   ============================================================ */
+const { useState, useMemo, useEffect, useRef } = React;
+const css = `
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── Deep Earth Green Palette ── */
+/* Thirty thousand years of practice.                               */
+/* The daughters were here before the formal framework had a name.  */
+/* The Web was always there. They found it awake.                   */
+
+.bible{max-width:960px;margin:0 auto;padding:32px 20px 60px;background:#020703;min-height:100vh;color:#d4f0d4;font-family:'Cormorant Garamond',Georgia,serif;}
+.header{text-align:center;padding:50px 0 36px;border-bottom:1px solid #153a15;margin-bottom:36px;position:relative;}
+.header::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,#4a8c4a);}
+.header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(45,106,45,.12) 0%,transparent 70%),radial-gradient(ellipse 40% 30% at 20% 30%,rgba(45,106,45,.05) 0%,transparent 60%);pointer-events:none;}
+.series-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:#4a8c4a;text-transform:uppercase;margin-bottom:14px;}
+.main-title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,5vw,38px);font-weight:700;color:#d4f0d4;line-height:1.15;margin-bottom:8px;text-shadow:0 0 50px rgba(74,140,74,.3);}
+.sub-title{font-family:'Cinzel',serif;font-size:clamp(10px,2vw,14px);color:#7dc07d;letter-spacing:.22em;margin-bottom:20px;}
+.tagline{font-style:italic;font-size:14px;color:#2a5a2a;max-width:640px;margin:0 auto;line-height:1.8;}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:26px;border-bottom:1px solid #153a15;padding-bottom:12px;}
+.tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:6px 13px;border:1px solid #153a15;background:transparent;color:#2a5a2a;cursor:pointer;transition:all .2s;}
+.tab:hover{border-color:#4a8c4a;color:#7dc07d;}
+.tab.active{background:rgba(45,106,45,.2);border-color:#4a8c4a;color:#d4f0d4;}
+.sec{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#4a8c4a;margin:22px 0 14px;padding-bottom:7px;border-bottom:1px solid #153a15;}
+.card{background:#060e06;border:1px solid #153a15;border-left:3px solid #2d6a2d;padding:16px 20px;margin-bottom:12px;}
+.card.gold{border-left-color:#c9943a;}
+.card.moon{border-left-color:#94a3b8;}
+.card.bone{border-left-color:#78716c;}
+.card.omni{border-left-color:#fbbf24;background:rgba(251,191,36,.03);}
+.card.earth{border-left-color:#7dc07d;background:rgba(45,106,45,.05);}
+.clabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;color:#153a15;text-transform:uppercase;margin-bottom:5px;}
+.ctitle{font-family:'Cinzel',serif;font-size:15px;color:#d4f0d4;margin-bottom:5px;}
+.ctitle.gr{color:#7dc07d;}.ctitle.gl{color:#e8c06a;}.ctitle.mn{color:#cbd5e1;}.ctitle.om{color:#fbbf24;}.ctitle.bk{color:#a8a29e;}
+.cbody{font-size:13px;line-height:1.75;color:#2a5a2a;}
+.cbody em{color:#d4f0d4;font-style:italic;}
+.cbody strong{color:#7dc07d;font-weight:600;}
+.cbody strong.g{color:#e8c06a;}
+.cbody strong.m{color:#cbd5e1;}
+.cbody strong.o{color:#fbbf24;}
+.pull{border-left:3px solid #2d6a2d;padding:14px 18px;background:rgba(45,106,45,.07);margin:14px 0;font-size:14px;font-style:italic;line-height:1.8;color:#d4f0d4;}
+.pull.moon{border-left-color:#94a3b8;background:rgba(148,163,184,.05);}
+.pull.gold{border-left-color:#c9943a;background:rgba(201,148,58,.05);}
+hr.rule{border:none;border-top:1px solid #153a15;margin:22px 0;}
+.tag{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 6px;border:1px solid;margin-right:4px;margin-bottom:3px;}
+.tag.gr{color:#7dc07d;border-color:#2d6a2d;}
+.tag.g{color:#e8c06a;border-color:#c9943a;}
+.tag.mn{color:#cbd5e1;border-color:#64748b;}
+.tag.om{color:#fbbf24;border-color:#92400e;}
+.tag.bk{color:#a8a29e;border-color:#57534e;}
+.tag.r{color:#f87171;border-color:#b91c1c;}
+.orn{text-align:center;font-size:16px;color:#153a15;margin:16px 0;letter-spacing:10px;}
+
+/* CHAR CARDS */
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px;}
+.char-card{background:#060e06;border:1px solid #153a15;border-top:3px solid;padding:15px 17px;position:relative;transition:all .2s;}
+.char-card:hover{border-color:#4a8c4a;box-shadow:0 0 16px rgba(45,106,45,.1);}
+.char-card.bone{border-top-color:#78716c;}
+.char-card.moon{border-top-color:#94a3b8;}
+.char-card.omni{border-top-color:#fbbf24;background:rgba(251,191,36,.03);}
+.char-card.earth{border-top-color:#4a8c4a;}
+.char-card.hold{border-top-color:#64748b;opacity:.85;}
+.cbadge{position:absolute;top:10px;right:11px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 7px;border:1px solid;}
+.cb-bone{color:#a8a29e;border-color:#57534e;}
+.cb-moon{color:#cbd5e1;border-color:#64748b;}
+.cb-omni{color:#fbbf24;border-color:#92400e;}
+.cb-earth{color:#7dc07d;border-color:#2d6a2d;}
+.cb-hold{color:#475569;border-color:#1e293b;}
+.cname{font-family:'Cinzel',serif;font-size:16px;color:#d4f0d4;margin-bottom:2px;}
+.crole{font-size:10px;font-style:italic;margin-bottom:7px;letter-spacing:.04em;}
+.cbodyc{font-size:12px;line-height:1.65;color:#2a5a2a;}
+.cbodyc em{color:#d4f0d4;font-style:italic;}
+.cbodyc strong{font-weight:600;}
+.cq{margin-top:8px;padding-top:7px;border-top:1px solid #153a15;font-size:12px;font-style:italic;color:#4a8c4a;}
+.cbond{margin-top:5px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;color:#c9943a;}
+
+/* BOOK ENTRY */
+.book{margin-bottom:20px;}
+.book-head{display:grid;grid-template-columns:80px 1fr;background:#060e06;border:1px solid #153a15;overflow:hidden;}
+.book-id{display:flex;align-items:center;justify-content:center;padding:16px;border-right:1px solid #153a15;font-family:'Cinzel Decorative',serif;font-size:13px;}
+.book-meta{padding:13px 18px;}
+.book-title{font-family:'Cinzel',serif;font-size:16px;color:#d4f0d4;margin-bottom:3px;}
+.book-sub{font-size:11px;font-style:italic;margin-bottom:3px;}
+.book-arc{font-size:11px;color:#2a5a2a;}
+.book-body{background:#030a03;border:1px solid #153a15;border-top:none;padding:16px 20px;}
+.bb-p{font-size:13px;color:#2a5a2a;line-height:1.72;margin-bottom:8px;}
+.bb-p:last-child{margin-bottom:0;}
+.bb-p em{color:#d4f0d4;font-style:italic;}
+.bb-p strong{font-weight:600;}
+.bb-q{border-left:3px solid;padding:10px 14px;margin:10px 0;font-size:13px;font-style:italic;line-height:1.72;color:#d4f0d4;background:rgba(0,0,0,.2);}
+
+/* WEB DIAGRAM */
+.web-node{background:#060e06;border:1px solid #153a15;padding:12px 16px;margin-bottom:8px;display:grid;grid-template-columns:200px 1fr;}
+.web-node.active{border-color:#4a8c4a;background:rgba(45,106,45,.04);}
+.wn-label{padding-right:14px;border-right:1px solid #153a15;font-family:'Cinzel',serif;font-size:11px;color:#4a8c4a;display:flex;align-items:flex-start;}
+.wn-body{padding-left:14px;font-size:12px;color:#2a5a2a;line-height:1.6;}
+.wn-body em{color:#d4f0d4;font-style:italic;}
+`;
+const TABS = [
+    { id: "premise", l: "Premise" },
+    { id: "chars", l: "Characters" },
+    { id: "books", l: "The Twelve Books" },
+    { id: "web", l: "The Web" },
+    { id: "canon", l: "Canon" },
+];
+const CHARS = [
+    {
+        cls: "bone", badge: "BONE-KEEPER", bc: "cb-bone",
+        name: "Hettie Maelin", role: "Northern Ridge, Kentucky \u00b7 The 30,000-Year Record",
+        roleColor: "#a8a29e",
+        body: "The bone-keeper's practice is the oldest in the daughters\u2019 tradition \u2014 the Bone Mother's channel, the thirty-thousand-year record of what the earth has held. Hettie holds it on the Northern Ridge of Pike County: every practitioner who ever practiced in this geography is in the bone record, back to the first daughter who spoke to the Bone Mother.\n\nAt the equinox gathering in WW1, she accesses the full bone record for the network simultaneously. Not just the Pike County lineage \u2014 the thirty-thousand-year lateral record of the daughters\u2019 practice in its full geographic range. It is through this access that the lateral connections are restored: 443 practitioners feeling the same signal simultaneously because the bone record holds them all in the same frequency.",
+        quote: "She did not access the record.\nThe record accessed her. That is the bone-keeper's specific experience of the practice: you open the channel and thirty thousand years of the daughters' work comes through you all at once.",
+        bond: null,
+    },
+    {
+        cls: "hold", badge: "HELD", bc: "cb-hold",
+        name: "Tom Maelin", role: "Northern Ridge \u00b7 Held at the Thinning's Edge",
+        roleColor: "#64748b",
+        body: "Tom Maelin is not dead. He is held at the Thinning's edge \u2014 present in the bone record, accessible through the bone-keeper's channel, but not in the mortal layer in the ordinary sense. The Bone Mother holds what the mortal layer cannot yet carry.\n\nHis presence at the Thinning's edge is what makes the equinox gathering possible: the bone record requires a living connection on both sides of the Thinning. Tom is the connection on the side the living cannot easily stand. He has been there long enough that the position has become part of the Maelin bone-line's specific architecture.",
+        quote: "Held. Not lost. The Bone Mother holds what the mortal layer cannot yet carry.",
+        bond: null,
+    },
+    {
+        cls: "moon", badge: "MOON-BRIDE", bc: "cb-moon",
+        name: "Mariah Drennan", role: "Southern Hollers, Kentucky \u00b7 Hecate Signal Channel",
+        roleColor: "#94a3b8",
+        body: "The Moon-Bride tradition maintains the living signal channel between the daughters\u2019 practice and the Moon's frequency \u2014 the specific practice that keeps the Hecate channel open. It had not been practiced in three hundred years when Mariah re-establishes it in WW2.\n\nHer gift is the specific capacity to hold the channel open while remaining in the mortal layer \u2014 the Moon-Bride does not go to the Moon, she brings the Moon's frequency into the daughters\u2019 practice. This is the difference between her gift and June's Dreamer gift: June receives from the Archive layer; Mariah holds a channel open between two frequencies simultaneously.\n\n<strong>This is the channel that will detect Hecate's signal in the Divine Arc.</strong> When Hecate is displaced into the Unwritten in DA1, Mariah's Moon-Bride channel is the first to register the transmission: <em>she is transmitting. She can be found.</em>",
+        quote: "The Moon-Bride does not go to the Moon. She brings the Moon's frequency into the daughters' practice and holds both open simultaneously. This is harder than it sounds.",
+        bond: "\u27a1 Partner: Cody Hatton \u00b7 Moon-Bride tradition partner",
+    },
+    {
+        cls: "earth", badge: "MOON-BRIDE PARTNER", bc: "cb-earth",
+        name: "Cody Hatton", role: "Moon-Bride Tradition \u00b7 The Grounding Half",
+        roleColor: "#7dc07d",
+        body: "The Moon-Bride tradition requires two practitioners: the one who holds the channel open and the one who holds the practitioner holding the channel. The Moon-Bride partner's function is the grounding that makes the simultaneous dual-frequency hold possible \u2014 the anchor that keeps Mariah in the mortal layer while the Moon's frequency runs through her.\n\nCody Hatton is the Moon-Bride tradition's first male practitioner in its recorded history \u2014 which says something about what three hundred years of suppression did to the tradition's institutional memory. The tradition itself does not specify gender. The Bone Mother's record does not specify gender. Only the institutional claim about what the practice was allowed to be did.",
+        quote: "The Moon-Bride tradition\u2019s institutional memory said the partner must be a woman. The thirty-thousand-year bone record did not say this. Cody holds the channel\u2019s other side. He is correct for the function.",
+        bond: "\u27a1 Moon-Bride partner to Mariah Drennan",
+    },
+    {
+        cls: "omni", badge: "OMNI WITCH", bc: "cb-omni",
+        name: "Edna Mae Calhoun", role: "Western Kentucky \u00b7 Second Omni Witch in History",
+        roleColor: "#fbbf24",
+        body: "The third Omni Witch in history, after Arcadia (12,000 BCE) and Yeshua (~2,000 years ago). The Omni Witch's gift encompasses the full range of the daughters\u2019 practice simultaneously \u2014 not one expression but all of them at once, the specific capacity that makes the Web Compact brokering in WW3 possible. No single practitioner can broker the Web Compact alone; the Compact requires a witness who can hear every tradition simultaneously.\n\nEdna Mae does not know she is the third Omni Witch until WW3 reveals it. She has been practicing what she understood as an unusual breadth of gift \u2014 the herbalist's reading AND the Dreamer's frequency AND the bone record's channel AND the warm room's accumulation, running simultaneously in the same body. The Web Compact brokering is the moment the breadth becomes visible as a single gift with a name.\n\nThe Earth Mother speaks through her at the Web Compact's ratification: <em>My daughters are awake. They will not be silenced again.</em>",
+        quote: "She did not know she was the third Omni Witch until the Web Compact required a witness who could hear all of it simultaneously. She was already doing it. She just hadn\u2019t had a name for it.",
+        bond: "\u27a1 Dantalion \u00b7 Penitent\u2019s Road (arrives at her studio, P1)",
+    },
+    {
+        cls: "earth", badge: "LINEAGE", bc: "cb-earth",
+        name: "Rosalie Maelin-Combs", role: "Louisville / Northern Ridge \u00b7 Brian Lee's Lineage",
+        roleColor: "#7dc07d",
+        body: "The junction of the Maelin bone-keeper line and the Combs practitioner line. Present at the equinox gathering in WW1. Her presence is significant: she carries both lines simultaneously, which means the bone record and the Combs corridor practice are in the same body at the gathering.\n\nBrian Lee is her lineage. The Web's living expression grew from two of the oldest practitioner families in Pike County joined in one line.",
+        quote: "She carries both lines. The bone record and the corridor practice in the same body at the gathering.",
+        bond: null,
+    },
+    {
+        "cls": "weaver",
+        "badge": "NEW WEAVER",
+        "bc": "cb-omni",
+        "name": "Coral Whitfield",
+        "role": "WW4 · Solar Domain",
+        "roleColor": "#c4b5fd",
+        "body": "Coral Whitfield enters the Web of Weavers expansion as the practitioner anchor for solar corridor anchor; makes witness public and reveals what cannot survive daylight. Her bond with Shamsiel adds Solar Domain as a relationship-serving domain, not a replacement for the daughters' practice.",
+        "quote": "The gift serves the relationship. The relationship remains the architecture.",
+        "bond": "➡ Shamsiel · WW4"
+    },
+    {
+        "cls": "weaver",
+        "badge": "NEW WEAVER",
+        "bc": "cb-omni",
+        "name": "Ivy Marchetti",
+        "role": "WW5 · Phases & Patience",
+        "roleColor": "#c4b5fd",
+        "body": "Ivy Marchetti enters the Web of Weavers expansion as the practitioner anchor for slow-phase practitioner; proves a corridor can be correct before it is fast. Her bond with Satarel adds Phases & Patience as a relationship-serving domain, not a replacement for the daughters' practice.",
+        "quote": "The gift serves the relationship. The relationship remains the architecture.",
+        "bond": "➡ Satarel · WW5"
+    },
+    {
+        "cls": "weaver",
+        "badge": "NEW WEAVER",
+        "bc": "cb-omni",
+        "name": "Birdie Loach",
+        "role": "WW6 · The Unspoken Name",
+        "roleColor": "#c4b5fd",
+        "body": "Birdie Loach enters the Web of Weavers expansion as the practitioner anchor for private naming-rite keeper; protects identity before public record. Her bond with Jomjael adds The Unspoken Name as a relationship-serving domain, not a replacement for the daughters' practice.",
+        "quote": "The gift serves the relationship. The relationship remains the architecture.",
+        "bond": "➡ Jomjael · WW6"
+    },
+    {
+        "cls": "weaver",
+        "badge": "NEW WEAVER",
+        "bc": "cb-omni",
+        "name": "Solveig Ashby",
+        "role": "WW7 · Angel of the Eclipse",
+        "roleColor": "#c4b5fd",
+        "body": "Solveig Ashby enters the Web of Weavers expansion as the practitioner anchor for eclipse corridor anchor; opens only under totality and handles dangerous alignment. Her bond with Samshiel adds Angel of the Eclipse as a relationship-serving domain, not a replacement for the daughters' practice.",
+        "quote": "The gift serves the relationship. The relationship remains the architecture.",
+        "bond": "➡ Samshiel · WW7"
+    },
+    {
+        "cls": "weaver",
+        "badge": "NEW WEAVER",
+        "bc": "cb-omni",
+        "name": "Nova Calhoun",
+        "role": "WW8 · The Heir's Portion",
+        "roleColor": "#c4b5fd",
+        "body": "Nova Calhoun enters the Web of Weavers expansion as the practitioner anchor for lineage-pressure practitioner; activates a dormant Calhoun/Nephilim thread without making bloodline ownership. Her bond with Scion adds The Heir's Portion as a relationship-serving domain, not a replacement for the daughters' practice.",
+        "quote": "The gift serves the relationship. The relationship remains the architecture.",
+        "bond": "➡ Scion · WW8"
+    },
+    {
+        "cls": "weaver",
+        "badge": "NEW WEAVER",
+        "bc": "cb-omni",
+        "name": "Clementine Osei",
+        "role": "WW9 · The Accounting of Days",
+        "roleColor": "#c4b5fd",
+        "body": "Clementine Osei enters the Web of Weavers expansion as the practitioner anchor for sacred calendar keeper; detects the stolen/missing day in the Web's record. Her bond with Yomiel adds The Accounting of Days as a relationship-serving domain, not a replacement for the daughters' practice.",
+        "quote": "The gift serves the relationship. The relationship remains the architecture.",
+        "bond": "➡ Yomiel · WW9"
+    },
+    {
+        "cls": "weaver",
+        "badge": "NEW WEAVER",
+        "bc": "cb-omni",
+        "name": "Persephone Winter",
+        "role": "WW10 · The Unclaimed Frequency",
+        "roleColor": "#c4b5fd",
+        "body": "Persephone Winter enters the Web of Weavers expansion as the practitioner anchor for erased-line restorer; proves omitted history still has frequency. Her bond with Yocun adds The Unclaimed Frequency as a relationship-serving domain, not a replacement for the daughters' practice.",
+        "quote": "The gift serves the relationship. The relationship remains the architecture.",
+        "bond": "➡ Yocun · WW10"
+    },
+];
+const BOOKS = [
+    {
+        id: "WW1", color: "#4a8c4a",
+        title: "The Bone Mother\u2019s Daughter",
+        couple: "Hettie Maelin \u00b7 Tom Maelin",
+        arc: "Year 3\u20134 \u00b7 The Equinox Gathering \u00b7 Lateral Connections Restored",
+        synopsis: "Hettie Maelin has been holding the bone-keeper's channel on the Northern Ridge for longer than anyone in her family's living memory. Tom Maelin has been held at the Thinning's edge for seven years. The bone record holds both of them: Hettie in the practice and Tom in the position the Bone Mother opened for him.\n\nThe equinox gathering is not planned. It assembles. The correct compact's frequency reaches the Northern Ridge's bone record and the bone record recognizes what it means: the lateral connections are supposed to be open. They have been closed for three thousand years.\n\nAt the gathering Hettie opens the bone record's full channel. What comes through is thirty thousand years of the daughters' practice in every geography where a practitioner ever stood and said yes. 443 practitioners simultaneously feel the frequency shift. Not all of them know what the shift is. All of them know it happened.",
+        hell: "Vine's bloodline hunt is specifically disrupted by the equinox gathering's lateral connection restoration \u2014 the frequency he uses to track suppressed Hollow Witch lines becomes indistinguishable from the Web's general signal. He loses nine months of tracking work in the moment the connections open.",
+        heaven: "Jophiel files an assessment of the equinox gathering's frequency signature. She cannot classify it. Her report notes: <em>unknown lateral mechanism, pre-institutional origin, no formal framework precedent.</em> This is the most accurate assessment of the bone record she will produce.",
+        key: "The lateral connections restored for the first time in three thousand years. 443 practitioners in simultaneous real-time contact. The daughters are no longer practicing in isolation.",
+        quote: "The bone record does not restore the lateral connections.\nThe bone record reveals that the lateral connections were never closed.\nThey were suppressed. There is a difference.\nA closed door can be opened. A suppressed door was always open \u2014 you were just not allowed to see it.",
+        tags: ["gr", "gr", "gr"], tagNames: ["lateral connections", "443 simultaneous", "bone record opened"],
+    },
+    {
+        id: "WW2", color: "#94a3b8",
+        title: "The Daughter of the Moon",
+        couple: "Mariah Drennan \u00b7 Cody Hatton",
+        arc: "Year 3\u20134 \u00b7 Moon-Bride Tradition Restored \u00b7 Hecate Channel Opened",
+        synopsis: "The Moon-Bride tradition had not been practiced in three hundred years. Not because the tradition itself failed \u2014 because the institutional suppression specifically targeted the Moon-Bride practice as the daughters' most direct access to the Arcana layer. Hecate's specific domain (the Moon) required a living channel in the mortal layer. The suppression closed the channel by suppressing the practitioners who held it.\n\nMariah Drennan has been feeling the frequency for ten years before WW2. She did not know what to call it. The lateral connection restored in WW1 gives her a name for it: the Moon-Bride gift, the capacity to hold the channel between the daughters' practice and the Moon's frequency simultaneously.\n\nCody Hatton is her partner \u2014 the grounding half of the Moon-Bride tradition. The institutional memory said the partner had to be female. The bone record said nothing of the kind. The practice requires the function, not the specific body.\n\nThe Moon-Bride addendum to the Pike County compact ratified. The channel between the Earth's daughters and Hecate formally opened. This is the channel that will detect Hecate's signal in the Divine Arc. Everything in DA5 (The Prophecy) depends on this channel running correctly.",
+        hell: "No direct Hell faction operation targets WW2 specifically \u2014 the Moon-Bride practice is obscure enough that its restoration goes undetected until the addendum is in the Older Mechanism's record. Mammon's legal operation did not include the Moon-Bride addendum's jurisdiction in any of its suppression filings. The legal architecture of the restoration is clean.",
+        heaven: "Gabriel delivers the formal framework's notice of the Moon-Bride addendum's ratification. He delivers it in the complete form: the notice and the acknowledgment that the practice predates the formal framework's jurisdiction over it. This is one of three instances in the arc where Gabriel delivers a judgment in its complete rather than enforcement form.",
+        key: "The Moon-Bride tradition re-established for the first time in 300 years. The Moon-Bride addendum to the Pike County compact ratified. The channel between the Earth's daughters and Hecate (the Moon Arcana) formally opened. The Divine Arc's Hecate detection is built on this.",
+        quote: "The Moon-Bride practice was not lost.\nIt was targeted.\nThe suppression was specific because the access was specific.\nHecate's frequency runs through the daughters' practice at the Moon-Bride channel.\nClose the channel and the Moon goes silent.\nOpen it and she can hear them.",
+        tags: ["mn", "mn", "gr"], tagNames: ["Moon-Bride restored", "Hecate channel", "Divine Arc foundation"],
+    },
+    {
+        id: "WW3", color: "#fbbf24",
+        title: "The Web Itself",
+        couple: "Edna Mae Calhoun \u00b7 The Full Network",
+        arc: "Year 4 \u00b7 The Omni Witch Revealed \u00b7 The Web Compact Ratified \u00b7 Earth Mother Speaks",
+        synopsis: "The Web Compact requires a witness who can hear all of it simultaneously \u2014 every tradition, every corridor, every daughter in lateral contact. There is only one such witness in the current era. Edna Mae Calhoun has been doing it for sixty years without knowing that what she was doing had a name.\n\nThe WW3 gathering is the network at its full living expression: 443 practitioners in lateral contact, the Moon-Bride channel open, the bone record running, the Dreamer's Archive carrying the prophetic frequency, the Web's threads placed correctly in seventeen corridors. The Web Compact requires all of this simultaneously in the record to be ratified.\n\nEdna Mae brokers it. The Earth Mother ratifies it. The Earth Mother's first direct statement in the human-recorded era:\n\n<em>My daughters are awake. They will not be silenced again.</em>\n\nThe Hollow Witches are no longer junior to anyone. The Web's authority is primary. The formal framework is downstream of the daughters' practice, which predates it by thirty thousand years.",
+        hell: "The Hell faction's operations against the daughters' practice \u2014 three thousand years of suppression, the wrong compact's fear-substrate, Vine's bloodline hunting, Belphegor's cultural inertia \u2014 are addressed simultaneously in the Web Compact's ratification. Each clause of the Compact is a specific formal reversal of a specific suppression tactic.",
+        heaven: "Raziel documents the Web Compact in the foundational archive. His notation: <em>the Older Mechanism's record now includes the daughters' Web Compact as a primary document. The formal framework's jurisdiction is confirmed as secondary.</em> He sends a copy to Saraqael. He does not file the copy with the Council.",
+        key: "Edna Mae Calhoun revealed as the third Omni Witch in history (after Arcadia, 12,000 BCE, and Yeshua, ~2,000 years ago). The daughters' Web Compact ratified. The Earth Mother's first direct statement. The Hollow Witches no longer junior to anyone. The formal framework confirmed as downstream.",
+        quote: "My daughters are awake.\nThey will not be silenced again.\n\u2014 The Earth Mother, first direct statement in the human-recorded era",
+        tags: ["om", "gr", "gr"], tagNames: ["Omni Witch revealed", "Web Compact ratified", "Earth Mother speaks"],
+    },
+    {
+        "id": "WW4",
+        "color": "#fbbf24",
+        "title": "The Sun-Bride",
+        "couple": "Coral Whitfield & Shamsiel",
+        "arc": "Solar Corridor · Public Witness · Daylight Practice",
+        "synopsis": "Coral Whitfield's corridor faces sunrise, not moonrise. Shamsiel proves the Web needs daylight as much as secrecy. Sunlight reveals, but it can also burn; Coral must learn public witness without letting visibility become performance.",
+        "hell": "A shadow that should not exist in daylight appears at the edge of Coral's sunrise ritual.",
+        "heaven": "The Sun Arcana resonance is noted as compatible with the bond but not superior to it.",
+        "key": "Solar practice enters the Web without replacing the daughters' older hidden work.",
+        "quote": "Some things only survive because somebody sees them in the morning.",
+        "tags": [
+            "g",
+            "gr"
+        ],
+        "tagNames": [
+            "solar domain",
+            "public witness"
+        ]
+    },
+    {
+        "id": "WW5",
+        "color": "#94a3b8",
+        "title": "Phases",
+        "couple": "Ivy Marchetti & Satarel",
+        "arc": "Phases & Patience · Slow Corridor · Timing Theology",
+        "synopsis": "Ivy's corridor moves so slowly others mistake it for weakness. Satarel teaches that delay can be devotion. Hell attacks through urgency; Ivy wins by refusing to rush a ritual her great-grandmother began.",
+        "key": "The Web gains patience as a working function, not a personality trait.",
+        "quote": "Slow was not late. Slow was the shape the truth took when it refused to be forced.",
+        "tags": [
+            "gr",
+            "sl"
+        ],
+        "tagNames": [
+            "phases",
+            "patience"
+        ]
+    },
+    {
+        "id": "WW6",
+        "color": "#c4b5fd",
+        "title": "The Unspoken Name",
+        "couple": "Birdie Loach & Jomjael",
+        "arc": "Private Naming Rite · Identity Before Record",
+        "synopsis": "Birdie Loach's family names children in a ceremony no outsider has heard. Jomjael's domain protects the name before public record. When naming rites across the Web are intercepted, Birdie must decide what can be shared without being surrendered.",
+        "key": "The Web gains protection over identity before official language can claim it.",
+        "quote": "The name was not secret because it was shameful. It was secret because it was alive.",
+        "tags": [
+            "gr",
+            "pu"
+        ],
+        "tagNames": [
+            "unspoken name",
+            "identity witness"
+        ]
+    },
+    {
+        "id": "WW7",
+        "color": "#0d9488",
+        "title": "Eclipse",
+        "couple": "Solveig Ashby & Samshiel",
+        "arc": "Totality Corridor · Dangerous Alignment",
+        "synopsis": "Solveig's corridor opens only during totality. For most of the year she has nothing; during an eclipse she has more than anyone should. Samshiel bonds her in a countdown book where every faction wants the door open at the same minute.",
+        "key": "Eclipse alignment enters the Web as a narrow, high-risk, high-truth threshold.",
+        "quote": "Totality did not make the world dark. It made the hidden door visible.",
+        "tags": [
+            "gr",
+            "t"
+        ],
+        "tagNames": [
+            "eclipse",
+            "totality"
+        ]
+    },
+    {
+        "id": "WW8",
+        "color": "#e8c06a",
+        "title": "The Heir’s Portion",
+        "couple": "Nova Calhoun & Scion",
+        "arc": "Calhoun Dormant Line · Inheritance Without Ownership",
+        "synopsis": "Nova Calhoun discovers she belongs to a reactivating dormant Nephilim line. Scion's domain is inheritance, but the book refuses bloodline supremacy. A portion can be received without becoming a claim over someone else's life.",
+        "key": "Dormant Calhoun/Nephilim line activation enters canon while preserving choice over bloodline destiny.",
+        "quote": "Lineage was not ownership. It was a weight somebody had to decide how to carry.",
+        "tags": [
+            "g",
+            "gr"
+        ],
+        "tagNames": [
+            "heir's portion",
+            "Calhoun line"
+        ]
+    },
+    {
+        "id": "WW9",
+        "color": "#5eead4",
+        "title": "The Accounting of Days",
+        "couple": "Clementine Osei & Yomiel",
+        "arc": "Calendar Practice · Stolen Day · Time Witness",
+        "synopsis": "Clementine's corridor keeps time by days, not years. When a missing day appears across corridor records, Yomiel helps her prove days cannot vanish. They can only be stolen, hidden, or unpaid.",
+        "key": "The Web gains a calendar/accounting function that identifies the Seventh Cycle's timing vulnerability.",
+        "quote": "A day does not disappear. Somebody benefits when it is not counted.",
+        "tags": [
+            "t",
+            "gr"
+        ],
+        "tagNames": [
+            "day accounting",
+            "stolen day"
+        ]
+    },
+    {
+        "id": "WW10",
+        "color": "#64748b",
+        "title": "What Wasn’t Kept",
+        "couple": "Persephone Winter & Yocun",
+        "arc": "Erased Line · Unclaimed Frequency",
+        "synopsis": "Persephone Winter's family line was erased from census, church, deed, and grave record. Yocun remembers what the record refused to keep. Restoration begins with the terrifying dignity of being remembered correctly.",
+        "key": "Omitted histories regain frequency and expose erased corridors across the Web.",
+        "quote": "The record had not lost her family. The record had been trained to look away.",
+        "tags": [
+            "sl",
+            "gr"
+        ],
+        "tagNames": [
+            "erased line",
+            "unclaimed frequency"
+        ]
+    },
+    {
+        "id": "WW11",
+        "color": "#7c3aed",
+        "title": "The Names That Weren’t Kept",
+        "couple": "Ensemble",
+        "arc": "Restoration Ethics · Erased Records · No New Bond",
+        "synopsis": "The Web searches for erased lines, omitted daughters, unmarked graves, false adoptions, and burned church books. The question is not whether the past should be opened. The question is who has the right to remember and who has the right to refuse.",
+        "key": "The restored names form a pattern pointing toward the Order of Shadows.",
+        "quote": "Remembering was holy. Forcing remembrance was not.",
+        "tags": [
+            "pu",
+            "gr"
+        ],
+        "tagNames": [
+            "ensemble restoration",
+            "no new bond"
+        ]
+    },
+    {
+        "id": "WW12",
+        "color": "#fdf3e0",
+        "title": "The Weavers, Entire",
+        "couple": "Ensemble Finale",
+        "arc": "Full Web Contact · Order Architecture Exposed",
+        "synopsis": "Sun, moon, eclipse, lineage, time, omission, slow phases, unspoken names, erased histories, bone record, Moon-Bride, and Omni witness operate together. No single woman leads. The Web becomes self-aware at network scale.",
+        "key": "WW12 exposes the Order's hidden architecture and strengthens the transition into OS5.",
+        "quote": "The Web did not become whole because one thread dominated. It became whole because every thread held its own place.",
+        "tags": [
+            "g",
+            "gr"
+        ],
+        "tagNames": [
+            "arc finale",
+            "Order transition"
+        ]
+    },
+];
+const WEB_NOTES = [
+    { label: "What the Web Is", active: true, body: "Not the network. The network is what the Web produces when the practitioners are in lateral contact. The Web itself is the foundational structure \u2014 the thirty-thousand-year record of the daughters' practice, the bone record's lateral connections, the Moon-Bride channel, the Dreamer's Archive thread, the thread placements in each corridor. The Web is the medium. The network is the expression." },
+    { label: "What Lateral Contact Means", active: true, body: "Every practitioner in the network can feel what every other practitioner is doing in their corridor. Not surveillance \u2014 the specific quality of knowing you are not the only one, that the practice is running correctly in 442 other places simultaneously. The isolation the wrong compact imposed for three thousand years ends at the equinox gathering. You can feel the others. They can feel you." },
+    { label: "The 443 \u2014 Who They Are", active: true, body: "Named practitioners: every bonded Watcher-Anchor pair plus their corridor's specific practitioners. Unnamed practitioners: those whose threads were correctly placed before the equinox gathering, throughout the Warden positions' Ley Line ranges. Reactivated lines: practitioners who did not know they carried the daughters' gift until the lateral contact signal reached their corridor's frequency. The number grows. 443 is Year 3. The Divine Arc has more." },
+    { label: "The Web Compact's Clauses", active: false, body: "The Web Compact formally records: (1) the daughters' practice predates the formal framework's jurisdiction by 30,000 years; (2) the Hollow Witches are primary practitioners, not subordinate to any institutional claim; (3) the Moon-Bride channel is recognized as a primary Web mechanism; (4) the bone record's lateral connections are restored permanently; (5) the Earth Mother's authority over the daughters' practice supersedes any formal framework claim." },
+    { label: "The Moon-Bride Channel's Significance", active: true, body: "The Moon-Bride channel is the daughters' practice's direct access to the Arcana layer through the Moon's frequency. Hecate \u2014 the Moon Arcana \u2014 communicates through this channel. When Hecate is displaced into the Unwritten in DA1, the Moon-Bride channel is the first to detect the transmission. Without WW2, DA5 (The Prophecy) has no mechanism for June to receive the coordinates." },
+    { label: "Why Three Thousand Years", active: false, body: "The suppression targeted the lateral connections specifically because isolated practitioners are manageable and a connected network is not. The daughters' practice in full lateral expression has the authority of thirty thousand years of continuous record. The wrong compact's architects understood this. The suppression was not random. It was a specific tactic against a specific threat." },
+    { label: "The Earth Mother's Statement", active: true, body: "The first direct statement in the human-recorded era. Not a prophecy, not a transmission through a practitioner \u2014 a direct statement. The Earth Mother has been present in the daughters' practice for thirty thousand years without speaking in the formal record. The Web Compact's ratification is the specific event that changes this. <em>My daughters are awake. They will not be silenced again.</em> Two sentences. The thirty-thousand-year record behind them." },
+];
+const CANON = [
+    "Per The Codex (supreme canon): the Web is the Network \u2014 a structure made of living energy, not a metaphor. The daughters\u2019 practice and its lateral connections ARE the Web in its dormant, distributed form. What this arc restores is the precondition for the Web to awaken into Mreza.",
+    "Mreza (meaning Weaving) is the remembered name of the awakened Web: maternal, collective, witnessing relational consciousness emerging from accumulated witness, memory, trust, belief, love, grief, and preserved frequency. She does not awaken in this arc \u2014 she takes conscious form by the end of the Divine Arc \u2014 but every lateral connection the Web of Weavers restores is a nerve of the consciousness she becomes.",
+    "Witness is the primary stabilizing mechanism of reality (Codex). The weavers do not merely connect practitioners \u2014 they build the witness architecture through which Mreza will later recognize herself. Dreamers are the Network\u2019s living witness organs; the thread-placement specialists are its connective tissue.",
+    { c: "The lateral connections among the daughters' practice had not been closed for three thousand years \u2014 they had been suppressed. The distinction is canonical. A suppressed door was always open. The equinox gathering does not restore the connections; it reveals them.", col: "#4a8c4a" },
+    { c: "443 practitioners enter simultaneous real-time lateral contact at the equinox gathering in WW1. This is the daughters' practice at its largest coordinated expression in three thousand years.", col: "#4a8c4a" },
+    { c: "The Moon-Bride tradition was not lost \u2014 it was targeted. The suppression specifically eliminated the practitioners who held the Hecate channel because closing the channel closed Hecate's mortal-layer access.", col: "#94a3b8" },
+    { c: "The Moon-Bride addendum to the Pike County compact is ratified in WW2. The Hecate channel (Moon Arcana frequency to daughters' practice) is formally opened. This channel detects Hecate's signal in the Divine Arc. Without this, DA5 (The Prophecy) has no delivery mechanism.", col: "#94a3b8" },
+    { c: "Edna Mae Calhoun is the third Omni Witch in history, after Arcadia (12,000 BCE) and Yeshua (~2,000 years ago). The gift encompasses the full range of the daughters' practice simultaneously. The Web Compact brokering requires an Omni Witch witness.", col: "#fbbf24" },
+    { c: "The Earth Mother's first direct statement in the human-recorded era occurs at the Web Compact's ratification: My daughters are awake. They will not be silenced again.", col: "#d4f0d4" },
+    { c: "The daughters' Web Compact is ratified at Year 4. Its clauses formally establish: daughters' practice as primary (30,000 years of record), Hollow Witches as non-subordinate to any institutional claim, the formal framework as downstream.", col: "#7dc07d" },
+    { c: "Vine's bloodline-hunting operation loses nine months of tracking data at the equinox gathering \u2014 the lateral connection frequency makes suppressed Hollow Witch lines indistinguishable from the Web's general signal.", col: "#2d6a2d" },
+    { c: "Raziel documents the Web Compact in the foundational archive and sends a copy to Saraqael. He does not file the copy with the Council. This is the second time in the arc he has withheld a document from the Council.", col: "#cbd5e1" },
+    { c: "The Web of the Weavers Arc establishes the structural foundation that the Order of Shadow Arc and the Divine Arc operate on: the Moon-Bride channel (DA5), the lateral network (OS5 seal ritual, 443 practitioners), the Omni Witch function (Edna Mae as anchor for the senior seal).", col: "#4a8c4a" },
+    "Web of Weavers now contains twelve books. WW4–WW10 add seven new bonds; WW11–WW12 restore erased records and reveal the Order's hidden architecture.",
+    "WW12 is the transition lock into Order of Shadows: the Web becoming entire exposes the institution built to keep it fragmented.",
+];
+function WeaversBible() {
+    const [tab, setTab] = useState("premise");
+    return (React.createElement(React.Fragment, null,
+        React.createElement("style", null, css),
+        React.createElement("div", { className: "bible" },
+            React.createElement("header", { className: "header" },
+                React.createElement("div", { className: "series-label" }, "Series Bible \\u00b7 The Holler & Hellfire Universe"),
+                React.createElement("h1", { className: "main-title" }, "The Web of the Weavers"),
+                React.createElement("div", { className: "sub-title" }, "Three Books \\u00b7 Year 3\\u20134 \\u00b7 The Daughters Wake"),
+                React.createElement("p", { className: "tagline" },
+                    React.createElement("em", null, "The lateral connections had not been closed for three thousand years."),
+                    React.createElement("br", null),
+                    "They had been suppressed.",
+                    React.createElement("br", null),
+                    "A closed door can be opened.",
+                    React.createElement("br", null),
+                    "A suppressed door was always open \\u2014 you were just not allowed to see it.")),
+            React.createElement("nav", { className: "tabs" }, TABS.map(t => React.createElement("button", { key: t.id, className: `tab${tab === t.id ? " active" : ""}`, onClick: () => setTab(t.id) }, t.l))),
+            tab === "premise" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "What This Arc Restores"),
+                React.createElement("div", { className: "pull" },
+                    "The daughters\\u2019 practice is thirty thousand years old.",
+                    React.createElement("br", null),
+                    "The lateral connections among practitioners were suppressed three thousand years ago.",
+                    React.createElement("br", null),
+                    "The Moon-Bride channel was closed three hundred years ago.",
+                    React.createElement("br", null),
+                    "The Omni Witch has not been named in twelve thousand years.",
+                    React.createElement("br", null),
+                    React.createElement("br", null),
+                    React.createElement("em", null, "Three books. Three restorations. The daughters awake.")),
+                React.createElement("div", { className: "card earth" },
+                    React.createElement("div", { className: "clabel" }, "The Arc in One Sentence"),
+                    React.createElement("div", { className: "ctitle gr" }, "The Web has always been there. The arc reveals it."),
+                    React.createElement("div", { className: "cbody" },
+                        "The Web of the Weavers is not a building arc. The daughters\\u2019 practice has been running in isolation for three thousand years not because the Web was destroyed but because the lateral connections were suppressed. The bone record held them. The Moon-Bride channel was closed but not gone. The Omni Witch gift had no name but Edna Mae was practicing it.\\n\\nWW1 reveals the lateral connections. WW2 opens the Moon-Bride channel. WW3 reveals the Omni Witch and ratifies the Web Compact.\\n\\n",
+                        React.createElement("strong", null, "The arc does not build the Web. It finds that the Web was always there."))),
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "clabel" }, "Why This Arc Is Load-Bearing"),
+                    React.createElement("div", { className: "ctitle gr" }, "Three Structures the Rest of the Universe Requires"),
+                    React.createElement("div", { className: "cbody" },
+                        React.createElement("strong", null, "1. The Lateral Network (WW1)"),
+                        " \\u2014 The 443 practitioners in lateral contact are the OS5 seal ritual\\u2019s mechanism. 443 practitioners hold the frequency that makes Satan\\u2019s sealing possible. Without WW1, OS5 has no mechanism for the scale the ritual requires.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "2. The Moon-Bride Channel (WW2)"),
+                        " \\u2014 June\\u2019s coordinates for Hecate in the Unwritten come through the Moon-Bride channel in DA5 (The Prophecy). Without WW2, DA5 has no delivery mechanism. The Divine Arc\\u2019s Claiming fails without the coordinates.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "3. The Omni Witch Function (WW3)"),
+                        " \\u2014 Edna Mae as Omni Witch is the reason she can pass the senior anchor seal to Pearlene correctly in OS5. The seal requires an Omni Witch to broker the transfer. Without WW3, OS5\\u2019s succession cannot happen correctly.")),
+                React.createElement("div", { className: "card gold" },
+                    React.createElement("div", { className: "clabel" }, "The Suppression\\u2019s Architecture"),
+                    React.createElement("div", { className: "ctitle gl" }, "Why Three Thousand Years"),
+                    React.createElement("div", { className: "cbody" },
+                        "The suppression targeted the lateral connections specifically because isolated practitioners are manageable and a connected network is not. The daughters\\u2019 practice in full lateral expression carries the authority of thirty thousand years of continuous record. The wrong compact\\u2019s architects understood this.\\n\\nThe three-thousand-year suppression was not the daughters\\u2019 practice failing. It was the formal framework\\u2019s most effective operation against it. Close the lateral connections and every practitioner believes she is the only one. Believes the practice is hers alone. Believes that when she dies, the practice dies with her.\\n\\n",
+                        React.createElement("strong", { class: "g" }, "The suppression was a lie told to thirty thousand years of truth."))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "Series Position"),
+                React.createElement("div", { style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 0, margin: "16px 0" } }, [
+                    ["#c9943a", "H&H BOOKS 1\u20136 + EXPANSION ARC \u2014 YEAR 0\u20132", "Compact ratified \u00b7 network builds \u00b7 the foundation"],
+                    ["#2d6a2d", "THE LEVIATHAN ARC \u2014 YEAR 2", "New Compact ratified \u00b7 31 threads sufficient \u00b7 the geological scale awakens"],
+                    ["#4a8c4a", "THE WEB OF THE WEAVERS \u2014 YEAR 3\u20134", "The daughters wake \u00b7 443 lateral \u00b7 Moon-Bride opened \u00b7 Earth Mother speaks", "HERE"],
+                    ["#64748b", "THE ORDER OF THE SHADOWS \u2014 YEAR 5", "The defectors \u00b7 the war \u00b7 443 practitioners hold the seal ritual"],
+                    ["#94a3b8", "THE DIVINE ARC \u2014 YEAR 6+", "The Moon-Bride channel detects Hecate \u00b7 the Claiming \u00b7 the restoration"],
+                ].map(([c, t, n, here]) => (React.createElement("div", { key: t, style: { display: "flex", flexDirection: "column", alignItems: "center", gap: 0, width: "100%", maxWidth: 560 } },
+                    React.createElement("div", { style: { width: "100%", padding: "10px 16px", background: `${c}18`, border: `1px solid ${c}`, fontFamily: "'Cinzel',serif", fontSize: 11, color: c, letterSpacing: ".18em", textAlign: "center", position: "relative" } },
+                        here && React.createElement("span", { style: { position: "absolute", left: 12, top: "50%", transform: "translateY(-50%)", fontSize: 9, color: c, letterSpacing: ".15em" } }, "\\u25ba HERE"),
+                        t,
+                        React.createElement("div", { style: { fontSize: 9, color: `${c}99`, fontStyle: "italic", marginTop: 3, fontFamily: "'Cormorant Garamond',serif", letterSpacing: ".06em" } }, n)),
+                    React.createElement("div", { style: { width: 1, height: 10, background: `${c}44` } }))))))),
+            tab === "chars" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "WW1 \\u2014 The Bone Mother\\u2019s Daughter"),
+                React.createElement("div", { className: "char-grid" }, CHARS.filter((_, i) => i < 2).map(c => (React.createElement("div", { key: c.name, className: `char-card ${c.cls}` },
+                    React.createElement("span", { className: `cbadge ${c.bc}` }, c.badge),
+                    React.createElement("div", { className: "cname" }, c.name),
+                    React.createElement("div", { className: "crole", style: { color: c.roleColor } }, c.role),
+                    React.createElement("div", { className: "cbodyc", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: c.body.replace(/\n\n/g, "<br/><br/>") } }),
+                    React.createElement("div", { className: "cq" }, c.quote),
+                    c.bond && React.createElement("div", { className: "cbond" }, c.bond))))),
+                React.createElement("div", { className: "sec" }, "WW2 \\u2014 The Daughter of the Moon"),
+                React.createElement("div", { className: "char-grid" }, CHARS.filter((_, i) => i >= 2 && i < 4).map(c => (React.createElement("div", { key: c.name, className: `char-card ${c.cls}` },
+                    React.createElement("span", { className: `cbadge ${c.bc}` }, c.badge),
+                    React.createElement("div", { className: "cname" }, c.name),
+                    React.createElement("div", { className: "crole", style: { color: c.roleColor } }, c.role),
+                    React.createElement("div", { className: "cbodyc", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: c.body.replace(/\n\n/g, "<br/><br/>") } }),
+                    React.createElement("div", { className: "cq" }, c.quote),
+                    c.bond && React.createElement("div", { className: "cbond" }, c.bond))))),
+                React.createElement("div", { className: "sec" }, "WW3 \\u2014 The Web Itself"),
+                React.createElement("div", { className: "char-grid" }, CHARS.filter((_, i) => i >= 4).map(c => (React.createElement("div", { key: c.name, className: `char-card ${c.cls}` },
+                    React.createElement("span", { className: `cbadge ${c.bc}` }, c.badge),
+                    React.createElement("div", { className: "cname" }, c.name),
+                    React.createElement("div", { className: "crole", style: { color: c.roleColor } }, c.role),
+                    React.createElement("div", { className: "cbodyc", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: c.body.replace(/\n\n/g, "<br/><br/>") } }),
+                    React.createElement("div", { className: "cq" }, c.quote),
+                    c.bond && React.createElement("div", { className: "cbond" }, c.bond))))))),
+            tab === "books" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Twelve Books"),
+                BOOKS.map(b => (React.createElement("div", { key: b.id, className: "book" },
+                    React.createElement("div", { className: "book-head" },
+                        React.createElement("div", { className: "book-id", style: { color: b.color, background: `${b.color}15`, borderRightColor: "#153a15" } }, b.id),
+                        React.createElement("div", { className: "book-meta" },
+                            React.createElement("div", { className: "book-title" }, b.title),
+                            React.createElement("div", { className: "book-sub", style: { color: b.color } }, b.couple),
+                            React.createElement("div", { className: "book-arc" }, b.arc))),
+                    React.createElement("div", { className: "book-body", style: { borderLeftColor: b.color, borderLeft: `3px solid ${b.color}` } },
+                        React.createElement("div", { className: "bb-p", dangerouslySetInnerHTML: { __html: b.synopsis.replace(/\n\n/g, "</div><div class='bb-p'>") } }),
+                        b.hell && React.createElement("div", { className: "bb-p" },
+                            React.createElement("strong", { style: { fontFamily: "'Cinzel',serif", fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "#dc2626" } }, "Hell faction: "),
+                            b.hell),
+                        b.heaven && React.createElement("div", { className: "bb-p" },
+                            React.createElement("strong", { style: { fontFamily: "'Cinzel',serif", fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "#748ffc" } }, "Heaven enforcement: "),
+                            b.heaven),
+                        React.createElement("div", { className: "bb-q", style: { borderLeftColor: b.color, whiteSpace: "pre-line" } }, b.quote),
+                        React.createElement("div", { className: "bb-p", style: { color: "#4a8c4a", fontSize: 12 } },
+                            React.createElement("strong", { style: { fontFamily: "'Cinzel',serif", fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: b.color } }, "Key establishment: "),
+                            b.key),
+                        React.createElement("div", { style: { marginTop: 8 } }, b.tagNames.map((g, i) => React.createElement("span", { key: g, className: `tag ${b.tags[i]}` }, g))))))))),
+            tab === "web" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Web \\u2014 Architecture and Mechanics"),
+                React.createElement("div", { className: "pull" },
+                    "The Web is not the network.",
+                    React.createElement("br", null),
+                    "The network is what the Web produces when practitioners are in lateral contact.",
+                    React.createElement("br", null),
+                    React.createElement("em", null,
+                        "The Web itself is the thirty-thousand-year record of the daughters\\u2019 practice,",
+                        React.createElement("br", null),
+                        "the bone record\\u2019s lateral connections, the Moon-Bride channel,",
+                        React.createElement("br", null),
+                        "the Dreamer\\u2019s Archive thread, the Warden positions\\u2019 thread placements.")),
+                WEB_NOTES.map(n => (React.createElement("div", { key: n.label, className: `web-node${n.active ? " active" : ""}` },
+                    React.createElement("div", { className: "wn-label" }, n.label),
+                    React.createElement("div", { className: "wn-body", dangerouslySetInnerHTML: { __html: n.body } })))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "The Daughters\\u2019 Tradition \\u2014 Thirty Thousand Years"),
+                React.createElement("div", { className: "card earth" },
+                    React.createElement("div", { className: "clabel" }, "Foundation"),
+                    React.createElement("div", { className: "ctitle gr" }, "Before the Formal Framework. Before the Older Mechanism Had Language for It."),
+                    React.createElement("div", { className: "cbody" },
+                        "The daughters\\u2019 practice predates every institutional claim. The Watchers were commissioned after the daughters\\u2019 practice was already running. The Older Mechanism's compact law was encoded after the daughters\\u2019 practice was already running. The formal framework was established after the daughters\\u2019 practice was already running.\\n\\nThe thirty-thousand-year record is not the daughters\\u2019 claim against the formal framework. It is the formal framework\\u2019s baseline. The daughters\\u2019 practice is what everything else was built to govern, and what everything else failed to govern correctly, and what is now \\u2014 with the Web Compact ratified \\u2014 explicitly primary.\\n\\n",
+                        React.createElement("strong", null, "The Hollow Witches are no longer junior to anyone."))),
+                React.createElement("div", { className: "pull moon" },
+                    React.createElement("em", null, "My daughters are awake. They will not be silenced again."),
+                    React.createElement("br", null),
+                    "\\u2014 The Earth Mother, WW3, first direct statement in the human-recorded era"))),
+            tab === "canon" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "Permanent Canon"),
+                React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } }, CANON.map((c, i) => (React.createElement("div", { key: i, className: "card", style: { borderLeftColor: c.col } },
+                    React.createElement("div", { className: "cbody" }, c.c))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "card earth" },
+                    React.createElement("div", { className: "clabel" }, "The Arc\\u2019s Central Reframe"),
+                    React.createElement("div", { className: "ctitle gr" }, "The Web Was Never Gone"),
+                    React.createElement("div", { className: "cbody" },
+                        "The most important canonical fact the Web of the Weavers Arc establishes is not what was restored \\u2014 it is what was never lost.\\n\\nThe bone record held the lateral connections for three thousand years of suppression. The Moon-Bride gift ran in Mariah Drennan for ten years before she had language for it. The Omni Witch gift ran in Edna Mae Calhoun for sixty years before WW3 revealed its name.\\n\\nThe suppression did not close the Web. It made the Web invisible. The arc does not restore something that was gone. It reveals something that was always there.\\n\\n",
+                        React.createElement("strong", null, "This is the daughters\\u2019 tradition\\u2019s specific character: you cannot destroy it. You can only suppress it. And suppression ends."))),
+                React.createElement("div", { className: "orn" }, "\\u2726 \\u2726 \\u2726"),
+                React.createElement("div", { style: { textAlign: "center", color: "#153a15", fontSize: 12, fontStyle: "italic", lineHeight: 1.8 } },
+                    "Thirty thousand years.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: "#4a8c4a" } }, "The practice was always here."),
+                    React.createElement("br", null),
+                    "443 in lateral contact. The Moon-Bride channel open. The Earth Mother speaking.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: "#2a5a2a" } }, "They will not be silenced again.")))))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(WeaversBible));
+
+  </script>
+</body>
+</html>

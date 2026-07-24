@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>01Holler Hellfire Series Bible</title>
+  <meta name="description" content="Converted HTML version of 01holler_hellfire_series_bible.jsx for the Holler & Hellfire Universe." />
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #04020a; }
+    #root { min-height: 100vh; }
+    .conversion-note {
+      font-family: Georgia, serif;
+      background: #100603;
+      color: #e8c06a;
+      border: 1px solid #3d1a08;
+      padding: 12px 16px;
+      max-width: 900px;
+      margin: 16px auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <noscript><div class="conversion-note">JavaScript is required to display this converted H&amp;H bible.</div></noscript>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+const { useState, useMemo, useEffect, useRef } = React;
+const css = `
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+/* ── Red-to-Gold Gradient Palette ── */
+/* RED:   #b91c1c  #dc2626  #f87171               */
+/* GOLD:  #92400e  #c9943a  #e8c06a  #fde68a       */
+/* GRAD:  linear-gradient(135deg, #b91c1c, #c9943a) */
+
+*{box-sizing:border-box;margin:0;padding:0;}
+.bible{max-width:960px;margin:0 auto;padding:32px 20px 60px;background:#04020a;min-height:100vh;color:#fdf3e0;font-family:'Cormorant Garamond',Georgia,serif;}
+.header{text-align:center;padding:50px 0 36px;border-bottom:1px solid #3d1a08;margin-bottom:36px;position:relative;}
+.header::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,#c9943a);}
+.header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 30% 0%,rgba(185,28,28,.1) 0%,transparent 55%), radial-gradient(ellipse 50% 40% at 70% 0%,rgba(201,148,58,.08) 0%,transparent 60%);pointer-events:none;}
+.series-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:#c9943a;text-transform:uppercase;margin-bottom:14px;}
+.main-title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,5vw,40px);font-weight:700;color:#fdf3e0;line-height:1.1;margin-bottom:8px;text-shadow:0 0 40px rgba(185,28,28,.4),0 0 80px rgba(201,148,58,.2);}
+.sub-title{font-family:'Cinzel',serif;font-size:clamp(10px,2.5vw,15px);color:#e8c06a;letter-spacing:.2em;margin-bottom:20px;}
+.tagline{font-style:italic;font-size:14px;color:#7a4020;max-width:600px;margin:0 auto;line-height:1.7;}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:26px;border-bottom:1px solid #3d1a08;padding-bottom:12px;}
+.tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:6px 13px;border:1px solid #3d1a08;background:transparent;color:#7a4020;cursor:pointer;transition:all .2s;}
+.tab:hover{border-color:#c9943a;color:#e8c06a;}
+.tab.active{background:linear-gradient(135deg,rgba(185,28,28,.2),rgba(201,148,58,.18));border-color:#c9943a;color:#fdf3e0;}
+.sec{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;text-transform:uppercase;background:linear-gradient(90deg,#b91c1c,#c9943a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:22px 0 14px;padding-bottom:7px;border-bottom:1px solid #3d1a08;}
+.card{background:#100603;border:1px solid #3d1a08;border-left:3px solid #b91c1c;padding:16px 20px;margin-bottom:12px;}
+.card.g{border-left-color:#c9943a;}
+.card.cr{border-left-color:#7f1d1d;}
+.card.t{border-left-color:#0d9488;}
+.card.gr{border-left-color:#15803d;}
+.clabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;color:#5c2810;text-transform:uppercase;margin-bottom:5px;}
+.ctitle{font-family:'Cinzel',serif;font-size:15px;color:#fdf3e0;margin-bottom:5px;}
+.ctitle.pu{color:#e8c06a;}.ctitle.g{color:#e8c06a;}.ctitle.t{color:#5eead4;}.ctitle.cr{color:#f87171;}.ctitle.gr{color:#86efac;}
+.cbody{font-size:13px;line-height:1.72;color:#7a4020;}
+.cbody em{color:#fdf3e0;font-style:italic;}.cbody strong{color:#e8c06a;font-weight:600;}
+.pull{border-left:3px solid transparent;border-image:linear-gradient(to bottom,#b91c1c,#c9943a) 1;padding:14px 18px;background:linear-gradient(135deg,rgba(185,28,28,.07),rgba(201,148,58,.05));margin:14px 0;font-size:14px;font-style:italic;line-height:1.8;color:#fdf3e0;}
+hr.rule{border:none;border-top:1px solid #3d1a08;margin:22px 0;}
+.tag{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 6px;border:1px solid;margin-right:4px;margin-bottom:3px;}
+.tag.pu{color:#e8c06a;border-color:#c9943a;}
+.tag.g{color:#e8c06a;border-color:#c9943a;}
+.tag.t{color:#5eead4;border-color:#0d9488;}
+.tag.cr{color:#f87171;border-color:#dc2626;}
+.tag.gr{color:#86efac;border-color:#15803d;}
+.tag.b{color:#93c5fd;border-color:#1e40af;}
+.tag.e{color:#fdba74;border-color:#c2410c;}
+.tag.m{color:#b07050;border-color:#5c2810;}
+.orn{text-align:center;font-size:16px;color:#5c2810;margin:16px 0;letter-spacing:8px;}
+
+/* HEROINE / WATCHER CARDS */
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px;}
+.char-card{background:#100603;border:1px solid #3d1a08;border-top:3px solid;padding:15px 17px;transition:all .2s;}
+.char-card:hover{border-color:#c9943a;box-shadow:0 0 20px rgba(185,28,28,.1);}
+.char-card.b1{border-top-color:#b91c1c;}
+.char-card.b2{border-top-color:#991b1b;}
+.char-card.b3{border-top-color:#1e40af;}
+.char-card.b4{border-top-color:#c2410c;}
+.char-card.b5{border-top-color:#0d9488;}
+.char-card.b6{border-top-color:#c9943a;}
+.char-card.b6b{border-top-color:#15803d;}
+.cbook{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.25em;color:#5c2810;text-transform:uppercase;margin-bottom:5px;}
+.cname{font-family:'Cinzel',serif;font-size:16px;color:#fdf3e0;margin-bottom:2px;}
+.crole{font-size:10px;font-style:italic;margin-bottom:7px;letter-spacing:.04em;}
+.cbodyc{font-size:12px;line-height:1.65;color:#7a4020;}
+.cbodyc em{color:#fdf3e0;font-style:italic;}
+.cbodyc strong{font-weight:600;}
+.cquote{margin-top:8px;padding-top:7px;border-top:1px solid #3d1a08;font-size:12px;font-style:italic;color:#c4855a;}
+.cbond{margin-top:7px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.15em;padding-top:6px;border-top:1px solid #3d1a08;}
+
+/* BOOK ENTRIES */
+.book-entry{margin-bottom:20px;}
+.book-header{display:grid;grid-template-columns:auto 1fr;gap:0;margin-bottom:0;overflow:hidden;border:1px solid #3d1a08;background:#100603;}
+.book-num{display:flex;align-items:center;justify-content:center;padding:16px 18px;border-right:1px solid #3d1a08;font-family:'Cinzel Decorative',serif;font-size:12px;min-width:80px;}
+.book-meta{padding:14px 18px;}
+.book-title{font-family:'Cinzel',serif;font-size:16px;color:#fdf3e0;margin-bottom:3px;}
+.book-couple{font-size:11px;font-style:italic;margin-bottom:4px;}
+.book-arc{font-size:11px;color:#7a4020;margin-bottom:0;}
+.book-body{background:#0a0301;border:1px solid #3d1a08;border-top:none;padding:16px 20px;}
+.book-body p{font-size:13px;color:#7a4020;line-height:1.7;margin-bottom:8px;}
+.book-body p:last-child{margin-bottom:0;}
+.book-body em{color:#fdf3e0;font-style:italic;}
+.book-body strong{font-weight:600;}
+.book-body .bq{border-left:3px solid;padding:10px 14px;margin:10px 0;font-size:13px;font-style:italic;line-height:1.7;color:#fdf3e0;background:rgba(0,0,0,.2);}
+
+.char-card.b6c{border-top-color:#78716c;}
+.char-card.b6d{border-top-color:#6b7280;}
+.char-card.b6e{border-top-color:#94a3b8;}
+.char-card.b6f{border-top-color:#7c3aed;}
+.char-card.b6g{border-top-color:#fdf3e0;}
+`;
+const TABS = [
+    { id: "premise", l: "Premise" },
+    { id: "heroines", l: "The Heroines" },
+    { id: "watchers", l: "The Watchers" },
+    { id: "books", l: "The Twelve Books" },
+    { id: "world", l: "World & Canon" },
+];
+const BOOK_COLORS = { b1: "#b91c1c", b2: "#991b1b", b3: "#1e40af", b4: "#c2410c", b5: "#0d9488", b6: "#c9943a", b6b: "#15803d", b6c: "#78716c", b6d: "#6b7280", b6e: "#94a3b8", b6f: "#7c3aed", b6g: "#fdf3e0" };
+const HEROINES = [
+    {
+        cl: "b1", book: "Book 1",
+        name: 'Raelee "Dixie" Calhoun', role: "Primary Anchor \u00b7 Musician \u00b7 Dixie Deadshot",
+        bond: "Azazel", bondColor: "#b91c1c",
+        body: "The seventh generation of Calhoun women to hold the Pike County Thinning. She did not choose it the way her grandmother chose it \u2014 she turned down a road she\u2019d never taken before and the compact she built was real, which Mama Calhoun says is stronger than a planned arrangement would have been.\n\nDixie Deadshot is her stage name. The three outstanding warrants are not hers in any way that matters to the corridor's legal architecture. By Book 6 she has a second album out and a third half-built and is the reason five Watcher-witch partnerships are holding a fracturing Thinning together in December.",
+        quote: "She turned down a road she\u2019d never taken before, and the arrangement she built was real.",
+    },
+    {
+        cl: "b2", book: "Book 2",
+        name: "Della Combs", role: "Herbalist \u00b7 Hollow Witch \u00b7 Brian Lee's Mother",
+        bond: "Samyaza", bondColor: "#991b1b",
+        body: "Held the east fence of her Pike County property alone for fifteen years. Herbalist since her grandmother passed her the practice at fourteen. She buried her own mother. She raised Brian Lee without a name to give for his father because there was never a name to give.\n\nShe watched the shape at the edge of her east wood for twenty-two mornings before she did anything about it. On the twenty-third she walked to the fence. When he came to her kitchen she made tea. When she understood what he was telling her, she told him to get out of her house. She called Edna Mae. She went to the herb shed and screamed into a dish towel for forty-five seconds. Then she washed the dish towel. Then she went back to work.\n\nThe most technically precise practitioner the corridor has produced in a generation. By Book 6, one of the most operationally capable people Dixie has ever met.",
+        quote: '"Get out of my house."\n\nHe went.',
+    },
+    {
+        cl: "b3", book: "Book 3",
+        name: "Carla June Maynard", role: "Hollow Diner \u00b7 Route 119 \u00b7 Warm Room Keeper",
+        bond: "Baraqiel", bondColor: "#1e40af",
+        body: "She was waitressing the night the Feral demon attacked the Hollow Diner. When it was over and the man responsible for the lightning in the parking lot was standing at the counter, she asked him if he wanted more coffee.\n\nThat was the beginning. What she built in the twenty-six years before and after is a warm room \u2014 the Strength Arcana's specific expression in a diner on Route 119 in Pike County, Kentucky. Not strategy. Deliberate resistance: consistently and cheerfully refusing to treat impossible situations as reasons to be anything other than present.\n\nThe warm room is the network's informal field headquarters. The Darkness finds it resistant. Beelzebub's consumption domain finds no purchase in it. The Feral pack's emotional disruption finds nothing to disrupt. It is warm because Carla June decided every morning that it would be.",
+        quote: "She asked the man responsible for the lightning in the parking lot if he wanted more coffee.",
+    },
+    {
+        cl: "b4", book: "Book 4",
+        name: "Mercy Tackett", role: "Grey-Area Practitioner \u00b7 Tri-County",
+        bond: "Armaros", bondColor: "#c2410c",
+        body: "The operational clarity of someone who has been working in the corridor\u2019s grey areas long enough to know exactly which laws apply and which ones she\u2019s willing to break.\n\nMercy's practice is the older idiom expressed in the tri-county space the formal framework forgot to close. Fox blood. Chalk. Her grandmother's thread. She discovered in the Book 4 confrontation that Asmodeus had been working in the same idiom \u2014 the holding, the releasing, the Earth Mother's original practice \u2014 for nine hundred years without the lateral Web. He'd been doing it alone for so long he'd forgotten it was supposed to be shared.\n\nShe won not by out-powering him. She won by being the thing he gave up on being.",
+        quote: "She won not by out-powering him. She won by being the thing he gave up on being.",
+    },
+    {
+        cl: "b5", book: "Book 5",
+        name: "June Tackett", role: "Dreamer \u00b7 High Priestess Archive Thread",
+        bond: "Kokabiel", bondColor: "#0d9488",
+        body: "The corridor responds to her. Dixie watches her come up the porch steps in Book 6 and feels the Thinning shift the way it shifts when the Dreamer is present \u2014 with the specific quality of everything leaning slightly toward her.\n\nShe began the prophetic record \u2014 Volume One \u2014 when the gift opened fully. Every volume is an accurate rendering of what the Archive transmits: the corridor\u2019s future made legible in the present, with the specific precision of a gift that does not give everything, only enough.\n\nIn Book 5 she and Kokabiel live in Aunt Lela\u2019s cottage on the south ridge, where her dream journal becomes Volume One of the twenty-one-volume prophetic record. Their daughter is born July 20th under the opened star \u2014 Pearlene Calhoun in the succession record, called Wren by her parents. By Book 6 (the prior December) she is newly pregnant and in the exact place the dream told her she was supposed to be. She has seen this. She has been dreaming it since April. She knows what happens. Kokabiel is certain the child is not at risk. The child is coming in July, under a very specific star.",
+        quote: "I\u2019ve seen this. I\u2019ve been dreaming this since April. I know what happens. I know what I\u2019m doing here.",
+    },
+    {
+        cl: "b6b", book: "Book 6B",
+        name: "Velvet Thornbloom", role: "Web Apex \u00b7 Thread-Placement Specialist \u00b7 Blue Ridge",
+        bond: "Kasdeja", bondColor: "#15803d",
+        body: "The Web\u2019s apex thread-placement specialist. Velvet\u2019s gift is the specific capacity to feel where a Web thread is supposed to go \u2014 not where the formal architecture suggests, not where the precedent points, but where the thread actually belongs in the geological and relational record.\n\nThe Blue Ridge corridor is the Web\u2019s first non-Appalachian-primary thread in the network \u2014 the first extension of the compact beyond the specific geographical range of Pike County. What Velvet places at the Blue Ridge establishes the template for every subsequent corridor expansion.\n\nRaphael is the antagonist of Book 6B: Kasdeja taught what Raphael was meant to guard. The confrontation is about who the healing domain belongs to.",
+        quote: "The first thread placed outside the primary range. Everything that follows is built on the template she establishes here.",
+    },
+    {
+        "cl": "b6c",
+        "book": "Book 6C",
+        "name": "Ruthanne Sizemore",
+        "role": "Quarry Keeper · Geological Voice Practitioner",
+        "bond": "Turiel",
+        "bondColor": "#78716c",
+        "body": "Ruthanne runs the last working quarry in the county and has spent a decade certain the mountain talks back. Turiel confirms it does. Her practice is not soil magic but geological listening: pressure, fracture, patience, warning, and the silence of rock that has held too much for too long.\n\nHer choosing adds the stone layer to Arc 1's foundation and makes the Leviathan's cardiac frequency audible before the Leviathan Arc names it.",
+        "quote": "The mountain had been speaking. Ruthanne was the first one stubborn enough to answer."
+    },
+    {
+        "cl": "b6d",
+        "book": "Book 6D",
+        "name": "Nadine Skaggs",
+        "role": "Plain-Sight Witness · Shadow Practitioner",
+        "bond": "Bezaliel",
+        "bondColor": "#6b7280",
+        "body": "Nadine has spent her life as the woman people look through. Bezaliel's shadow domain reveals that invisibility and worthlessness were never the same thing. Her practice catches what Pike County has trained itself not to see: missing women, quiet bargains, family omissions, and corridor markers hidden in ordinary porch-light shadow.\n\nHer bond teaches the network that hidden does not mean absent.",
+        "quote": "What Pike County overlooked had still been standing there the whole time."
+    },
+    {
+        "cl": "b6e",
+        "book": "Book 6E",
+        "name": "Wren Justice",
+        "role": "Waning-Moon Practitioner · Release Function",
+        "bond": "Sariel",
+        "bondColor": "#94a3b8",
+        "body": "Wren's line was never dead. It worked at the wrong end of the month for anyone to notice. Her corridor opens under the waning moon, when things lessen, return, and release their claim. Sariel's lunar domain stands beside Saraqael's resonance without becoming Saraqael.\n\nWren's work gives the network a release function before expansion makes the Web heavier than Pike County can carry alone.",
+        "quote": "The full moon was never her door. The door opened when the light was leaving."
+    },
+];
+const WATCHERS = [
+    {
+        cl: "b1", book: "Book 1",
+        name: "Azazel", role: "The One Who Stopped Watching and Started Staying",
+        bond: "Dixie",
+        body: "Not the watching \u2014 the staying. That is the specific note the Book 6 text gives him. He stopped being an observer and became part of what he was observing. His relationship with Dixie is the compact\u2019s core expression: the bond that makes the corridor\u2019s jurisdiction real, not because it was required but because it was chosen.\n\nHe was already awake at 3:47 AM when the seal broke in WMB1. He did not want to wake her. That is the whole of him in one sentence: he knows everything, he chooses what to share, and he stays.",
+        quote: "He stopped watching and started staying.",
+    },
+    {
+        cl: "b2", book: "Book 2",
+        name: "Samyaza", role: "First Name on the List \u00b7 Horde General \u00b7 Brian Lee's Father",
+        bond: "Della",
+        body: "The first name on the list of the Watchers. Their leader. He watched Della\u2019s property for twenty-six years \u2014 not surveillance but attendance, the specific form of presence a being allows itself when it believes presence is the only form of love it has the right to.\n\nHe first came to the Combs property in 1994, when Della was eight years old and set a cup of water out for a shape no one else could see. He came back for twenty-six years. He stood at the east wood. He watched the morning she would speak to him.\n\nWhen Asmodeus came for Brian Lee, Samyaza stopped attending and started acting. The Cain-Abel clause that bound Asmodeus to him was not his plan. It was the consequence of Asmodeus choosing betrayal as architecture. The older claim wins. It has always won.",
+        quote: "In case he\u2019s thirsty.\u2014 Della Combs, age 8",
+    },
+    {
+        cl: "b3", book: "Book 3",
+        name: "Baraqiel", role: "The Quietest Watcher \u00b7 Lightning \u00b7 Storm Domain",
+        bond: "Carla June",
+        body: "The quietest Watcher \u2014 the one who spent eight months of Tuesday coffees making war on his own feelings before giving up. His domain is the atmospheric layer: the interface between the sky and ground, the lightning's frequency, the storm patterns that run along the Ley Lines.\n\nHis relationship with Carla June Maynard is: she asked him if he wanted more coffee after the Feral attack, and he said yes, and eight months later he said everything else. The warm room is warm because she decided it would be. The perimeter is held because he decided to hold it. The two things are not the same kind of decision and they work together exactly because of that.",
+        quote: "He was the quietest Watcher \u2014 the one who\u2019d spent eight months of Tuesday coffees making war on his own feelings before giving up.",
+    },
+    {
+        cl: "b4", book: "Book 4",
+        name: "Armaros", role: "The Spell-Breaker \u00b7 The Older Idiom",
+        bond: "Mercy",
+        body: "His gift is the breaking of wrong bindings \u2014 the specific capacity to identify the fear-substrate in a compact or bond and remove it. What the arc discovers is that his craft and Mercy's practice are the same operation: the holding, the releasing, the Earth Mother's original idiom, practiced in the same tradition from the same source.\n\nAsmodeus had been practicing the same idiom alone for nine hundred years. The difference between Armaros and Asmodeus is: Armaros found Mercy. He did not hold alone.\n\nHe is coming from the southern boundary in Book 6, addressing a Hell faction incursion that decided to take advantage of the fracturing Thinning.",
+        quote: "Her making and his binding were the same operation.",
+    },
+    {
+        cl: "b5", book: "Book 5",
+        name: "Kokabiel", role: "The Stellar Domain \u00b7 The Naming of Stars",
+        bond: "June",
+        body: "He has been naming stars into the stellar record since before the formal framework had language for itself. His domain and June\u2019s gift \u2014 the stellar frequency and the Dreamer\u2019s Archive \u2014 are calibrated to each other in ways neither understood until they bonded.\n\nHe is certain about the child. The dream is clear. The child is coming in July, under a very specific star. He named that star before the practice had a definition. June showed him the dream. He confirmed: certain.\n\nHis stellar domain becomes the signal that will eventually reach Hecate in the Unwritten. The star aimed at the deep places in the Divine Arc is in his domain.",
+        quote: '"The child is not at risk. The dream is clear."\n"You\u2019ve seen the dream."\n"June showed it to me. Yes."',
+    },
+    {
+        cl: "b6b", book: "Book 6B",
+        name: "Kasdeja", role: "The Blue Ridge \u00b7 Healing Integration",
+        bond: "Velvet",
+        body: "Kasdeja\u2019s domain is the integration of the natural and healing practices \u2014 the specific intersection that Raphael was commissioned to guard. Kasdeja taught what Raphael was meant to guard, which is the specific wound at the center of Book 6B\u2019s conflict.\n\nHis bonding with Velvet at the Blue Ridge establishes the first non-Appalachian-primary Web thread in the network. The corridor they hold together is the template for the Expansion Arc: each subsequent book establishes a new corridor from the template Kasdeja and Velvet place at the Blue Ridge.",
+        quote: "Kasdeja taught what Raphael was meant to guard. The confrontation is about who the domain belongs to.",
+    },
+    {
+        "cl": "b6c",
+        "book": "Book 6C",
+        "name": "Turiel",
+        "role": "Geological Voice · Rock, Not Soil",
+        "bond": "Ruthanne Sizemore",
+        "body": "Turiel's domain is the patience of what does not move. He has listened beside the Leviathan's depth for twelve thousand years. Ruthanne does not make him believe the mountain speaks; she proves a mortal can hear it too.",
+        "quote": "Rock remembers differently than soil. It waits longer before it answers."
+    },
+    {
+        "cl": "b6d",
+        "book": "Book 6D",
+        "name": "Bezaliel",
+        "role": "Angel of Shadows · What Hides in Plain Sight",
+        "bond": "Nadine Skaggs",
+        "body": "Bezaliel's domain is not evil darkness but unobserved truth. He bonds Nadine because she knows the difference between being hidden and being dismissed. Together they reveal the omissions Pike County's old stories depended on.",
+        "quote": "A shadow is not a lie. Sometimes it is where the truth survived."
+    },
+    {
+        "cl": "b6e",
+        "book": "Book 6E",
+        "name": "Sariel",
+        "role": "Angel of the Waning Moon · Release and Return",
+        "bond": "Wren Justice",
+        "body": "Sariel is distinct from Saraqael, though the name resonance is intentional canon. His domain is the waning moon: what departs without being lost, what releases without being erased, and what returns because it was allowed to leave.",
+        "quote": "Not every door opens by increase. Some open by letting go."
+    },
+];
+const BOOKS = [
+    {
+        cl: "b1", num: "Book 1", color: "#b91c1c",
+        title: "Fallin' for a Fallen",
+        couple: "Dixie & Azazel",
+        colorDesc: "Amethyst",
+        arc: "The compact ratified. The corridor established. The foundation.",
+        synopsis: "Raelee Calhoun \u2014 who goes by Dixie Deadshot on the music side and lives with three outstanding warrants on the legal side \u2014 is the seventh generation of Calhoun women to hold the Pike County Thinning. She did not plan to ratify a compact. She turned down a road she\u2019d never taken before. The compact she built was real.\n\nThe Morvael deal dissolved. The wrong compact \u2014 which had been distorting the corridor's frequency for three hundred years \u2014 replaced with the correct one. Azazel bonds. The corridor's jurisdiction formalized under the Older Mechanism's bond law.",
+        hell: "Belial (Books 1\u20132), Bune (background), Vepar (creek contamination), the first Feral encounters",
+        heaven: "Heaven's Enforcement awareness established. Saraqael begins monitoring the new compact.",
+        key: "The first correct compact in Pike County in three centuries. The Calhoun succession line\u2019s seven generations of holding the door reaches its designed culmination: not held forever, opened.",
+        quote: "The Calhoun line was always supposed to ratify the compact. One of us was always supposed to open the door.",
+        tags: ["pu", "pu"], tagNames: ["compact ratified", "foundation"],
+    },
+    {
+        cl: "b2", num: "Book 2", color: "#991b1b",
+        title: "The Devil's in the Details",
+        couple: "Della & Samyaza",
+        colorDesc: "Burgundy",
+        arc: "The herbalist and the Watcher who watched for twenty-six years. The Nephilim. The writ.",
+        synopsis: 'Della Combs held the east fence alone for fifteen years. She watched the shape at the edge of her east wood for twenty-two mornings. On the twenty-third she walked to the fence.\n\nSamyaza \u2014 the first name on the list, the Horde\'s general, the man who had been watching her property since she was eight years old and she left a cup of water out for a shape no one else could see \u2014 told her the truth at her kitchen table. She told him to get out of her house. She called Edna Mae. She screamed into a dish towel. She washed the dish towel. She went back to work.\n\nAsmodeus came for Brian Lee with a writ of acquisition: the first Nephilim born to a chief Watcher in twelve thousand years \u2014 the first new thing since Arcadia\u2019s era \u2014 the most significant leverage asset Hell\u2019s council had identified. The writ\'s architecture was the Flood Clause \u2014 the formal framework\'s founding Commission once ordered the destruction of all Nephilim, with Goliath cited as precedent; the writ argued Brian Lee was not of the mortal layer, therefore unclaimed, therefore available. Asmodeus raced the compact to close his claim before the older claim could close over the boy. The devil was in the legal details. The Cain-Abel clause defeated him: choosing betrayal as architecture bound his life force to Samyaza\'s permanently. The older claim wins. It has always won.',
+        hell: "Asmodeus (Prince of Lust \u2014 primary antagonist). Balam, Bathym (background). The writ of acquisition for Brian Lee.",
+        heaven: "Formal framework monitoring intensifies. The Horde liaison structure is a new jurisdictional complication.",
+        key: "Brian Lee Combs: the first Nephilim born to a chief Watcher in twelve thousand years \u2014 the first new thing since Arcadia\u2019s era. The Watcher-Weaver compact at the east fence. The Cain-Abel clause binds Asmodeus to Samyaza permanently.",
+        quote: '"In case he\'s thirsty." \u2014 Della Combs, age 8, setting a cup of water out for a shape no one else could see.',
+        tags: ["cr", "g"], tagNames: ["Asmodeus defeated", "Brian Lee / Nephilim"],
+    },
+    {
+        cl: "b3", num: "Book 3", color: "#1e40af",
+        title: "Strike Me Down",
+        couple: "Carla June & Baraqiel",
+        colorDesc: "Deep Blue",
+        arc: "The warm room. The quietest Watcher. The diner on Route 119.",
+        synopsis: "Carla June Maynard was waitressing the night the Feral demon attacked the Hollow Diner. When it was over, she asked the man responsible for the lightning in the parking lot if he wanted more coffee.\n\nThe warm room is not strategy. It is twenty-six years of one decision made every morning: everyone who comes in gets treated like a person who deserves to be warm. The Strength Arcana noticed. The formal framework notices the warm room\u2019s frequency and cannot classify it. The Darkness finds it resistant.\n\nBaraqiel spent eight months of Tuesday coffees making war on his own feelings about Carla June Maynard before giving up. He holds the perimeter. She warms the room. The diner on Route 119 becomes the network\u2019s informal field headquarters.",
+        hell: "Focalor (storms, opposing Baraqiel\u2019s domain), Vine (Hollow Witch bloodline hunt), Zaleos (Feral disruption), first Feral pack operations under Arian",
+        heaven: "Jophiel assesses the warm room\u2019s frequency. Cannot classify it. This bothers her.",
+        key: "The warm room established. The Hollow Diner as field headquarters. The Strength Arcana\u2019s recognition. Baraqiel's perimeter.",
+        quote: "She was waitressing the night the Feral demon attacked the diner. When it was over, she asked the man responsible for the lightning if he wanted more coffee.",
+        tags: ["b", "b"], tagNames: ["warm room", "Route 119 HQ"],
+    },
+    {
+        cl: "b4", num: "Book 4", color: "#c2410c",
+        title: "All Hell Breaks Loose",
+        couple: "Mercy & Armaros",
+        colorDesc: "Dark Ember",
+        arc: "The grey-area practitioner. The spell-breaker. The older idiom shared.",
+        synopsis: "Mercy Tackett works the tri-county grey space \u2014 the territory the formal framework\u2019s jurisdiction forgot to close. Fox blood, chalk, her grandmother\u2019s thread. The making and releasing of the holding. She taught herself the older idiom by accident while waiting tables.\n\nAsmodeus had been working in the same idiom alone for nine hundred years. He found the grey-area practitioner in Pike County and recognized her craft as the dark twin of his own. He calculated that the recognition gave him an edge. He was wrong. The difference between Asmodeus and Mercy is not power. It is that Mercy found Armaros. She did not hold alone.\n\nShe won the confrontation not by out-powering him but by being the thing he gave up on being: a practitioner in the lateral Web, held and holding in the correct relationship.",
+        hell: "Asmodeus (secondary \u2014 Mercy\u2019s specific confrontation). Baal, Eligos, Aym. The Feral pack at peak operation under Arian. Beleth targeting Anchor families.",
+        heaven: "Chamuel investigates the Watcher-Anchor bonds. Every bond he investigates is correct. He does not file the report.",
+        key: "The grey-area practice legitimized within the network. Armaros\u2019s spell-breaking capacity established. The older idiom\u2019s lateral nature \u2014 the daughters\u2019 Web \u2014 is what defeats the holding-alone.",
+        quote: '"Asmodeus is what Mercy could become if she kept refusing to ask for help. He is the Tackett-line pathology with ten thousand years to mature." \u2014 Book 4 editorial notes',
+        tags: ["e", "e"], tagNames: ["grey area", "older idiom"],
+    },
+    {
+        cl: "b5", num: "Book 5", color: "#0d9488",
+        title: "Written in the Stars",
+        couple: "June & Kokabiel",
+        colorDesc: "Teal",
+        arc: "The Dreamer\u2019s gift opens. The record begins. Volume One. The cottage that receives.",
+        synopsis: "June Tackett and Kokabiel move into Aunt Lela\u2019s cottage on the south ridge \u2014 a house a Calhoun woman built in 1963 and kept empty thirty-seven years, waiting. June\u2019s Dreamer gift opens at full expression and her dream journal becomes Volume One of the prophetic record \u2014 the High Priestess\u2019s Archive thread running through her. Edna Mae names it: there will be twenty-one volumes. (Order of Shadows opens on Volume 21.)\n\nKokabiel bonds. His stellar domain and her Dreamer\u2019s Archive are calibrated to each other; the star he has watched for seventy years \u2014 in the old notation, the Wren\u2019s register \u2014 is approaching its opening. Their morning letters become the partnership\u2019s framework, counting up to two hundred.\n\nThe book\u2019s signature inversion: where the earlier books repel Hell, the cottage receives Heaven. Aunt Lela\u2019s house unbinds the enforcers Heaven sends \u2014 Asbeel (the Grigori\u2019s oldest dissenter, who declares and bonds Iola Pruitt, senior Anchor of the Tennessee corridor, after a forty-seven-year wait) and Tamiel (Lela\u2019s own forbidden partner, bound sixty-two years, freed when the house takes the binding). Beneath this, Zagam counterfeits Watcher signatures and Berith corrupts the celestial event\u2019s archive entry to make the corridor\u2019s evidence look unreliable \u2014 both defeated because June\u2019s record is the uncorrupted original the corruption cannot reach.\n\nPearlene Calhoun is born July 20th under the opened star \u2014 called Wren by her parents (for the wren-bird and the Wren\u2019s register), recorded as Pearlene Calhoun in the Calhoun succession. The first child born under the older mechanism\u2019s direct register; the future Senior Anchor.",
+        hell: "Zagam (energy signature counterfeiting), Berith (archive-entry corruption), Gusoin (secret revelation at maximum-damage timing). Secondary pressure beneath the Heaven-reception arc; defeated by June\u2019s uncorrupted record.",
+        heaven: "Yahoel (Senior Council Convener, 3,000 years, partial awareness of the older mechanism) \u2014 reasoned with, not defeated; certifies the event on June\u2019s record and invents the transitional-representative role. Asbeel and Tamiel: enforcers received and unbound by the cottage. Raziel documents the framework\u2019s position against the Older Mechanism\u2019s record and finds they do not align.",
+        key: "The prophetic record established \u2014 Volume One, of twenty-one. The cottage-receives-enforcers inversion of the warm-room idea. Pearlene Calhoun (called Wren) born under the opened star: the next senior Anchor. Yahoel as the Council figure who bends first.",
+        quote: "Two names for a child who is two arrivals at once. The Tackett-line dreamer named her for the star. The Calhoun line named her for the door.",
+        tags: ["t", "t"], tagNames: ["dream record", "the cottage"],
+    },
+    {
+        cl: "b6", num: "Book 6", color: "#c9943a",
+        title: "Outlaw Heaven",
+        couple: "Ensemble \u00b7 Five Partnerships",
+        colorDesc: "Crimson",
+        arc: "The convergence. The fracturing. The door opened.",
+        synopsis: "December. The Thinning has been fracturing in three places simultaneously for three months under Heaven\u2019s full enforcement operation. Saraqael has been authorized everything. Michael is at the county\u2019s outer boundary. Mama Calhoun (89 years old, holding the corridor since 1987) says: it\u2019s time to stop holding the door and open it.\n\nFive Watcher-witch partnerships converge at the Calhoun homestead: Dixie and Azazel, Della and Samyaza (with Brian, seven years old), Carla June and Baraqiel, Mercy and Armaros, June and Kokabiel (newly pregnant). More old power in one small house than has been in one place since before the republic had a name.\n\nMama Calhoun at dinner: <em>I have been holding this door for fifty-three years. The holding was the waiting. The waiting was for the configuration that made the opening possible. You\u2019re the configuration.</em>\n\nMichael arrives. Uriel defects. The compact meets Heaven\u2019s full enforcement operation and holds. The formal framework\u2019s final attempt to close the Thinning fails against what two years of correct bonds have built.",
+        hell: "Full Hell faction active. Feral pack final operations. Aym deployed. The formal framework and Hell factions both challenging the compact simultaneously.",
+        heaven: "Saraqael (full operation, authorized everything). Michael (the war angel \u2014 the sword). Uriel (defects). The convergence is the formal framework\u2019s final attempt.",
+        key: "The gathering. The compact held against full Heaven enforcement. Uriel\u2019s defection. Michael\u2019s confrontation. Mama Calhoun passes the succession. The door opened, not held.",
+        quote: "I have been holding this door for fifty-three years. The holding was the waiting. The waiting was for the configuration that made the opening possible. You\u2019re the configuration.",
+        tags: ["pu", "cr", "pu"], tagNames: ["full gathering", "Uriel defects", "door opened"],
+    },
+    {
+        cl: "b6b", num: "Book 6B", color: "#15803d",
+        title: "Kasdeja & Velvet",
+        couple: "Velvet Thornbloom & Kasdeja",
+        colorDesc: "Forest Green",
+        arc: "The Blue Ridge. The Web\u2019s first extended thread. The template.",
+        synopsis: "Velvet Thornbloom is the Web\u2019s apex thread-placement specialist: her gift is the precise capacity to feel where a thread belongs, not where precedent suggests but where it actually sits in the geological and relational record.\n\nThe Blue Ridge corridor is the network\u2019s first extension beyond the Appalachian primary range. What Velvet places here is the template for every subsequent corridor in the Expansion Arc. Books 7\u201311 are possible because of the pattern she establishes at the Blue Ridge.\n\nRaphael is the antagonist: Kasdeja taught what Raphael was meant to guard. The confrontation over the healing domain\u2019s jurisdiction is personal and it is architectural \u2014 Kasdeja\u2019s integration of natural and healing practice is exactly what Raphael was commissioned to prevent.",
+        hell: "Background operations. Vine\u2019s Hollow Witch bloodline hunt extends to the Blue Ridge.",
+        heaven: "Raphael (Book 6B primary antagonist \u2014 healing enforcement). The confrontation over what the healing domain belongs to.",
+        key: "The Blue Ridge thread established. The Web\u2019s apex thread-placement methodology documented. Velvet and Kasdeja as the template for the Expansion Arc\u2019s five subsequent corridors.",
+        quote: "Kasdeja taught what Raphael was meant to guard. The confrontation is not about rules. It is about who the healing belongs to.",
+        tags: ["gr", "gr"], tagNames: ["Blue Ridge thread", "Expansion Arc template"],
+    },
+    {
+        "cl": "b6c",
+        "num": "Book 6C",
+        "color": "#78716c",
+        "title": "Bone of the Mountain",
+        "couple": "Ruthanne Sizemore & Turiel",
+        "colorDesc": "Stone Grey",
+        "arc": "Arc 1 addition · geological listening · Leviathan foreshadowing",
+        "synopsis": "Ruthanne Sizemore runs the last working quarry in Pike County. Everybody thinks the blast dust and long hours have made her strange because she says the mountain talks back. Turiel confirms she has been hearing correctly.\n\nAs tremors begin under the county, the quarry becomes a pressure point in the Corridor. Hell wants the stone broken open. The Older Mechanism wants the mountain read, not mined. Ruthanne learns to tell the difference between stone that is holding and stone that is warning.",
+        "hell": "Hell-backed extraction interests attempt to fracture the quarry before the Web can read its warning.",
+        "heaven": "The formal framework misclassifies the tremors as geological instability rather than witness.",
+        "key": "The stone-listening function activates inside Arc 1 and plants the Leviathan cardiac-frequency clue before WMB1.",
+        "quote": "The mountain had been talking for years. Ruthanne had been the only one polite enough to listen.",
+        "tags": [
+            "m",
+            "t"
+        ],
+        "tagNames": [
+            "geological voice",
+            "Leviathan foreshadowing"
+        ]
+    },
+    {
+        "cl": "b6d",
+        "num": "Book 6D",
+        "color": "#6b7280",
+        "title": "Shadow on the Porch Light",
+        "couple": "Nadine Skaggs & Bezaliel",
+        "colorDesc": "Shadow Grey",
+        "arc": "Arc 1 addition · hidden truth · plain-sight witness",
+        "synopsis": "Nadine Skaggs has spent her life being overlooked: family tables, church basements, town meetings, every place where a woman can be useful and unseen at the same time. Bezaliel's shadow domain does not make darkness. It reveals what darkness kept safe.\n\nPorch lights, old photographs, and kitchen-window shadows begin exposing what Pike County has quietly not-seen for two generations. Nadine's bond proves the Web must include the overlooked, not merely the obvious.",
+        "hell": "Belphegor's inertia tries to keep the omissions comfortable and ordinary.",
+        "heaven": "Jophiel cannot classify a witness mechanism that works through absence rather than proclamation.",
+        "key": "The plain-sight witness function joins the compact. Hidden does not mean absent.",
+        "quote": "A thing can be hidden and still be standing in the middle of the room.",
+        "tags": [
+            "sl",
+            "pu"
+        ],
+        "tagNames": [
+            "shadow witness",
+            "family omissions"
+        ]
+    },
+    {
+        "cl": "b6e",
+        "num": "Book 6E",
+        "color": "#94a3b8",
+        "title": "Waning",
+        "couple": "Wren Justice & Sariel",
+        "colorDesc": "Waning Moon Silver",
+        "arc": "Arc 1 addition · release function · lunar resonance",
+        "synopsis": "Wren Justice's corridor only opens under a waning moon. Everyone assumed her practice had died out because they kept looking at the wrong phase. Sariel's lunar domain confirms that her line was never dead; it was always working through release rather than fullness.\n\nAs memories, objects, and old obligations begin thinning in unnatural ways, Wren learns to distinguish holy lessening from theft. The Web gains a way to release pressure without erasing witness.",
+        "hell": "A thinning distortion tries to turn release into disappearance.",
+        "heaven": "Saraqael recognizes the name-resonance but confirms Sariel is distinct and correctly placed.",
+        "key": "The waning-moon release function enters Arc 1 before the network expands beyond Pike County.",
+        "quote": "The door opened when the light was leaving.",
+        "tags": [
+            "sl",
+            "t"
+        ],
+        "tagNames": [
+            "waning moon",
+            "release function"
+        ]
+    },
+    {
+        "cl": "b6f",
+        "num": "Book 6F",
+        "color": "#7c3aed",
+        "title": "What the Holler Remembers",
+        "couple": "Ensemble",
+        "colorDesc": "Memory Violet",
+        "arc": "Arc 1 addition · ensemble reckoning · no new bond",
+        "synopsis": "No new Watcher bonds in this book. Pike County takes stock of three new bonds in one season on top of the original configuration. The Corridor's elders face what it means for the compact to spread beyond one family, one diner, and one holler.\n\nThe central conflict is pressure rather than a single villain: can the original women let the story grow beyond them without feeling replaced? The holler remembers every choice made in it, including the ones nobody wants written down.",
+        "key": "Arc 1 accepts that the compact is no longer local and prepares the bridge into the Expansion Arc.",
+        "quote": "The holler had never forgotten. It had only been waiting for them to ask the right question.",
+        "tags": [
+            "pu",
+            "g"
+        ],
+        "tagNames": [
+            "ensemble reckoning",
+            "bridge logic"
+        ]
+    },
+    {
+        "cl": "b6g",
+        "num": "Book 6G",
+        "color": "#fdf3e0",
+        "title": "Twelve Thousand Years Later",
+        "couple": "Ensemble / Bridge",
+        "colorDesc": "Threshold White",
+        "arc": "Arc 1 finale bridge · Older Mechanism threshold",
+        "synopsis": "The closing gate of Arc 1. The thread count crosses a threshold the Older Mechanism has been waiting on since Arcadia. Not everything opens, but something ancient notices.\n\nDixie learns that being central does not mean being the whole story. Edna Mae decides what knowledge must pass forward before the Expansion Arc carries the compact beyond Pike County. The first external corridor contacts Pike County without being called.",
+        "key": "Arc 1 hands off cleanly into Expansion Arc Book 7 while preserving the local foundation.",
+        "quote": "Twelve thousand years later, the door did not open because it was forced. It opened because enough people had chosen correctly.",
+        "tags": [
+            "g",
+            "t"
+        ],
+        "tagNames": [
+            "threshold count",
+            "Expansion Arc bridge"
+        ]
+    },
+];
+const CANON = [
+    "The Pike County compact is the Older Mechanism\u2019s most significant mortal-layer document in three centuries. It ratified the first correct compact in the corridor since the Morvael deal distorted the Thinning\u2019s frequency.",
+    "Mama Calhoun (Edna Mae Calhoun) has been holding the Pike County corridor since 1987 \u2014 53 years by Book 6. The Calhoun succession runs seven generations. The holding was the waiting. The compact opening is the designed culmination.",
+    "Brian Lee Combs: the first Nephilim born to a chief Watcher in twelve thousand years \u2014 the first new thing since Arcadia\u2019s era. Born into a compact-held property \u2014 legally spoken for under the Older Mechanism\u2019s bond law. Seven years old in Book 6 (Year Zero); age 10 by the Leviathan Arc in Year 3.",
+    "Asmodeus\u2019s Cain-Abel clause binds his life force to Samyaza\u2019s permanently as a consequence of his betrayal architecture. He cannot act against the Pike County network without acting against himself.",
+    "The Hollow Diner on Route 119 is the network\u2019s informal field headquarters. Twenty-six years of the warm room\u2019s accumulated frequency makes it resistant to the Darkness, Feral disruption, and Beelzebub\u2019s consumption domain.",
+    "The prophetic record (Volume One, June Tackett) begins during the main series. By Book 6 it is two years in. It will run for twenty-one volumes and end with: she is transmitting. She can be found.",
+    "June Tackett is newly pregnant at the Book 6 convergence. The child is coming in July, under a very specific star. Kokabiel is certain. The child is Pearlene Calhoun \u2014 who will become Senior Anchor in the Order of Shadow arc.",
+    "The Thinning fractures in three places simultaneously during Book 6 under Saraqael\u2019s full enforcement operation. Michael arrives at the county\u2019s outer boundary. Uriel defects at the Book 6 convergence.",
+    "The correct compact\u2019s frequency is visible to the Arcana layer. The Lovers Arcana notices each bond. The Strength Arcana notices the warm room. The High Priestess Archive thread runs through June Tackett.",
+    "Velvet Thornbloom\u2019s Blue Ridge thread placement establishes the template for the Expansion Arc. Books 7\u201311\u2019s five new corridors are built on the pattern established in Book 6B.",
+    "Arc 1 now closes at twelve books: Books 6C–6E add geological voice, shadow witness, and waning-moon release; Books 6F–6G reckon with expansion and bridge directly into Expansion Arc Book 7.",
+    "Theology control: every new domain serves relationship, trust, consent, belief, and correct witness. No domain overpowers the bond law; each makes a new form of choosing legible.",
+];
+const WORLD = [
+    { t: "Pike County, Kentucky", c: "", body: "The primary corridor. The Calhoun homestead above the Leviathan\u2019s heart. The Hollow Diner on Route 119. The creek (the Thinning\u2019s primary geographic anchor \u2014 Vepar\u2019s target). The east fence where Samyaza stood for twenty-three mornings. The back field where Arcadia wrote the first word twelve thousand years ago.\n\nAppalachian mountains. The coal country. The extraction economy that Mammon and Haagenti have been running for a century. The specific quality of the light at 4 AM when the gift is most active." },
+    { t: "The Daughters\u2019 Practice", c: "t", body: "The Hollow Witches of Pike County are the inheritors of a practice that predates the formal framework by thirty thousand years. Herbalists, bone-keepers, dreamers, warm-room keepers, grey-area practitioners \u2014 each gift is the daughters\u2019 tradition expressed in the specific form that practitioner carries.\n\nThe formal framework classified them as subordinate to the Watcher compact\u2019s jurisdiction. The correct compact establishes: the daughters\u2019 practice is primary. The Watcher bond is not containment. It is relationship." },
+    { t: "The Older Mechanism", c: "g", body: "The foundational law that predates Heaven\u2019s formal framework, the Church\u2019s institutional architecture, and every compact the Princes negotiated. Bond law. Compact law. Web authority.\n\nThe Older Mechanism\u2019s record is the irrefutable document \u2014 the one Raziel maintains, the one the formal framework\u2019s enforcement position contradicts, the one that Metatron will eventually transmit correctly: <em>the formal framework is downstream of the Web. Always was.</em>" },
+    { t: "The Bond\u2019s Correct Expression", c: "pu", body: "The main series establishes what the Bond is when it\u2019s correct: not a contract, not containment, not a compact of control. The Bond is the choosing that runs both directions. The Watcher chooses. The practitioner chooses. The Web holds both choices in the Older Mechanism\u2019s record.\n\nAzazel stopped watching and started staying. Samyaza stood at the east wood for twenty-six years because waiting was the only form of love he believed he was allowed. Baraqiel spent eight months of Tuesday coffees before giving up on the argument with himself. The Bond is not dramatic. It is specific, and it is chosen, and it holds." },
+    { t: "The Compact\u2019s Architecture", c: "pu", body: "The compact is ratified at the Calhoun homestead above the Leviathan\u2019s heart, which means it is ratified above the geological position that holds both the first word (<em>here</em>, written by Arcadia) and Satan\u2019s sealed position. The compact\u2019s frequency \u2014 the correct version, relationship rather than fear \u2014 is the key that will eventually unlock both: the Leviathan\u2019s twelve-thousand-year dormancy and Satan\u2019s twelve-thousand-year prison." },
+];
+function OriginalSeriesBible() {
+    const [tab, setTab] = useState("premise");
+    return (React.createElement(React.Fragment, null,
+        React.createElement("style", null, css),
+        React.createElement("div", { className: "bible" },
+            React.createElement("header", { className: "header" },
+                React.createElement("div", { className: "series-label" }, "Series Bible \\u00b7 The Holler & Hellfire Universe"),
+                React.createElement("h1", { className: "main-title" }, "Holler & Hellfire"),
+                React.createElement("div", { className: "sub-title" }, "The Original Series \\u00b7 Books 1\\u20136B \\u00b7 Year Zero"),
+                React.createElement("p", { className: "tagline" },
+                    React.createElement("em", null, "The compact was never supposed to be held forever."),
+                    React.createElement("br", null),
+                    "It was supposed to be opened.",
+                    React.createElement("br", null),
+                    "Seven women. Seven bonds. The door that seven generations of Calhoun women",
+                    React.createElement("br", null),
+                    "held until the configuration was right.")),
+            React.createElement("nav", { className: "tabs" }, TABS.map(t => React.createElement("button", { key: t.id, className: `tab${tab === t.id ? " active" : ""}`, onClick: () => setTab(t.id) }, t.l))),
+            tab === "premise" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "What This Arc Is"),
+                React.createElement("div", { className: "pull" },
+                    "Pike County, Kentucky. The Appalachian corridor above the Leviathan\\u2019s heart.",
+                    React.createElement("br", null),
+                    "Six women whose gifts are as specific as their choices.",
+                    React.createElement("br", null),
+                    "Six Watchers who stopped being observers and became part of what they were observing.",
+                    React.createElement("br", null),
+                    React.createElement("br", null),
+                    React.createElement("em", null, "The compact was never meant to be maintained forever. It was meant to be opened. The Calhoun women held the door for seven generations because the configuration wasn\\u2019t ready. Book 6 is the door opening.")),
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "clabel" }, "The Central Argument"),
+                    React.createElement("div", { className: "ctitle pu" }, "The Bond Is Not Containment. It Is Relationship."),
+                    React.createElement("div", { className: "cbody" },
+                        "The wrong compact \\u2014 the fear-and-control architecture that ran the corridor for three centuries \\u2014 treated the Watcher bond as a containment mechanism. The Thinning as a lock. The daughters\\u2019 practice as a jurisdictional problem to be managed.\\n\\nThe original series establishes, book by book, what the Bond looks like when it\\u2019s correct: Samyaza standing at the east wood for twenty-six years because waiting was the only form of love he believed he was allowed. Baraqiel spending eight months of Tuesday coffees before giving up on the argument with himself. Azazel stopping watching and starting staying.\\n\\n",
+                        React.createElement("strong", null, "The compact ratified in Book 1 is the most significant mortal-layer document in the Older Mechanism\\u2019s record in three centuries."),
+                        " Every arc that follows \\u2014 the Leviathan, the Web, the Order, the Divine \\u2014 is built on what six couples build in Pike County in Year Zero.")),
+                React.createElement("div", { className: "card g" },
+                    React.createElement("div", { className: "clabel" }, "The Setting"),
+                    React.createElement("div", { className: "ctitle g" }, "Pike County, Kentucky \\u00b7 The Appalachian Corridor"),
+                    React.createElement("div", { className: "cbody" }, "The Hollow Diner on Route 119. The Calhoun homestead. The east fence where twenty-three mornings happened. The creek (Vepar\\u2019s target). The back field above the Leviathan\\u2019s heart, above the first word, above Satan\\u2019s sealed position.\\n\\nThe extraction economy that Mammon\\u2019s deed language built and that Haagenti\\u2019s geological corruption maintains. The daughters\\u2019 practice that the suppression made invisible and that six women in Year Zero make visible again. The specific quality of Appalachian light at 4 AM when the gift is most active.\\n\\nPike County is not the backdrop. It is the primary document.")),
+                React.createElement("div", { className: "card cr" },
+                    React.createElement("div", { className: "clabel" }, "The Stakes"),
+                    React.createElement("div", { className: "ctitle cr" }, "Two Factions. One Compact. The Configuration."),
+                    React.createElement("div", { className: "cbody" },
+                        "Heaven\\u2019s Enforcement Arm \\u2014 Saraqael with full authorization, eventually Michael \\u2014 challenges the compact\\u2019s jurisdiction across Books 1\\u20136. Hell\\u2019s faction \\u2014 Asmodeus with a writ of acquisition, Arian\\u2019s Feral pack, Mammon\\u2019s deed architecture, Belphegor\\u2019s cultural inertia \\u2014 works to prevent the correct compact\\u2019s establishment.\\n\\nBoth factions are ultimately defeated by the same thing: five Watcher-witch partnerships, constituted under the Older Mechanism\\u2019s bond law, assembled at one table in one small house on a Pike County ridge. The compact\\u2019s legal architecture is older than either faction\\u2019s authority. ",
+                        React.createElement("em", null, "The older claim wins. It has always won."))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "The Book Color Key"),
+                React.createElement("div", { style: { display: "flex", gap: 10, flexWrap: "wrap", marginTop: 8 } }, [["#b91c1c", "Book 1 — Deep Red"], ["#991b1b", "Book 2 — Burgundy"], ["#1e40af", "Book 3 — Deep Blue"], ["#c2410c", "Book 4 — Dark Ember"], ["#0d9488", "Book 5 — Teal"], ["#c9943a", "Book 6 — Gold"], ["#15803d", "Book 6B — Forest Green · 6C Stone · 6D Shadow · 6E Waning Moon · 6F/6G Bridge"]].map(([c, l]) => (React.createElement("span", { key: l, style: { fontFamily: "'Cinzel',serif", fontSize: 9, letterSpacing: ".15em", color: c, borderTop: `2px solid ${c}`, paddingTop: 3 } }, l)))))),
+            tab === "heroines" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Nine Bonded Heroines"),
+                React.createElement("div", { className: "char-grid" }, HEROINES.map(h => (React.createElement("div", { key: h.name, className: `char-card ${h.cl}` },
+                    React.createElement("div", { className: "cbook" }, h.book),
+                    React.createElement("div", { className: "cname" }, h.name),
+                    React.createElement("div", { className: "crole", style: { color: BOOK_COLORS[h.cl] } }, h.role),
+                    React.createElement("div", { className: "cbodyc", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: h.body.replace(/\n\n/g, "<br/><br/>") } }),
+                    React.createElement("div", { className: "cquote", style: { borderTopColor: BOOK_COLORS[h.cl] + "44" } }, h.quote),
+                    React.createElement("div", { className: "cbond", style: { color: BOOK_COLORS[h.cl], borderTopColor: BOOK_COLORS[h.cl] + "44" } },
+                        "\\u27a1 Bonded: ",
+                        h.bond))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "clabel" }, "What the Heroines Share"),
+                    React.createElement("div", { className: "ctitle pu" }, "The Daughters\\u2019 Tradition in Six Expressions"),
+                    React.createElement("div", { className: "cbody" },
+                        "Each heroine\\u2019s gift is the daughters\\u2019 practice in its specific form. The herbalist\\u2019s reading of the geological layer (Della). The warm room keeper\\u2019s accumulated frequency (Carla June). The grey-area practitioner\\u2019s holding in the older idiom (Mercy). The Dreamer\\u2019s Archive thread (June). The thread-placement specialist\\u2019s Web sense (Velvet). The primary anchor\\u2019s compact jurisdiction (Dixie).\\n\\nNone of them were recruited to a cause. They arrived at their practice through their own histories. The network assembles because the correct compact\\u2019s frequency attracts the practitioners who belong in it. ",
+                        React.createElement("strong", null, "You don\\u2019t build the Web. You find that it was always there."))))),
+            tab === "watchers" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Nine Bonded Watchers"),
+                React.createElement("div", { className: "char-grid" }, WATCHERS.map(w => (React.createElement("div", { key: w.name, className: `char-card ${w.cl}` },
+                    React.createElement("div", { className: "cbook" }, w.book),
+                    React.createElement("div", { className: "cname" }, w.name),
+                    React.createElement("div", { className: "crole", style: { color: BOOK_COLORS[w.cl] } }, w.role),
+                    React.createElement("div", { className: "cbodyc", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: w.body.replace(/\n\n/g, "<br/><br/>") } }),
+                    React.createElement("div", { className: "cquote", style: { borderTopColor: BOOK_COLORS[w.cl] + "44" } }, w.quote),
+                    React.createElement("div", { className: "cbond", style: { color: BOOK_COLORS[w.cl], borderTopColor: BOOK_COLORS[w.cl] + "44" } },
+                        "\\u27a1 Bonded: ",
+                        w.bond))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "clabel" }, "What the Watchers Share"),
+                    React.createElement("div", { className: "ctitle pu" }, "The Bond\\u2019s Correct Expression \\u2014 Six Times Over"),
+                    React.createElement("div", { className: "cbody" },
+                        "The wrong compact distorted the Watcher bond for three centuries: the Watchers as enforcers, the practitioners as jurisdictional problems. The original series builds the correct version six times in a row.\\n\\nEach Watcher chose to stop performing the formal framework\\u2019s function and start being present to the specific human in front of them. Azazel stopped watching and started staying. Samyaza walked to the fence on the twenty-third morning. Baraqiel said yes to the coffee. Armaros found Mercy in the grey space and recognized his craft in her hands. Kokabiel showed June the star he had already named. Kasdeja taught Velvet how to read the thread.\\n\\n",
+                        React.createElement("strong", null, "Nine times by the close of Arc 1 expansion. The same choosing. The correct version."))))),
+            tab === "books" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Twelve Books"),
+                BOOKS.map(b => (React.createElement("div", { key: b.num, className: "book-entry" },
+                    React.createElement("div", { className: "book-header" },
+                        React.createElement("div", { className: "book-num", style: { color: b.color, background: `${b.color}18`, borderRightColor: "#3d1a08" } }, b.num),
+                        React.createElement("div", { className: "book-meta" },
+                            React.createElement("div", { className: "book-title" }, b.title),
+                            React.createElement("div", { className: "book-couple", style: { color: b.color } },
+                                b.couple,
+                                " \\u00b7 ",
+                                React.createElement("span", { style: { color: "#7a4020" } }, b.colorDesc)),
+                            React.createElement("div", { className: "book-arc" }, b.arc))),
+                    React.createElement("div", { className: "book-body", style: { borderLeftColor: b.color } },
+                        React.createElement("p", { dangerouslySetInnerHTML: { __html: b.synopsis.replace(/\n\n/g, "</p><p>") } }),
+                        b.hell && React.createElement("p", null,
+                            React.createElement("strong", { style: { color: b.color } }, "Hell faction: "),
+                            b.hell),
+                        b.heaven && React.createElement("p", null,
+                            React.createElement("strong", { style: { color: "#748ffc" } }, "Heaven enforcement: "),
+                            b.heaven),
+                        React.createElement("div", { className: "bq", style: { borderLeftColor: b.color } }, b.quote),
+                        React.createElement("p", { style: { color: "#c4855a", fontSize: 12 } },
+                            React.createElement("strong", { style: { fontFamily: "'Cinzel',serif", fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: b.color } }, "Key establishment: "),
+                            b.key),
+                        React.createElement("div", { style: { marginTop: 8 } }, b.tagNames.map((g, i) => React.createElement("span", { key: g, className: `tag ${b.tags[i]}` }, g))))))))),
+            tab === "world" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "World-Building Established in the Original Series"),
+                WORLD.map(w => (React.createElement("div", { key: w.t, className: `card${w.c ? " " + w.c : ""}`, style: { marginBottom: 12 } },
+                    React.createElement("div", { className: "clabel" }, "World Layer"),
+                    React.createElement("div", { className: `ctitle${w.c ? " " + w.c : " pu"}` }, w.t),
+                    React.createElement("div", { className: "cbody", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: w.body.replace(/\n\n/g, "<br/><br/>") } })))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "Permanent Canon from the Original Series"),
+                React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 7 } }, CANON.map((c, i) => (React.createElement("div", { key: i, className: "card", style: { borderLeftColor: ["#b91c1c", "#e8c06a", "#991b1b", "#dc2626", "#1e40af", "#0d9488", "#c9943a", "#b91c1c", "#e8c06a", "#15803d"][i] } },
+                    React.createElement("div", { className: "cbody", dangerouslySetInnerHTML: { __html: c.replace(/\*(.*?)\*/g, "<em>$1</em>") } }))))),
+                React.createElement("div", { className: "orn" }, "\\u2726 \\u2726 \\u2726"),
+                React.createElement("div", { style: { textAlign: "center", color: "#5c2810", fontSize: 12, fontStyle: "italic", lineHeight: 1.8 } },
+                    "Six generations held the door.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: "#e8c06a" } }, "The seventh opened it."),
+                    React.createElement("br", null),
+                    "The compact was never supposed to be held forever.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: "#7a4020" } },
+                        "It was supposed to be opened.",
+                        React.createElement("br", null),
+                        "The configuration was right.")))))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(OriginalSeriesBible));
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>03Leviathan Arc Series Bible</title>
+  <meta name="description" content="Converted HTML version of 03leviathan_arc_series_bible.jsx for the Holler & Hellfire Universe." />
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #04020a; }
+    #root { min-height: 100vh; }
+    .conversion-note {
+      font-family: Georgia, serif;
+      background: #100603;
+      color: #e8c06a;
+      border: 1px solid #3d1a08;
+      padding: 12px 16px;
+      max-width: 900px;
+      margin: 16px auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <noscript><div class="conversion-note">JavaScript is required to display this converted H&amp;H bible.</div></noscript>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+const { useState, useMemo, useEffect, useRef } = React;
+const css = `
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.bible{max-width:940px;margin:0 auto;padding:32px 20px 60px;background:#04020a;min-height:100vh;color:#e0faf5;font-family:'Cormorant Garamond',Georgia,serif;}
+.header{text-align:center;padding:50px 0 36px;border-bottom:1px solid #083830;margin-bottom:36px;position:relative;}
+.header::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,#0d9488);}
+.series-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:#0d9488;text-transform:uppercase;margin-bottom:14px;}
+.main-title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,5vw,38px);font-weight:700;color:#e0faf5;line-height:1.2;margin-bottom:8px;text-shadow:0 0 40px rgba(13,148,136,.35);}
+.sub-title{font-family:'Cinzel',serif;font-size:clamp(11px,2.5vw,16px);color:#5eead4;letter-spacing:.2em;margin-bottom:20px;}
+.tagline{font-style:italic;font-size:15px;color:#6b9e98;max-width:580px;margin:0 auto;line-height:1.7;}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:28px;border-bottom:1px solid #083830;padding-bottom:14px;}
+.tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;padding:7px 14px;border:1px solid #083830;background:transparent;color:#6b9e98;cursor:pointer;transition:all .2s;}
+.tab:hover{border-color:#0d9488;color:#5eead4;}.tab.active{background:rgba(13,148,136,.18);border-color:#0d9488;color:#e0faf5;}
+.sec{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#0d9488;margin:22px 0 14px;padding-bottom:7px;border-bottom:1px solid #083830;}
+.card{background:#060f0e;border:1px solid #083830;border-left:3px solid #0d9488;padding:16px 20px;margin-bottom:12px;}
+.card.ge{border-left-color:#c9943a;}.card.cr{border-left-color:#dc2626;}.card.wt{border-left-color:#059669;}
+.clabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;color:#2e6b65;text-transform:uppercase;margin-bottom:5px;}
+.ctitle{font-family:'Cinzel',serif;font-size:15px;color:#e0faf5;margin-bottom:6px;}
+.ctitle.tl{color:#5eead4;}.ctitle.gd{color:#e8c06a;}.ctitle.cr{color:#f87171;}
+.cbody{font-size:13px;line-height:1.72;color:#6b9e98;}
+.cbody em{color:#e0faf5;font-style:italic;}.cbody strong{color:#5eead4;font-weight:600;}
+.pull{border-left:3px solid #0d9488;padding:16px 20px;background:rgba(13,148,136,.07);margin:16px 0;font-size:15px;font-style:italic;line-height:1.8;color:#e0faf5;}
+.stack{display:flex;flex-direction:column;align-items:center;gap:0;margin:18px 0;}
+.sr{width:100%;max-width:500px;padding:10px 16px;text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;border:1px solid;}
+.sr.arc{background:rgba(13,148,136,.22);border-color:#0d9488;color:#e0faf5;}
+.sr.old{background:rgba(201,148,58,.1);border-color:#c9943a;color:#e8c06a;}
+.sr.wat{background:rgba(5,150,105,.1);border-color:#059669;color:#6ee7b7;}
+.sarr{font-size:16px;color:#2e6b65;line-height:1;padding:2px 0;}
+.snote{font-size:9px;color:#2e6b65;font-family:'Cormorant Garamond',serif;font-style:italic;margin-top:3px;}
+.alist{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+.abook{display:grid;grid-template-columns:54px 1fr;background:#060f0e;border:1px solid #083830;overflow:hidden;transition:border-color .2s;}
+.abook:hover{border-color:#0d9488;}
+.anum-col{background:rgba(13,148,136,.13);border-right:1px solid #083830;display:flex;align-items:center;justify-content:center;font-family:'Cinzel Decorative',serif;font-size:13px;color:#0d9488;padding:12px 6px;}
+.acont{padding:12px 16px;}
+.atitle{font-family:'Cinzel',serif;font-size:13px;color:#e0faf5;margin-bottom:3px;}
+.aeng{font-size:11px;color:#0d9488;font-style:italic;margin-bottom:6px;}
+.ab{font-size:12px;color:#2e6b65;line-height:1.55;font-style:italic;}
+.tag{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:2px 6px;border:1px solid;margin-right:4px;margin-bottom:3px;}
+.tag.t{color:#5eead4;border-color:#0d9488;}.tag.g{color:#e8c06a;border-color:#c9943a;}.tag.r{color:#f87171;border-color:#dc2626;}
+hr.rule{border:none;border-top:1px solid #083830;margin:24px 0;}
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:10px;}
+.char-card{background:#060f0e;border:1px solid #083830;border-left:3px solid #0d9488;padding:13px 15px;transition:border-color .2s;}
+.char-card:hover{border-color:#14b8a6;}
+.char-card.key{border-left-color:#5eead4;background:rgba(13,148,136,.06);}
+.char-card.ancient{border-left-color:#e8c06a;background:rgba(201,148,58,.04);}
+.char-card.horde{border-left-color:#c9943a;}
+.char-card.hell{border-left-color:#dc2626;}
+.char-card.unknown{border-left-color:#7c6fa0;}
+.cname{font-family:'Cinzel',serif;font-size:13px;color:#e0faf5;margin-bottom:2px;}
+.crole{font-size:10px;color:#0d9488;font-style:italic;margin-bottom:5px;}
+.cdesc{font-size:12px;color:#6b9e98;line-height:1.6;}
+.cdesc em{color:#e0faf5;font-style:italic;}
+.warden-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;margin-top:10px;}
+.warden-card{background:#060f0e;border:1px solid #083830;border-top:3px solid;padding:14px 16px;position:relative;}
+.warden-card.awake{border-top-color:#5eead4;}
+.warden-card.bonded{border-top-color:#e8c06a;}
+.warden-card.dissolved{border-top-color:#6b5a8a;opacity:.82;}
+.warden-card.sleeping{border-top-color:#2e6b65;opacity:.75;}
+.warden-status{position:absolute;top:10px;right:12px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:2px 7px;border:1px solid;}
+.st-awake{color:#5eead4;border-color:#0d9488;}
+.st-dissolved{color:#9b7fd4;border-color:#4a3a6a;}
+.st-sleeping{color:#2e6b65;border-color:#083830;}
+.st-bonded{color:#e8c06a;border-color:#c9943a;}
+.wrange{font-family:'Cinzel',serif;font-size:14px;color:#e0faf5;margin-bottom:2px;padding-right:80px;}
+.wloc{font-size:10px;color:#5eead4;font-style:italic;margin-bottom:6px;}
+.wdesc{font-size:12px;color:#6b9e98;line-height:1.6;}
+.wdesc em{color:#e0faf5;font-style:italic;}
+.wbond{display:block;margin-top:7px;font-size:11px;color:#e8c06a;padding-top:6px;border-top:1px solid #083830;font-style:italic;}
+.orn{text-align:center;font-size:18px;color:#2e6b65;margin:18px 0;letter-spacing:10px;}
+`;
+const TABS = [{ id: "premise", l: "Premise" }, { id: "chars", l: "Characters" }, { id: "myth", l: "Mythology" }, { id: "books", l: "The 12 Books" }, { id: "tone", l: "Tone & Canon" }];
+const WARDENS = [
+    { st: "dissolved", range: "Morvael", loc: "Appalachian Range \u00b7 North America", bond: null, desc: "The First Warden. Original position \u2014 the Appalachian seal above the Leviathan's heart. His position dissolved when the correct compact was established. <em>His dissolution is the compact completing its function.</em> His position now holds the compact's primary Web thread. He is the only Warden who did not wake \u2014 he resolved." },
+    { st: "bonded", range: "Tharael", loc: "Alps \u00b7 Central Europe", bond: "\u27a1 Familiar Bonded: Lilandra Keldren (Catskill Valley \u00b7 Gift of the Spoken Word)", desc: "The oldest voluntary seal in the Eastern hemisphere. Has been watching Web thread deterioration in the Alpine system for a thousand years. Said at the kitchen table: <em>I have been holding the European node for longer than the Church has existed.</em> The Familiar Bond with Lilandra Keldren is the first living practitioner connection across the Atlantic Ley Line into his position \u2014 the spoken tradition reaching across the ocean to the oldest Eastern seal." },
+    { st: "awake", range: "Cassith", loc: "Caucasus \u00b7 Taurus \u00b7 Zagros Complex \u00b7 Ancient Near East", bond: null, desc: "The position closest to where divine law was first formalized. Sits at the intersection of Heaven's original jurisdiction. <em>The five threads we placed were hidden for a thousand years specifically so they could be placed correctly when the time came.</em>" },
+    { st: "bonded", range: "Vorath", loc: "Andes \u00b7 South America", bond: "\u27a1 Familiar Bonded: Aleshia Sentiel (Andes Corridor)", desc: "The longest continuous range on Earth. The South American node has been the quietest \u2014 the suppression came later and more original Web structure survived. <em>The Andes threads are singing.</em>" },
+    { st: "bonded", range: "Ilavar", loc: "Rocky Mountains \u00b7 North America's Secondary Range", bond: "\u27a1 Familiar Bonded: Ravia Coldstone (Rockies Corridor)", desc: "The youngest Warden. North America's secondary range, placed when the Web's original architects understood the Appalachian anchor needed balance. Still learning the range with D's atmospheric practitioners and the Colorado/Utah corridor contacts. The bond with Ravia Coldstone is still establishing." },
+    { st: "sleeping", range: "Serath", loc: "Himalayas \u00b7 Tian Shan \u00b7 Central Asia", bond: null, desc: "The heaviest seal. The suppression of the Weaver equivalent in Central Asia was the most complete of any region \u2014 the traditions were dismantled root and branch over multiple centuries. <em>Stirring</em> \u2014 the New Compact is being felt at this depth, but not yet awake." },
+    { st: "sleeping", range: "Nareth", loc: "East African Rift Valley \u00b7 Atlas Range", bond: null, desc: "The oldest geology on Earth. The Rift is the seam where the continent split \u2014 the deepest geological structure in any Warden position. The sleep there is the deepest of all. <em>Stirring</em> \u2014 waking from the Rift's depth takes longer than any other position." },
+];
+const ANCIENT = [
+    { name: "Arcadia", role: "The First Practitioner \u00b7 12,000 BCE", desc: "She chose the Leviathan above its heart in the Pike County back field. The first Familiar bond. She wrote the first word in the soil: <em>here.</em> The Web is built from her yes. Brian Lee can feel her choosing when he puts his hands above the first word \u2014 <em>not me recognizing it. It recognizing me.</em>" },
+    { name: "The Leviathan", role: "The Oldest Living Thing \u00b7 Beneath Pike County \u00b7 12,000 years", desc: "The largest living thing in the Appalachian system, and Gaia's first real creation \u2014 made by the child Hecate from clay shaped after the primordial beast Agron (the First Nasilin Gate, a dragon big enough to swallow a planet). In the deep position since Arcadia's choosing. Its cardiac frequency becomes legible for the first time in twelve thousand years. Not hostile. Disoriented after twelve millennia. Then, gradually, reaching toward the relationship it was always supposed to have. The Web is built from its yes alongside Arcadia's." },
+];
+const MAIN_CHARS = [
+    { key: true, name: "Raelee \u201cDixie\u201d Calhoun", role: "Primary Anchor \u00b7 Central POV", desc: "Twenty-nine when the arc opens. Feels the seal break at 3:47 AM. Extends compact jurisdiction to the geological level. Ratifies the New Compact in July Year 3." },
+    { key: false, name: "Azazel", role: "Watcher \u00b7 Bonded to Dixie", desc: "In ten thousand years, not a being who says <em>I don't know</em> casually. Was already awake at 3:47 AM and didn't want to wake her." },
+    { key: true, name: "Brian Lee Combs", role: "Nephilim \u00b7 Web's Living Expression \u00b7 Age 10", desc: "Della's son. Samyaza's Nephilim-line. First Nephilim born to a chief Watcher in twelve thousand years — the first new thing since Arcadia’s era. A Nephilim operates on a frequency that is neither human nor Watcher \u2014 the in-between \u2014 so Brian Lee does not merely connect the geological and human scales, he <em>is</em> the connection, a bond made flesh, and that is why he can render the Leviathan's cardiac frequency in a child's notebook. He feels the Leviathan first as a barometric/static charge before he has words for it \u2014 a tickle, a pressure, a hum he answers with \"Hi.\" Has been drawing his father's wings since age three (when Samyaza left the fence vigil). Age seven in Book 1. Chooses the Familiar Bond ritual with Ravos and mediates the Catskill rock dragon at age ten in the Leviathan Arc. Translates the Wardens from his notebook. <em>I think I'm here to be what the Web was designed to make possible. The relationship. The real version.</em>" },
+    { key: false, name: "Della Combs", role: "Herbalist \u00b7 Compact Holder \u00b7 Brian Lee's Mother", desc: "Twenty years of reading the Pike County soil. Held the fence alone for fifteen years. The New Compact ratified at her property \u2014 above the Leviathan's heart, above the first word." },
+    { key: true, horde: true, name: "Samyaza", role: "Horde General \u00b7 Chief Watcher \u00b7 Della's Partner", desc: "One of the original Twelve. Was at the tree line for three years, afraid of fatherhood, afraid of harm. The most effective mediator between the formal framework and the Horde." },
+    { key: true, name: "Ravos", role: "Leviathan's Lateral Expression \u00b7 Web's Geological Surface Frequency", desc: "Has been calculating for twelve hundred years. Chooses Brian Lee in May Year 3. <em>Come closer.</em>" },
+];
+const NEW_CHARS = [
+    { name: "Aleshia Sentiel", role: "Andes Corridor \u00b7 Familiar Bonded to Vorath", desc: "The South American node's human-geological connection. Familiar Bonded to Vorath of the Andes \u2014 the longest continuous mountain range on Earth." },
+    { name: "Ravia Coldstone", role: "Rockies Corridor \u00b7 Familiar Bonded to Ilavar", desc: "The Rockies Corridor practitioner. Familiar Bonded to Ilavar, the youngest Warden. The bond is still establishing as Ilavar learns his range with D's atmospheric practitioners." },
+    { name: "Delila Keldren", role: "Catskill Valley \u00b7 Emily Keldren's Grandmother \u00b7 Elder Practitioner", desc: "The Catskill corridor's elder. Emily Keldren's grandmother and the practitioner who held the written tradition's thread before Emily came into her full gift. The corridor's institutional memory \u2014 the history of the Keldren practice that Emily carries forward and Penemue's archive will eventually hold. Her lineage is the reason the written tradition anchor is specifically a Keldren." },
+    { key: true, name: "Lilandra Keldren", role: "Catskill Valley \u00b7 Emily's Younger Sister \u00b7 Weaver \u00b7 Gift of the Spoken Word \u00b7 Familiar Bonded to Tharael", desc: "Emily Keldren's younger sister. Her gift is the Spoken Word \u2014 the oral tradition's specific expression, the capacity to speak things into the record that written language cannot hold. Where Emily anchors the written tradition, Lilandra anchors the spoken. Together the Keldren sisters hold both halves of the daughters' most ancient practice \u2014 the tradition that predates writing entirely.\n\nFamiliar Bonded to <strong>Tharael of the Alps</strong> \u2014 the oldest voluntary seal in the Eastern hemisphere. The bond between Lilandra and Tharael is significant beyond the Catskill corridor: it connects the North American written-and-spoken tradition directly to the Eastern hemisphere's oldest Warden node. Tharael has been holding the Alpine seal since before the Church existed. The Spoken Word bond brings the first living practitioner connection across the Atlantic Ley Line into his position.\n\nTharael began detecting the North American signal strengthening during the Expansion Arc. Lilandra is why he kept listening." },
+    { unknown: true, name: "Caleb", role: "Unknown Son of Metatron", desc: "Unknown to the formal framework. Possibly unknown to Metatron himself. His lineage places him at the intersection of divine law and the mortal world in a way that has no previous category. Specific capacity and arc role not yet fully established." },
+    { hell: true, name: "Tyson Shane", role: "Son of Abbadon \u00b7 Cardinal Prince of Hell", desc: "Abbadon is a cardinal Prince of Hell \u2014 a different order of entity than Asmodeus, whose domain is institutional. Tyson Shane carries that lineage into the arc's hell-side structure. The son of a cardinal Prince is not automatically the Prince's instrument. Specific position not yet fully established." },
+    {
+        "key": true,
+        "name": "Marisol Ochoa",
+        "role": "WMB7 · Angel of the Deep practitioner anchor",
+        "desc": "Marisol Ochoa carries the Leviathan Arc's deep-water frequency reader; hears the Leviathan through ocean trenches and drowned riverbeds. The bond with Rahab extends the New Compact's pressure without overpowering consent or witness."
+    },
+    {
+        "name": "Rahab",
+        "role": "Grigori · Angel of the Deep · Bonded to Marisol Ochoa",
+        "desc": "Activated in WMB7. His domain lets the Web survive Leviathan-scale pressure through relationship rather than force."
+    },
+    {
+        "key": true,
+        "name": "Wyatt Sorrel",
+        "role": "WMB8 · Angel of Storms practitioner anchor",
+        "desc": "Wyatt Sorrel carries the Leviathan Arc's storm-pattern interpreter; tracks Leviathan waking through impossible weather. The bond with Ananiel extends the New Compact's pressure without overpowering consent or witness."
+    },
+    {
+        "name": "Ananiel",
+        "role": "Grigori · Angel of Storms · Bonded to Wyatt Sorrel",
+        "desc": "Activated in WMB8. His domain lets the Web survive Leviathan-scale pressure through relationship rather than force."
+    },
+    {
+        "key": true,
+        "name": "Colton Vance",
+        "role": "WMB9 · Defensive Tactics practitioner anchor",
+        "desc": "Colton Vance carries the Leviathan Arc's corridor defense architect; turns the network from reactive survival to protected perimeter. The bond with Gadreel extends the New Compact's pressure without overpowering consent or witness."
+    },
+    {
+        "name": "Gadreel",
+        "role": "Grigori · Defensive Tactics · Bonded to Colton Vance",
+        "desc": "Activated in WMB9. His domain lets the Web survive Leviathan-scale pressure through relationship rather than force."
+    },
+    {
+        "key": true,
+        "name": "Judith Calloway",
+        "role": "WMB10 · Angel of Anger practitioner anchor",
+        "desc": "Judith Calloway carries the Leviathan Arc's anger-as-justice practitioner; converts inherited rage into a shield instead of a wound. The bond with Af extends the New Compact's pressure without overpowering consent or witness."
+    },
+    {
+        "name": "Af",
+        "role": "Grigori · Angel of Anger · Bonded to Judith Calloway",
+        "desc": "Activated in WMB10. His domain lets the Web survive Leviathan-scale pressure through relationship rather than force."
+    },
+    {
+        "key": true,
+        "name": "Noor Fen",
+        "role": "WMB11 · Angel of the Void practitioner anchor",
+        "desc": "Noor Fen carries the Leviathan Arc's astronomical void-mapper; gives absence shape without mistaking it for Abaddon's Abyss watch. The bond with Apollyon extends the New Compact's pressure without overpowering consent or witness."
+    },
+    {
+        "name": "Apollyon",
+        "role": "Grigori · Angel of the Void · Bonded to Noor Fen",
+        "desc": "Activated in WMB11. His domain lets the Web survive Leviathan-scale pressure through relationship rather than force."
+    },
+];
+const SUPPORTING = [
+    { name: "Mama Calhoun", role: "Succession Elder \u00b7 Archive Keeper", desc: "Opens the archive layer. Brian Lee: <em>I know</em> when told about Arcadia. She asked how. <em>Because when I put my hands in the soil it feels like recognition. Not me recognizing it. It recognizing me.</em>" },
+    { hell: true, name: "Asmodeus", role: "Prince of Lust \u00b7 Second-Ranked on Hell's Administrative Council \u00b7 Arc Antagonist", desc: "His sin is Lust but his domain is the specific corruption of bonds \u2014 not desire in the simple sense, but the corruption of the choosing that makes a bond possible. He cannot destroy a bond. He can only corrupt the conditions that make choosing possible.\n\nHe comes with paperwork. A writ of acquisition for Brian Lee Combs, filed before the compact's authority supersedes it \u2014 the most legally sophisticated Hell-side attack on the network to date. He positioned in the Pike County corridor for three years before moving, waiting for the legal architecture to be complete.\n\nThe Cain-Abel clause destroyed his position: choosing betrayal as an architectural move bound his life force to Samyaza's. He believed this guaranteed his asset. Instead it guaranteed Samyaza's survival. He cannot act against the Pike County network without acting against himself. Functionally neutralized from Book 2 onward.\n\n<em>That's very stupid of him.</em>" },
+    { hell: true, name: "Haagenti", role: "Duke of Hell \u00b7 Bull-Transmuter \u00b7 Geological Corruption", desc: "His domain is transmutation \u2014 specifically the transformation of the living into the extracted. He has been working through the coal industry's corporate infrastructure for four decades, corrupting the geological layer above the Leviathan's position. <strong>The coal seam fault line that ruptures in WMB1 at 3:47 AM is his preparation</strong> \u2014 the specific result of systematic industrial extraction along the fault line he identified and weakened over decades. Della Combs has his contamination signature in her notebooks. She did not have language for it until Samyaza explained what she was reading." },
+    { hell: true, name: "Bathym", role: "Duke of Hell \u00b7 Herbs &amp; Death \u00b7 Weaver Bloodline Hunter", desc: "Specifically targets the Hollow Witches' herb knowledge \u2014 corrupts healing plants at the root-frequency level, the same layer Della reads. Her thirty-year documentation practice is the specific counter to his operation: her contamination signatures allow the network to identify and quarantine his work. Active during the arc as the Horde's emergence brings Bathym's operations under increased network scrutiny." },
+    { hell: true, name: "Botis", role: "Duke of Hell \u00b7 The Viper \u00b7 The Undetected Observer", desc: "Has been watching the Pike County corridor for three centuries without acting \u2014 his domain is knowledge of past and future, which means he may be the most informed demon in the territory. He does not act because he has calculated that every action produces a worse outcome for Hell than continued observation. June Tackett's dream record has noted an anomalous recurring frequency in the corridor's background for seven years, categorized as environmental. It is not environmental. <strong>Botis knows what the New Compact means for Satan's operation. He has known for decades. He chose to watch.</strong>" },
+    { name: "D Coale", role: "Atmospheric Monitoring \u00b7 Thread Count", desc: "Calls on a Thursday in July. Has run the models forty times. <em>At thirty-one threads, the Web frequency is sufficient for the compact's authority.</em>" },
+];
+const MYTH = [
+    { t: "The Familiar Bond", c: "tl", body: "The first <em>Familiar</em> bond \u2014 Arcadia saying yes to the Leviathan twelve thousand years ago. The Web is built from that choosing. The correct version is relationship, not containment. <em>(The first bond of all was older still: the brothers Sano and Nepisano, at the origin. Arcadia and the Leviathan are the first Familiar bond in the mortal layer \u2014 the pattern the whole Web is built from.)</em>" },
+    { t: "The Leviathan's Origin \u2014 Gaia's First Creation", c: "gd", body: "The Leviathan is not a monster that arrived later. He is <strong>Gaia's first real creation</strong> \u2014 made when the child <strong>Hecate</strong> took a life-seed from her mother's Garden without asking, shaped clay to resemble the primordial beast <strong>Agron</strong>, and the clay moved, opened its eyes, stood, and smiled. She named him Leviathan. Her best friend.\n\n<strong>Agron is the First of the twelve Nasilin</strong> \u2014 the Gates, the primordial beasts who serve only the Bone Mother \u2014 a dragon big enough to swallow a planet. The Leviathan was modeled on that first Gate. So the oldest living thing beneath Pike County is, at its root, a child's act of love shaped after the deepest primordial architecture: Gaia's first creation, formed in the image of the Bone Mother's first Gate. <em>(See the Nasilin faction bible and The Codex.)</em>" },
+    { t: "The First Word", c: "gd", body: "<em>Here.</em> Written by Arcadia in the soil above the Leviathan's heart. Still in the geology. Brian Lee feels it \u2014 <em>not me recognizing it. It recognizing me.</em> Arcadia was killed by Satan immediately after establishing the first correct compact. Her death is the event that required the seal. The first word survives because the geological record cannot be taken." },
+    { t: "Satan's Architecture \u2014 The Prison Lock", c: "cr", body: "The wrong compact was not merely an incorrect version of the Familiar bond's architecture. It was <strong>Satan's prison lock</strong>.\n\nSatan \u2014 the Giant Red Dragon, Prince of Wrath \u2014 killed Arcadia in 12,000 BCE after the first correct compact was established. His wrath at the Leviathan's choosing was the event that required his sealing. The Leviathan's position above him was the seal's geological foundation: suppressing the Leviathan suppressed the frequency that maintained the seal.\n\nSatan told the other six Princes that the wrong compact was Hell's greatest weapon against mortal practitioners. It was not. It was the maintenance structure of his own prison. The Princes preserved it for twelve thousand years while Satan waited for natural degradation to free him.\n\nWhen the New Compact is ratified in WMB6, Satan's seal substrate fails. His operation in Year 5 (Order of Shadow arc) is his bid to complete his escape before the network can seal him again. He does not succeed. <strong>He is sealed into the Catholic Church's dissolved institutional structure in OS5.</strong> The Church is gone. The seal holds where the Church was." },
+    { t: "The Wrong Compact", c: "cr", body: "Twelve thousand years of fear-and-control architecture with a dual function: suppressing the daughters' practice in the mortal layer <em>and</em> maintaining the geological suppression of the Leviathan above Satan's sealed position. The Church's institutional architecture of guilt and compliance was the closest mortal-layer equivalent to Satan's specific wrath-substrate.\n\nLucifer built the Order of Shadows in 1414 to maintain the seal's institutional housing \u2014 dressed as Hell's weapon so the Princes would protect it. The arc refuses the wrong compact explicitly: not by destroying the structure but by replacing it with the correct one. This is the specific mechanism that allows Satan's seal to degrade: the correct compact removes the wrong compact's fear-substrate, which removes the seal's maintenance architecture." },
+    { t: "The Horde", c: "wt", body: "The Leviathan's extended geological family. Methane wyrms (blue-white fire, three hundred million years old). Rock dragons (twelve-thousand-year sleep, disoriented by interstates). Coal seam entities. The fault line that ruptures in WMB1 was <strong>Haagenti's preparation</strong> \u2014 four decades of systematic industrial extraction along the fault line he identified and weakened. The Horde's emergence through it is disorientation, not invasion. Samyaza mediates. Brian Lee translates." },
+    { t: "The Ley Line Network", c: "tl", body: "The seven Warden positions are connected by primary Ley Lines. Three of Ravos's seventeen identified thread locations are at secondary Ley Line nodes between Warden positions \u2014 not at the Warden positions themselves but at intersection points where the connections between positions run strongest." },
+    { t: "The New Compact's Frequency", c: "gd", body: "The compact moves through the Church's institutional architecture like <em>a key in a lock that has been cut to fit a different door.</em> Satan's fear-and-control substrate \u2014 the prison lock's maintenance architecture \u2014 destabilizes. He built his operation in a distorted-Web environment. He is now in a correctly-constituted-Web environment. The adaptation takes time. Lucifer, who built the Order to maintain the seal, understands before the other Princes do what the New Compact means.\n\nMetatron: <em>the formal framework is downstream of the Web. Always was. The compact makes that explicit.</em>" },
+];
+const BOOKS = [
+    { n: "WMB1", t: "What the Mountain Kept", q: "What is waking beneath the corridor \u2014 and does the compact cover it?", b: "The seal breaks at 3:47 AM. <strong>The fault line Haagenti has been preparing for forty years ruptures</strong> \u2014 the coal seam's systematic extraction having weakened precisely the geological structure that maintained both the Leviathan's suppression and Satan's seal beneath it. Methane wyrms emerge from the Harlan seam, trailing blue-white fire. Dixie speaks one word in the anchor bond and the wyrm stops. First geological claim. The compact was written for more than they knew \u2014 and so was the seal.", tags: ["t", "t", "t"], tagNames: ["compact tested", "Horde emerges", "Satan's seal stirs"] },
+    { n: "WMB2", t: "The General's Terms", q: "How do you negotiate with something twelve thousand years old?", b: "The Leviathan's cardiac frequency legible for the first time since Arcadia's choosing. Brian Lee mediates the Catskill rock dragon at ten. Ravos at the inner radius, watching.", tags: ["t", "g"], tagNames: ["cardiac frequency legible", "Brian Lee mediates"] },
+    { n: "WMB3", t: "The Oldest War", q: "The wrong compact has been running for twelve thousand years \u2014 what does it cost to refuse it?", b: "The Wardens come to the kitchen table. Brian Lee translates from his notebook. Cassith: <em>the threads were hidden for a thousand years specifically so they could be placed correctly when the time came.</em> The wrong compact formally refused \u2014 including its function as Satan's prison maintenance architecture, though the full understanding of that function comes later.", tags: ["t", "r", "g"], tagNames: ["Wardens speak", "wrong compact refused", "prison lock named"] },
+    { n: "WMB4", t: "Ravos and Brian", q: "What does it mean to be the first new thing in twelve thousand years?", b: "Brian Lee at ten years and four months. Ravos at the north edge for twenty minutes. Brian: <em>come closer.</em> In the field above the first word: <em>I know what it's building toward. You're going to have to say it.</em> MAY YEAR 3: Ravos chooses Brian Lee.", tags: ["t", "t", "t"], tagNames: ["MAY YEAR 3", "dual Familiar bond", "the choosing"] },
+    { n: "WMB5", t: "The Turn", q: "What does the choosing change \u2014 at every level?", b: "Brian Lee: <em>I think I'm here to be what the Web was designed to make possible. The relationship. The real version.</em> Not practitioner, not Watcher. The Web's living expression named.", tags: ["t", "t"], tagNames: ["Web's living expression", "new category"] },
+    { n: "WMB6", t: "The New Compact", q: "Sufficient is not complete \u2014 but is it enough to begin?", b: "D: thirty-one threads \u2014 sufficient. JULY YEAR 3: New Compact ratified at Della's property. The compact's frequency moves through the Church's institutional architecture and begins destabilizing Satan's seal substrate \u2014 the prison lock's maintenance architecture failing as the correct version replaces the wrong one. Metatron: <em>the formal framework is downstream of the Web. Always was. The compact makes that explicit.</em> Lucifer, in the deep places, understands what this means. The Order of Shadows' founding logic is now on a timer.", tags: ["t", "t", "r"], tagNames: ["JULY YEAR 3", "New Compact ratified", "Satan's seal degrades"] },
+    {
+        "n": "WMB7",
+        "t": "What the Deep Remembers",
+        "q": "What happens when the Leviathan's cardiac frequency moves through open water?",
+        "b": "Rahab bonds Marisol Ochoa in a Gulf corridor where the deep carries the same heartbeat Pike County heard in stone. The ocean floor proves the Leviathan's frequency was never only mountain-bound. The bond teaches scale without erasure: Marisol can hear the deep without being swallowed by it.",
+        "tags": [
+            "t",
+            "g"
+        ],
+        "tagNames": [
+            "deep frequency",
+            "Rahab bonds"
+        ]
+    },
+    {
+        "n": "WMB8",
+        "t": "The Storm Before the Waking",
+        "q": "When the waking reaches the surface as weather, who can tell warning from attack?",
+        "b": "Ananiel bonds Wyatt Sorrel, a storm chaser who has been driving toward the wrong kind of anomaly his whole career. Storm cells begin forming over corridor nodes. The Leviathan's turning becomes pressure, lightning, and impossible weather.",
+        "tags": [
+            "t",
+            "g"
+        ],
+        "tagNames": [
+            "storm domain",
+            "weather warning"
+        ]
+    },
+    {
+        "n": "WMB9",
+        "t": "The Watcher Who Chose the Wall",
+        "q": "Can the Web defend itself without becoming the institution it refused?",
+        "b": "Gadreel's long unaligned status ends when he bonds Colton Vance. His defense-architecture domain gives the corridor network its first tactical doctrine. The wall is not control. The wall is consent made defendable.",
+        "tags": [
+            "t",
+            "g"
+        ],
+        "tagNames": [
+            "defense architecture",
+            "Gadreel chooses"
+        ]
+    },
+    {
+        "n": "WMB10",
+        "t": "The Anger Underneath",
+        "q": "What if anger is not corruption, but pressure asking for justice?",
+        "b": "Af bonds Judith Calloway in a corridor built on three generations of unprocessed rage. Hell tries to weaponize the anger. The Formal Framework tries to condemn it. Judith learns to make anger a shield instead of a wound.",
+        "tags": [
+            "r",
+            "g"
+        ],
+        "tagNames": [
+            "anger domain",
+            "justice pressure"
+        ]
+    },
+    {
+        "n": "WMB11",
+        "t": "The Shape of the Void",
+        "q": "Can absence be mapped without mistaking it for the Abyss?",
+        "b": "Apollyon bonds Noor Fen, an astronomer whose corridor sits closest to Satan's sealed position. Sound, heat, shadow, and memory begin falling out of local reality. Noor gives the void shape without surrendering to it.",
+        "tags": [
+            "t",
+            "r"
+        ],
+        "tagNames": [
+            "void domain",
+            "Satan seal proximity"
+        ]
+    },
+    {
+        "n": "WMB12",
+        "t": "What the Network Carries Now",
+        "q": "Sufficient is not painless. What does the Web carry after the New Compact pressure spreads?",
+        "b": "The ensemble finale tests the entire network under Leviathan pressure. Deep, storm, defense, anger, void, stone, and original compact law must hold together without becoming command. The arc closes by carrying New Compact pressure into the Order of Shadows.",
+        "tags": [
+            "g",
+            "t"
+        ],
+        "tagNames": [
+            "arc finale",
+            "OS pressure handoff"
+        ]
+    },
+];
+const TONE = [
+    { l: "Domestic-scale cosmic", b: "The Wardens come through the Ley Lines and speak to people eating breakfast. Brian Lee translates geological-scale entities with his notebook on his knee. Arcadia said yes in a back field twelve thousand years ago. Brian Lee carries that yes in his hands." },
+    { l: "The wrong compact is not the enemy", b: "The arc doesn't destroy the wrong compact's structure. It replaces it. Twelve thousand years of the wrong architecture requires real understanding before it can be refused." },
+    { l: "The Horde is not a villain", b: "The methane wyrms and rock dragons are disoriented, not hostile. Geological entities waking from twelve thousand years of sleep into a world covered in interstate highways. The network's work is negotiation, translation, genuine relationship." },
+    { l: "Brian Lee is ten", b: "His capacity is specific and real. His age is also specific and real. Both are true simultaneously." },
+];
+const CANON = [
+    "The Leviathan's cardiac frequency is legible to the network for the first time since Arcadia's choosing (12,000 BCE).",
+    "Brian Lee Combs holds the dual Familiar bond: Leviathan and Ravos. The Web's living expression.",
+    "The New Compact ratified at Della Combs's property, July Year 3. Leviathan in the Older Mechanism's formal record.",
+    "The formal framework's jurisdiction in network corridors is now advisory. Web authority is primary.",
+    "The wrong compact was not merely an incorrect architecture \u2014 it was Satan's prison lock. The fear-and-control structure maintained the geological suppression of the Leviathan above Satan's sealed position.",
+    "Satan (Prince of Wrath, the Giant Red Dragon) killed Arcadia in 12,000 BCE. The seal was the consequence. The wrong compact was the seal's maintenance structure. The New Compact removes the maintenance structure.",
+    "The New Compact's frequency destabilizes Satan's seal substrate. Lucifer understands what this means before the other Princes do. The Order of Shadow arc's conditions are established. Satan's escape bid is Year 5.",
+    "Asmodeus (Prince of Lust) is Cain-Abel bound to Samyaza permanently. He cannot act against the Pike County network without acting against himself.",
+    "Haagenti prepared the WMB1 fault line rupture through forty years of systematic industrial extraction. The coal seam's opening was not geological accident.",
+    "Botis has been observing the Pike County corridor for three centuries undetected. His presence is registered in June Tackett's dream record as an anomalous background frequency categorized as environmental.",
+    "Seven Warden positions: Morvael (dissolved), Tharael (bonded to Lilandra Keldren / Spoken Word), Cassith/Vorath (awake), Ilavar (bonded to Ravia Coldstone), Vorath (bonded to Aleshia Sentiel), Serath/Nareth (sleeping, stirring).",
+    "Three of Ravos's seventeen thread locations are at secondary Ley Line nodes between Warden positions.",
+    "The first word \u2014 here \u2014 written by Arcadia is confirmed present in the geology of the Pike County back field. Brian Lee can feel Arcadia's choosing when his hands are above it.",
+    "Leviathan Arc now contains twelve books. WMB7–WMB11 add deep, storm, defense, anger, and void domains; WMB12 carries New Compact pressure directly into Order of Shadows.",
+    "Apollyon remains distinct from Abaddon: Apollyon maps void as domain; Abaddon remains the Abyss-edge guardian in the Seventh Cycle.",
+];
+function LeviaBible() {
+    const [tab, setTab] = useState("premise");
+    return (React.createElement(React.Fragment, null,
+        React.createElement("style", null, css),
+        React.createElement("div", { className: "bible" },
+            React.createElement("header", { className: "header" },
+                React.createElement("div", { className: "series-label" }, "Series Bible \\u00b7 The Holler & Hellfire Universe"),
+                React.createElement("h1", { className: "main-title" }, "When the Mountain Breaks"),
+                React.createElement("div", { className: "sub-title" }, "The Leviathan Arc \\u00b7 Six Books"),
+                React.createElement("p", { className: "tagline" },
+                    "The compact is established. The corridor is permanent.",
+                    React.createElement("br", null),
+                    React.createElement("em", null, "The maintenance is about to stop being sufficient."))),
+            React.createElement("nav", { className: "tabs" }, TABS.map(t => React.createElement("button", { key: t.id, className: `tab${tab === t.id ? " active" : ""}`, onClick: () => setTab(t.id) }, t.l))),
+            tab === "premise" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Inciting Event"),
+                React.createElement("div", { className: "pull" },
+                    "The seal breaks on a Tuesday. Not the corridor seal \\u2014 something beneath the corridor. A pressure shift at a depth the anchor bond has never registered before.",
+                    React.createElement("br", null),
+                    React.createElement("br", null),
+                    "Dixie feels it at 3:47 AM. Azazel was already awake. He says ",
+                    React.createElement("em", null, "I don't know"),
+                    " \\u2014 which in ten thousand years he does not say casually."),
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "clabel" }, "The Arc in One Sentence"),
+                    React.createElement("div", { className: "ctitle tl" }, "The Web begins to be correctly constituted \\u2014 and the oldest thing in the world wakes up."),
+                    React.createElement("div", { className: "cbody" }, "The Leviathan has been in the deep position since Arcadia's choosing twelve thousand years ago. As the network builds the Web's correct frequency, the seal on the wrong compact deteriorates. What emerges is the oldest living thing in the Appalachian system reaching toward the relationship it was always supposed to have.")),
+                React.createElement("div", { className: "card ge" },
+                    React.createElement("div", { className: "clabel" }, "Foundation"),
+                    React.createElement("div", { className: "ctitle gd" }, "What This Arc Establishes for Everything That Follows"),
+                    React.createElement("div", { className: "cbody" },
+                        React.createElement("strong", null, "The Arcana layer's record of the New Compact is the reason the Claiming in DA8 is possible."),
+                        " The Lovers Arcana traces the Familiar bond \\u2014 Arcadia's yes and the Leviathan's yes \\u2014 to its correct expression here in July Year 3.")),
+                React.createElement("div", { className: "card cr" },
+                    React.createElement("div", { className: "clabel" }, "Primary Arc Antagonist"),
+                    React.createElement("div", { className: "ctitle cr" }, "Asmodeus \\u2014 Prince of Lust \\u00b7 Hell's Second-Ranked Authority"),
+                    React.createElement("div", { className: "cbody" },
+                        "His sin is Lust but his domain is the specific corruption of bonds \\u2014 the corruption of the choosing that makes a bond possible. He cannot destroy a bond. He can only corrupt the conditions that make choosing possible. He comes with paperwork: a writ of acquisition for Brian Lee Combs, the most significant leverage asset Hell's council has seen in twelve thousand years. ",
+                        React.createElement("strong", null, "The Cain-Abel clause binds him to Samyaza permanently. He is functionally neutralized from Book 2 onward."),
+                        " ",
+                        React.createElement("em", null, "The older claim wins. It has always won."))),
+                React.createElement("div", { className: "card cr" },
+                    React.createElement("div", { className: "clabel" }, "The Arc's Deeper Antagonist Structure"),
+                    React.createElement("div", { className: "ctitle cr" }, "Satan \\u2014 Prince of Wrath \\u00b7 The Giant Red Dragon \\u00b7 Sealed Beneath the Leviathan's Position"),
+                    React.createElement("div", { className: "cbody" },
+                        "Satan killed Arcadia in 12,000 BCE. The seal was the consequence. The wrong compact was his prison lock \\u2014 the fear-and-control structure maintained the Leviathan's geological suppression above his sealed position. He told the six Princes it was Hell's greatest weapon against mortal practitioners. ",
+                        React.createElement("em", null, "It was the maintenance structure of his own cell."),
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "The New Compact in WMB6 removes the maintenance structure. His seal substrate begins failing. His escape bid is Year 5. He does not succeed. ",
+                        React.createElement("strong", null, "The arc's ratification of the correct compact is the action that seeds his defeat three arcs later."))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "Series Position"),
+                React.createElement("div", { className: "stack" },
+                    React.createElement("div", { className: "sr old" },
+                        "H&H BOOKS 1\\u20136 \\u2014 YEAR 0",
+                        React.createElement("div", { className: "snote" }, "The compact ratified \\u00b7 the corridor is permanent \\u00b7 the network's foundation established")),
+                    React.createElement("div", { className: "sarr" }, "\\u2193"),
+                    React.createElement("div", { className: "sr old" },
+                        "THE EXPANSION ARC (BOOKS 7\\u201311) \\u2014 YEAR 1",
+                        React.createElement("div", { className: "snote" }, "The network expands across eleven corridors \\u00b7 atmospheric monitoring \\u00b7 the written tradition anchor")),
+                    React.createElement("div", { className: "sarr" }, "\\u2193"),
+                    React.createElement("div", { className: "sr arc" },
+                        "THE LEVIATHAN ARC \\u2014 YEAR 2",
+                        React.createElement("div", { className: "snote" }, "Arcadia's choosing: 12,000 BCE \\u00b7 Brian Lee is 10 \\u00b7 the New Compact ratified")),
+                    React.createElement("div", { className: "sarr" }, "\\u2193"),
+                    React.createElement("div", { className: "sr wat" },
+                        "THE WEB OF THE WEAVERS \\u2014 YEAR 4",
+                        React.createElement("div", { className: "snote" }, "The daughters wake \\u00b7 443 practitioners in lateral contact \\u00b7 Moon-Bride channel opened")),
+                    React.createElement("div", { className: "sarr" }, "\\u2193"),
+                    React.createElement("div", { className: "sr wat" },
+                        "THE ORDER OF THE SHADOWS \\u2014 YEAR 5",
+                        React.createElement("div", { className: "snote" }, "The defectors \\u00b7 the war \\u00b7 Satan sealed \\u00b7 the cascade that breaks the Veil")),
+                    React.createElement("div", { className: "sarr" }, "\\u2193"),
+                    React.createElement("div", { className: "sr arc" },
+                        "THE DIVINE ARC \\u2014 YEAR 6",
+                        React.createElement("div", { className: "snote" }, "DA8: The Claiming \\u00b7 the Familiar bond invoked at full Arcana level \\u00b7 The Lovers Arcana"))))),
+            tab === "chars" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Ancient Principals"),
+                React.createElement("div", { className: "char-grid" }, ANCIENT.map(c => (React.createElement("div", { key: c.name, className: "char-card ancient" },
+                    React.createElement("div", { className: "cname" }, c.name),
+                    React.createElement("div", { className: "crole", style: { color: "#e8c06a" } }, c.role),
+                    React.createElement("div", { className: "cdesc", dangerouslySetInnerHTML: { __html: c.desc } }))))),
+                React.createElement("div", { className: "sec" }, "Main Characters"),
+                React.createElement("div", { className: "char-grid" }, MAIN_CHARS.map(c => (React.createElement("div", { key: c.name, className: `char-card${c.key ? " key" : ""}${c.horde ? " horde" : ""}` },
+                    React.createElement("div", { className: "cname" }, c.name),
+                    React.createElement("div", { className: "crole" }, c.role),
+                    React.createElement("div", { className: "cdesc", dangerouslySetInnerHTML: { __html: c.desc } }))))),
+                React.createElement("div", { className: "sec" }, "The Seven Wardens"),
+                React.createElement("div", { style: { fontSize: 12, color: "#2e6b65", marginBottom: 10, lineHeight: 1.7 } },
+                    "Seven positions along the Earth's primary Ley Line network. Five awake (Morvael counted as completed). Two sleeping and stirring. Three of Ravos's seventeen thread locations are at secondary Ley Line nodes between positions.",
+                    React.createElement("div", { style: { display: "flex", gap: 14, marginTop: 8, flexWrap: "wrap" } }, [["#5eead4", "#0d9488", "AWAKE"], ["#e8c06a", "#c9943a", "BONDED"], ["#9b7fd4", "#4a3a6a", "DISSOLVED"], ["#2e6b65", "#083830", "SLEEPING"]].map(([tc, bc, label]) => (React.createElement("span", { key: label, style: { fontFamily: "'Cinzel',serif", fontSize: 9, letterSpacing: ".18em", color: tc, borderTop: `2px solid ${bc}`, paddingTop: 3 } }, label))))),
+                React.createElement("div", { className: "warden-grid" }, WARDENS.map(w => (React.createElement("div", { key: w.range, className: `warden-card ${w.bond ? "bonded" : w.st}` },
+                    React.createElement("span", { className: `warden-status ${w.st === "sleeping" ? "st-sleeping" : w.st === "dissolved" ? "st-dissolved" : w.bond ? "st-bonded" : "st-awake"}` }, w.st === "sleeping" ? "SLEEPING" : w.st === "dissolved" ? "DISSOLVED" : w.bond ? "BONDED" : "AWAKE"),
+                    React.createElement("div", { className: "wrange" }, w.range),
+                    React.createElement("div", { className: "wloc" }, w.loc),
+                    React.createElement("div", { className: "wdesc", dangerouslySetInnerHTML: { __html: w.desc } }),
+                    w.bond && React.createElement("span", { className: "wbond" }, w.bond))))),
+                React.createElement("div", { className: "sec" }, "New & Emerging Characters"),
+                React.createElement("div", { className: "char-grid" }, NEW_CHARS.map(c => (React.createElement("div", { key: c.name, className: `char-card${c.unknown ? " unknown" : ""}${c.hell ? " hell" : ""}` },
+                    React.createElement("div", { className: "cname" }, c.name),
+                    React.createElement("div", { className: "crole" }, c.role),
+                    React.createElement("div", { className: "cdesc", dangerouslySetInnerHTML: { __html: c.desc } }))))),
+                React.createElement("div", { className: "sec" }, "Hell Faction \\u2014 Active During This Arc"),
+                React.createElement("div", { className: "char-grid" }, SUPPORTING.filter(c => c.hell).map(c => (React.createElement("div", { key: c.name, className: "char-card hell" },
+                    React.createElement("div", { className: "cname" }, c.name),
+                    React.createElement("div", { className: "crole", style: { color: "#f87171" } }, c.role),
+                    React.createElement("div", { className: "cdesc", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: c.desc.replace(/\n\n/g, "<br/><br/>") } }))))),
+                React.createElement("div", { className: "sec" }, "Supporting"),
+                React.createElement("div", { className: "char-grid" }, SUPPORTING.filter(c => !c.hell).map(c => (React.createElement("div", { key: c.name, className: "char-card" },
+                    React.createElement("div", { className: "cname" }, c.name),
+                    React.createElement("div", { className: "crole" }, c.role),
+                    React.createElement("div", { className: "cdesc", dangerouslySetInnerHTML: { __html: c.desc } }))))))),
+            tab === "myth" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "Mythology & Mechanisms"),
+                MYTH.map(m => (React.createElement("div", { className: `card${m.c === "cr" ? " cr" : m.c === "gd" ? " ge" : m.c === "wt" ? " wt" : ""}`, key: m.t },
+                    React.createElement("div", { className: "clabel" }, "Mechanism"),
+                    React.createElement("div", { className: `ctitle ${m.c}` }, m.t),
+                    React.createElement("div", { className: "cbody", dangerouslySetInnerHTML: { __html: m.body } })))))),
+            tab === "books" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Twelve Books"),
+                React.createElement("div", { className: "alist" }, BOOKS.map(b => (React.createElement("div", { className: "abook", key: b.n },
+                    React.createElement("div", { className: "anum-col" }, b.n),
+                    React.createElement("div", { className: "acont" },
+                        React.createElement("div", { className: "atitle" }, b.t),
+                        React.createElement("div", { className: "aeng" }, b.q),
+                        React.createElement("div", { className: "ab", dangerouslySetInnerHTML: { __html: b.b } }),
+                        React.createElement("div", { style: { marginTop: 7 } }, b.tagNames.map((g, i) => React.createElement("span", { key: g, className: `tag ${b.tags[i]}` }, g)))))))))),
+            tab === "tone" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "Tone Notes"),
+                React.createElement("div", { style: { marginBottom: 22 } }, TONE.map(n => (React.createElement("div", { className: "card", key: n.l, style: { marginBottom: 10 } },
+                    React.createElement("div", { className: "clabel" }, n.l),
+                    React.createElement("div", { className: "cbody" }, n.b))))),
+                React.createElement("div", { className: "sec" }, "Permanent Canon"),
+                React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 7 } }, CANON.map((c, i) => (React.createElement("div", { key: i, className: "card ge" },
+                    React.createElement("div", { className: "cbody" }, c))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "Key Quotes"),
+                React.createElement("div", { className: "pull" }, "\"I think I'm here to be what the Web was designed to make possible. The relationship. The real version.\" \\u2014 Brian Lee Combs, age 10, WMB5"),
+                React.createElement("div", { className: "pull" }, "\"I've been feeling the geological frequency change for three weeks. I know what it's building toward. You're going to have to say it.\" \\u2014 Brian Lee Combs to Ravos, WMB4"),
+                React.createElement("div", { className: "pull" }, "\"The formal framework is downstream of the Web. Always was. The compact makes that explicit.\" \\u2014 Metatron, WMB6"),
+                React.createElement("div", { className: "pull" }, "\"The older claim wins. It has always won. That is the law Asmodeus is trying to use, and it is also the law that defeats him.\" \\u2014 Samyaza to Della, Book 2"),
+                React.createElement("div", { className: "orn" }, "\\u2726 \\u2726 \\u2726"),
+                React.createElement("div", { style: { textAlign: "center", color: "#2e6b65", fontSize: 12, fontStyle: "italic", lineHeight: 1.8 } },
+                    "Arcadia said yes twelve thousand years ago.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: "#5eead4" } }, "The mountain knew."),
+                    React.createElement("br", null),
+                    "Brian Lee carries that yes in his hands above the first word.",
+                    React.createElement("br", null),
+                    "The Web is sufficient. The compact holds."))))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(LeviaBible));
+
+  </script>
+</body>
+</html>

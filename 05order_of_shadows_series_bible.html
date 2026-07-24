@@ -1,0 +1,601 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>05Order Of Shadows Series Bible</title>
+  <meta name="description" content="Converted HTML version of 05order_of_shadows_series_bible.jsx for the Holler & Hellfire Universe." />
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #04020a; }
+    #root { min-height: 100vh; }
+    .conversion-note {
+      font-family: Georgia, serif;
+      background: #100603;
+      color: #e8c06a;
+      border: 1px solid #3d1a08;
+      padding: 12px 16px;
+      max-width: 900px;
+      margin: 16px auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <noscript><div class="conversion-note">JavaScript is required to display this converted H&amp;H bible.</div></noscript>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+/* ============================================================
+   CANON AUTHORITY NOTE
+   The Codex (universe_canon_bible.jsx) is the SUPREME canon
+   authority for the H&H Universe. This file SPECIALIZES /
+   EXPANDS / ORGANIZES / DISPLAYS canon and does not supersede
+   The Codex on core universe truth. Objective metaphysical
+   truth lives in The Codex; perceived/in-world truth may differ.
+   ============================================================ */
+const { useState, useMemo, useEffect, useRef } = React;
+const css = `
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── Deep Crimson Palette ── */
+/* The binding. The oath. The slow unraveling.   */
+/* Six hundred years of carrying the wrong thing  */
+/* toward the only door left open.               */
+
+.bible{max-width:960px;margin:0 auto;padding:32px 20px 60px;background:#040001;min-height:100vh;color:#fce8e8;font-family:'Cormorant Garamond',Georgia,serif;}
+.header{text-align:center;padding:50px 0 36px;border-bottom:1px solid #3d0012;margin-bottom:36px;position:relative;}
+.header::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,#991b1b);}
+.header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 45% at 50% 0%,rgba(153,27,27,.12) 0%,transparent 70%);pointer-events:none;}
+.series-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:#991b1b;text-transform:uppercase;margin-bottom:14px;}
+.main-title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,5vw,38px);font-weight:700;color:#fce8e8;line-height:1.15;margin-bottom:8px;text-shadow:0 0 50px rgba(153,27,27,.45);}
+.sub-title{font-family:'Cinzel',serif;font-size:clamp(10px,2vw,14px);color:#f87171;letter-spacing:.22em;margin-bottom:20px;}
+.tagline{font-style:italic;font-size:14px;color:#5a1a1a;max-width:640px;margin:0 auto;line-height:1.8;}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:26px;border-bottom:1px solid #3d0012;padding-bottom:12px;}
+.tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:6px 13px;border:1px solid #3d0012;background:transparent;color:#5a1a1a;cursor:pointer;transition:all .2s;}
+.tab:hover{border-color:#991b1b;color:#f87171;}
+.tab.active{background:rgba(153,27,27,.2);border-color:#991b1b;color:#fce8e8;}
+.sec{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#dc2626;margin:22px 0 14px;padding-bottom:7px;border-bottom:1px solid #3d0012;}
+.card{background:#0d0005;border:1px solid #3d0012;border-left:3px solid #991b1b;padding:16px 20px;margin-bottom:12px;}
+.card.gold{border-left-color:#c9943a;}
+.card.teal{border-left-color:#0d9488;}
+.card.pu{border-left-color:#7c3aed;}
+.card.sl{border-left-color:#64748b;}
+.card.key{border-left-color:#f87171;background:rgba(153,27,27,.05);}
+.clabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;color:#3d0012;text-transform:uppercase;margin-bottom:5px;}
+.ctitle{font-family:'Cinzel',serif;font-size:15px;color:#fce8e8;margin-bottom:5px;}
+.ctitle.cr{color:#f87171;}.ctitle.g{color:#e8c06a;}.ctitle.t{color:#5eead4;}.ctitle.pu{color:#c4b5fd;}.ctitle.sl{color:#94a3b8;}
+.cbody{font-size:13px;line-height:1.75;color:#5a1a1a;}
+.cbody em{color:#fce8e8;font-style:italic;}
+.cbody strong{color:#f87171;font-weight:600;}
+.cbody strong.g{color:#e8c06a;}
+.cbody strong.t{color:#5eead4;}
+.cbody strong.pu{color:#c4b5fd;}
+.pull{border-left:3px solid #991b1b;padding:14px 18px;background:rgba(153,27,27,.07);margin:14px 0;font-size:14px;font-style:italic;line-height:1.8;color:#fce8e8;}
+hr.rule{border:none;border-top:1px solid #3d0012;margin:22px 0;}
+.tag{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 6px;border:1px solid;margin-right:4px;margin-bottom:3px;}
+.tag.cr{color:#f87171;border-color:#991b1b;}
+.tag.g{color:#e8c06a;border-color:#c9943a;}
+.tag.t{color:#5eead4;border-color:#0d9488;}
+.tag.pu{color:#c4b5fd;border-color:#7c3aed;}
+.tag.sl{color:#94a3b8;border-color:#4a5a70;}
+.tag.m{color:#5a1a1a;border-color:#3d0012;}
+.orn{text-align:center;font-size:16px;color:#3d0012;margin:16px 0;letter-spacing:10px;}
+
+/* DEFECTOR CARDS */
+.def-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px;}
+.def-card{background:#0d0005;border:1px solid #3d0012;border-top:3px solid;padding:15px 17px;position:relative;transition:all .2s;}
+.def-card:hover{border-color:#991b1b;box-shadow:0 0 18px rgba(153,27,27,.12);}
+.def-card.d1{border-top-color:#c4b5fd;}
+.def-card.d2{border-top-color:#94a3b8;}
+.def-card.d3{border-top-color:#e8c06a;}
+.def-card.d4{border-top-color:#64748b;opacity:.9;}
+.def-card.net{border-top-color:#5eead4;}
+.dbadge{position:absolute;top:10px;right:11px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.15em;text-transform:uppercase;padding:2px 7px;border:1px solid;}
+.db1{color:#c4b5fd;border-color:#7c3aed;}
+.db2{color:#94a3b8;border-color:#4a5a70;}
+.db3{color:#e8c06a;border-color:#c9943a;}
+.db4{color:#64748b;border-color:#334155;}
+.dbnet{color:#5eead4;border-color:#0d9488;}
+.dnum{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.25em;color:#3d0012;text-transform:uppercase;margin-bottom:5px;}
+.dname{font-family:'Cinzel',serif;font-size:16px;color:#fce8e8;margin-bottom:2px;}
+.drole{font-size:10px;font-style:italic;margin-bottom:7px;letter-spacing:.04em;}
+.dbody{font-size:12px;line-height:1.65;color:#5a1a1a;}
+.dbody em{color:#fce8e8;font-style:italic;}
+.dbody strong{font-weight:600;}
+.dq{margin-top:8px;padding-top:7px;border-top:1px solid #3d0012;font-size:12px;font-style:italic;color:#991b1b;}
+.dbond{margin-top:5px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;color:#c9943a;}
+
+/* BOOK ENTRIES */
+.book{margin-bottom:22px;}
+.book-head{display:grid;grid-template-columns:80px 1fr;background:#0d0005;border:1px solid #3d0012;overflow:hidden;}
+.book-id{display:flex;align-items:center;justify-content:center;padding:16px;border-right:1px solid #3d0012;font-family:'Cinzel Decorative',serif;font-size:13px;}
+.book-meta{padding:13px 18px;}
+.book-title{font-family:'Cinzel',serif;font-size:16px;color:#fce8e8;margin-bottom:3px;}
+.book-sub{font-size:11px;font-style:italic;margin-bottom:3px;}
+.book-arc{font-size:11px;color:#5a1a1a;}
+.book-body{background:#080003;border:1px solid #3d0012;border-top:none;padding:16px 20px;}
+.bb-p{font-size:13px;color:#5a1a1a;line-height:1.72;margin-bottom:8px;}
+.bb-p:last-child{margin-bottom:0;}
+.bb-p em{color:#fce8e8;font-style:italic;}
+.bb-p strong{font-weight:600;}
+.bb-q{border-left:3px solid;padding:10px 14px;margin:10px 0;font-size:13px;font-style:italic;line-height:1.72;color:#fce8e8;background:rgba(0,0,0,.25);}
+
+/* OS5 TIMELINE */
+.os5-row{display:grid;grid-template-columns:130px 1fr;background:#0d0005;border:1px solid #3d0012;margin-bottom:6px;overflow:hidden;}
+.os5-row.key{border-color:#991b1b;background:rgba(153,27,27,.05);}
+.os5-time{padding:10px 14px;border-right:1px solid #3d0012;font-family:'Cinzel',serif;font-size:10px;color:#991b1b;display:flex;align-items:flex-start;line-height:1.4;}
+.os5-body{padding:10px 14px;font-size:12px;color:#5a1a1a;line-height:1.6;}
+.os5-body em{color:#fce8e8;font-style:italic;}
+.os5-body strong{color:#f87171;font-weight:600;}
+`;
+const TABS = [
+    { id: "premise", l: "Premise" },
+    { id: "defectors", l: "The Defectors" },
+    { id: "books", l: "The Twelve Books" },
+    { id: "war", l: "OS5 — The War" },
+    { id: "canon", l: "Canon" },
+];
+const DEFECTORS = [
+    {
+        cls: "d1", badge: "FIRST DEFECTOR", bc: "db1", num: "One",
+        name: "Cassius Vale", formerName: "Tacitus",
+        role: "Order Intelligence Operative \u00b7 203-Year Binding",
+        roleColor: "#c4b5fd",
+        body: "He entered the Order approximately 203 years before the OS arc \u2014 around the early 1800s. Given the name Tacitus — the silent one. Assigned the intelligence domain: long-term monitoring of corridor practitioners. He has been in June Tackett's dream record for fifteen years \u2014 appearing as a figure of silence who waits at the edge of the frame. She wrote: <em>recurring figure. Silence characteristic. Not hostile. Not benign. Waiting.</em>\n\nHe was waiting. He did not know for what. She did.\n\nHe arrives at the Hollow Diner on a Tuesday. She says: <em>I've been seeing you in my dreams since I was nineteen. Sit down.</em> Sixteen days. The oath-refusal spoken in the warm room \u2014 June as witness, Kokabiel present, the full Web holding. The 203-year binding tears. He retrieves his name: <strong style='color:#c4b5fd'>Cassius.</strong>\n\nWhat he brings: the complete enforcement protocol architecture, the Order's current target list, the specific knowledge of what Raguel has been tasked to find \u2014 which means the network knows what Heaven's enforcement will look for before it looks.",
+        quote: "She said: I've been seeing you in my dreams since I was nineteen. Sit down.\nHe sat down.",
+        bond: "\u27a1 June Tackett \u00b7 OS1 primary \u00b7 France operation OS5",
+    },
+    {
+        cls: "d2", badge: "SECOND DEFECTOR", bc: "db2", num: "Two",
+        name: "Vania", formerName: "The Quiet",
+        role: "Order Master Infiltrator \u00b7 80 Years of Chosen Silence",
+        roleColor: "#94a3b8",
+        body: "117 years old. The Order's master infiltrator. She has not spoken in 80 years \u2014 a chosen discipline that became her identity inside the Order. The Order assumed her silence was compliance. It was not. It was refusal: the specific refusal of every word the Order would have required her to say.\n\nSaraqael enters the Vatican's secret library for the seal fragment. She is already there. She has been waiting 40 years for a witness. She signs one word in the oath-language: <em>witness.</em>\n\nTwo weeks through the Vatican sub-levels. 32 notes across a secret library desk. The seal fragment recovered. She hands it to Saraqael \u2014 the specific act of handing that breaks the binding's oath-architecture. Her first spoken word in 80 years: his name.\n\n40 years of observation in a language no one was reading. The network receives that archive in full after her defection.",
+        quote: "She signed one word: witness.\nThen she waited to see if he would sign back.",
+        bond: "\u27a1 Saraqael \u00b7 OS2 primary \u00b7 Final Vatican infiltration OS5",
+    },
+    {
+        cls: "d3", badge: "THIRD DEFECTOR", bc: "db3", num: "Three",
+        name: "Marisol Drake", formerName: null,
+        role: "Barbatos\u2019s Daughter \u00b7 Ritual Architect \u00b7 Age 26",
+        roleColor: "#e8c06a",
+        body: "Barbatos's daughter. Brilliant. Never once treated as a person. Designed binding structures from age twelve. The Order's most gifted ritual architect \u2014 which is why they commissioned her to design the binding to sacrifice Brian Lee Combs. The most significant ritual commission she has ever received. (The operation traces to her father: Barbatos \u2014 Prince of Envy, the Order\u2019s patient intelligence \u2014 identified the unguarded opening at the close of Book 1, the unnamed Nephilim on open ground, and acquired the right instrument for it, sending Asmodeus, Prince of Lust, to reach the boy through want rather than force while the Order supplied the binding architecture.)\n\nShe arrives at Pike County to take frequency readings for the binding's commission site. He pours her coffee. Asks if she wants anything else. Means the question.\n\nShe finds the commission documentation three days later. The word: <em>sacrifice.</em> She packs her father's complete ritual archive \u2014 600 years of binding mathematics, every working the Order has ever designed \u2014 and walks it into the Hollow Diner on a Friday morning. <em>I think these belong to you.</em>\n\n<strong style='color:#e8c06a'>What she delivers is the complete seal schematic</strong> \u2014 reconstructed from the archive's records of every binding operation the Order ran to maintain it. The network now has the exact architecture of what they need to rebuild.",
+        quote: "She found the word sacrifice in the commission documentation.\nShe packed the archive and walked it into the Hollow Diner.",
+        bond: "\u27a1 Brian Lee Combs \u00b7 OS3 primary \u00b7 Architectural matrix OS5 (Della\u2019s herb shed)",
+    },
+    {
+        cls: "d4", badge: "FOURTH DEPARTURE", bc: "db4", num: "Four",
+        name: "Brother Anselm", formerName: null,
+        role: "Last of the Founding Generation \u00b7 612 Years Old \u00b7 Arrives August \u00b7 Dies October",
+        roleColor: "#64748b",
+        body: "One of the original seven brothers who took the founding oath in 1414. The last one alive. Has been carrying the full weight of 600 years of the Order's operational history \u2014 every decision the Order made that it called necessary. The Segovia names. The seventh woman who was still finding her frequency when they came for her.\n\nHe renounced the oath at the second mile. He walks to Edna Mae's kitchen in August, Year 5. She is the Omni Witch. She is the only person on Earth whose archive is as deep as his.\n\nSix weeks of testimony. He gives Pearlene what the document cannot carry: the weight. <em>The seventh woman was still finding her frequency.</em>\n\nOctober: Anselm dies on Edna Mae's back porch. The Mother receives him. He is buried at the Maelin cemetery beside Tom Maelin \u2014 two men who held their positions until the end and died in the right place. Edna Mae acknowledges the succession: <em>Pearlene carries the future.</em>",
+        quote: "She asked him once how he had held it for six hundred years.\nHe said: I kept the record so that the record would be given.\nThat was all.",
+        bond: "\u27a1 Pearlene Calhoun \u00b7 OS4 primary \u00b7 Six weeks of testimony \u00b7 Buried Maelin cemetery",
+    },
+];
+const NETWORK = [
+    {
+        cls: "net", badge: "SENIOR ANCHOR", bc: "dbnet", num: "",
+        name: "Pearlene Calhoun", formerName: null,
+        role: "Senior Anchor \u00b7 Age 20 \u00b7 June\u2019s Daughter",
+        roleColor: "#5eead4",
+        body: "Twenty years old during the OS arc. June Tackett's daughter \u2014 born in July Year 0 under the specific star Kokabiel named. Carries both the Dreamer's Archive thread and the stellar lineage simultaneously.\n\nShe receives what Anselm's document cannot carry: the weight. Six weeks of testimony. The Segovia names. The specific knowledge of what the founding generation did and chose not to understand about what it was doing. This is not information. It is responsibility.\n\nEdna Mae passes the senior anchor seal to Pearlene in OS12 at the close of the ritual. <em>The work continues. But not by me.</em>",
+        quote: "The work continues. But not by me.\n\u2014 Edna Mae Calhoun, OS5",
+        bond: "\u27a1 Tobias Vale \u00b7 Receives Anselm\u2019s testimony OS4 \u00b7 Senior Anchor from OS5",
+    },
+    {
+        cls: "net", badge: "WEB'S EXPRESSION", bc: "dbnet", num: "",
+        name: "Brian Lee Combs", formerName: null,
+        role: "Familiar (Leviathan & Ravos) \u00b7 Age 25 \u00b7 Ritual Architect",
+        roleColor: "#5eead4",
+        body: "Twenty-five years old. Fifteen years past the Ravos choosing. The Web's living expression in full operation \u2014 not the ten-year-old with the notebook at the Warden kitchen table, but the man who builds the architectural matrix for Satan's sealing in Della's herb shed with Marisol Drake.\n\nHe poured Marisol Drake's coffee. He asked if she wanted anything else. He meant the question. That is the specific quality of Brian Lee Combs at twenty-five: the Familiar bond's expression in full human scale. He holds the geological frequency and pours coffee with the same hands.",
+        quote: "He poured her coffee. Asked if she wanted anything else. Meant the question.",
+        bond: "\u27a1 Marisol Drake \u00b7 OS5 architectural matrix \u00b7 Della\u2019s herb shed",
+    },
+];
+const BOOKS = [
+    {
+        id: "OS1", color: "#c4b5fd",
+        title: "The Oath Breaker", couple: "Cassius Vale (Tacitus) \u00b7 June Tackett",
+        arc: "Year 5 \u00b7 First Defector \u00b7 The Dream Record Converges",
+        synopsis: "June Tackett has been recording Tacitus Vale in her dream record for fifteen years. Volume 21 opens with his arrival. He does not know she has been recording him. She does not tell him immediately. She says: <em>I've been seeing you in my dreams since I was nineteen. Sit down.</em>\n\nSixteen days at the Hollow Diner. The 203-year binding does not break easily. The breaking requires witness \u2014 someone in the correct practice whose presence holds the space through the tearing. June is the witness. Kokabiel is present. The full Web holds him through it.\n\nThe warm room is the specific reason the oath-break is survivable. 26 years of Carla June's accumulated warmth is the frequency the binding's tear does not find purchase in. The binding needs fear to hold. The warm room has no fear.\n\nHe retrieves his name: Cassius. Not given back. Retrieved. The name was always his. The Order did not take it. It buried it.",
+        hell: "Lucifer registers the defection. He does not dispatch a response. He is already calculating what it means for the Order's structural integrity. He calculates correctly: one correct defection produces the conditions for the next.",
+        heaven: "Raguel receives the notice of Cassius's defection from Heaven's enforcement arm's monitoring system. He assesses the binding tear's frequency. His assessment: <em>voluntary and complete. No coercion detectable. The binding failed from the inside.</em> He sends this to the Council. He does not include his inference about what that means for the remaining Order members.",
+        key: "First defector. The 203-year binding tears. Cassius retrieved. June opens Volume 21.",
+        quote: "I've been seeing you in my dreams since I was nineteen.\nSit down.\n\nHe sat down.",
+        tags: ["cr", "pu", "cr"], tagNames: ["first defector", "203-year binding", "Volume 21"],
+    },
+    {
+        id: "OS2", color: "#94a3b8",
+        title: "The Silent Sister", couple: "Saraqael \u00b7 Vania",
+        arc: "Year 5 \u00b7 Second Defector \u00b7 The Vatican Sub-Levels",
+        synopsis: "Saraqael's enforcement-instrument knowledge of the Vatican's sub-level security architecture \u2014 two hundred years of finding what should not be findable \u2014 is the specific capacity that makes this operation possible. He is not working for Heaven's enforcement arm. He is working for the network. He is using the Hunter's gift toward the correct function: finding the seal fragment, finding Vania.\n\nVania has been there for forty years. She left her own record in 32 notes across a secret library desk \u2014 a language she developed specifically for a witness she did not know would come, written in oath-language because she knew only a being who understood the Order's internal record would be able to read it.\n\nShe hands him the seal fragment. That is the oath-break's specific act: the handing. Not the speaking, not the signing \u2014 the physical transfer of the thing the Order had assigned her to protect. She chooses the network over the Order in the act of handing.\n\nHer first spoken word in 80 years: his name.",
+        hell: "No direct Hell faction involvement in OS2. The Vatican sub-level operation is outside the Hell faction's monitoring range \u2014 the faction has been focused on the Pike County corridor during this period. Lucifer tracks it through the Order's internal record. He notes the second defection with the specific attention of someone who built the mechanism that is now dismantling itself.",
+        heaven: "The Vatican operation requires Saraqael to move through the same institutional architecture he patrolled for two hundred years. He encounters three Heaven's enforcement monitoring systems in the sub-levels. He disables them without detection. He knows exactly where they are. He placed two of them.",
+        key: "Second defector. Seal fragment recovered and delivered. Vania's 40-year archive received. First spoken word: his name.",
+        quote: "She signed one word in the oath-language: witness.\nThen she waited to see if he would sign back.\nHe did.\nTwo weeks. 32 notes. The fragment recovered.\nHer first spoken word in 80 years was his name.",
+        tags: ["sl", "cr", "sl"], tagNames: ["second defector", "Vatican operation", "Vania\u2019s archive"],
+    },
+    {
+        id: "OS3", color: "#e8c06a",
+        title: "The Architect\u2019s Daughter", couple: "Marisol Drake \u00b7 Brian Lee Combs",
+        arc: "Year 5 \u00b7 Third Defector \u00b7 The Archive Delivered",
+        synopsis: "Marisol Drake comes to Pike County with a commission. The commission is Brian Lee Combs's death \u2014 ritual sacrifice as the binding's final component for a working that would give the Order enough leverage to hold the network under institutional containment for another three hundred years.\n\nShe arrives, takes frequency readings, stays at the corridor's edge as the commission requires. He works the morning shift at the Hollow Diner. He pours her coffee on the third day. Asks if she wants anything else. Means the question. She has been asked if she wants anything else by hundreds of people in her life. None of them meant it the way he does. She can feel the difference in the frequency.\n\nShe stays. She does not know why she stays. She is still running the commission's assessment protocols. She finds the commission documentation on the fifth day. The word in the clause she had not read: <em>sacrifice.</em>\n\nShe was the sacrifice's architect. She did not know she was also designing the mechanism of her own family's claim on her continued existence. She was not a person to the commission. She was a function.\n\nShe packs the archive and walks it into the Hollow Diner on a Friday morning. Six hundred years of the Order's binding mathematics. The complete seal schematic. The record of everything.\n\n<em>I think these belong to you.</em>",
+        hell: "Barbatos registers the defection of his daughter. His response is the specific response of a Prince of Envy: he wants what she has given away. The archive is the Envy domain's most significant asset \u2014 600 years of binding mathematics built in his specific idiom. He begins moving against the network's legal position to recover jurisdiction. Mammon's legal architecture is activated in support. The legal challenge fails because Marisol's delivery is in the Older Mechanism's record as a voluntary transfer.",
+        heaven: "No direct Heaven's enforcement involvement. Chamuel files an assessment of the Marisol-Brian Lee bond. His report notes: <em>the bond constituted correctly in both directions simultaneously. No formal framework violation detectable.</em> He does not send the report to the Council. He files it in the correct archive.",
+        key: "Third defector. The complete 600-year Order archive delivered. The full seal schematic in the network's hands.",
+        quote: "She found the word sacrifice in the commission documentation.\nShe packed the archive.\nShe walked it into the Hollow Diner.\nI think these belong to you.",
+        tags: ["g", "cr", "g"], tagNames: ["third defector", "archive delivered", "seal schematic"],
+    },
+    {
+        id: "OS4", color: "#64748b",
+        title: "The Last Assassin", couple: "Anselm \u00b7 Pearlene Calhoun",
+        arc: "Year 5 \u00b7 The Founding Generation\u2019s Last Testimony \u00b7 August\u2013October",
+        synopsis: "Anselm is 612 years old. He is the last survivor of the Order's founding generation. He renounced the oath at the second mile on the road to Edna Mae's kitchen. He walks the rest of the way.\n\nHe brings the complete 6-century operational archive. He brings himself \u2014 which is the more significant thing. The archive is a document. The founding generation's testimony is what the document cannot carry: the weight of understanding what you were doing, and doing it anyway, and carrying that for six hundred years in the specific form of continuing to serve an institution you understood from the inside.\n\nSix weeks of testimony. Pearlene receives it. She is twenty years old. She is the succession's next holder. She does not have the option of receiving only what she is ready for. She receives what is given.\n\nThe Segovia names. The seventh woman who was still finding her frequency when they came for her. The specific cost of the founding oath's institutional purpose, held in the founding generation's last living memory.\n\nOctober: Anselm dies on Edna Mae's back porch in the morning. The Mother receives him. Edna Mae says: <em>the Mother has him.</em> He is buried at the Maelin cemetery beside Tom Maelin. Two men who held their positions until the end and died in the right place.",
+        hell: "No direct Hell faction involvement in OS4. Lucifer registers Anselm's arrival at Edna Mae's kitchen and the archive's transfer. He is the only Prince who understands what the 6-century archive contains \u2014 because he built the Order's founding architecture. He does not interfere. He is already calculating the next move.",
+        heaven: "Raziel receives notice of Anselm's arrival and the archive's transfer to the network. His notation in the foundational archive: <em>the Order of Shadows' complete operational record is now held by the Pike County network. The formal framework's institutional knowledge of the seal architecture is no longer exclusive.</em>",
+        key: "The founding generation's last testimony. The Segovia names. Anselm dies October. Buried Maelin cemetery beside Tom Maelin. Pearlene receives the succession's weight.",
+        quote: "She asked him once how he had held it for six hundred years.\nHe said: I kept the record so that the record would be given.\nThat was all.\nShe said: that's not nothing.\nHe said: no. But it's a long time to carry.",
+        tags: ["sl", "sl", "cr"], tagNames: ["founding testimony", "Anselm dies October", "Pearlene receives weight"],
+    },
+    {
+        "id": "OS5",
+        "color": "#c4b5fd",
+        "title": "The Liar’s Tell",
+        "couple": "Delacroix Vane & Sathriel",
+        "arc": "Inserted OS5 · Deception Domain · Counter-Intelligence",
+        "synopsis": "Delacroix Vane works inside the Order's counter-intelligence wing, building lies that survive scrutiny. Sathriel knows every lie has a tell. Together they find the one falsehood the Order cannot survive: its founding story was not incomplete. It was knowingly false.",
+        "hell": "Lucifer registers the lie's exposure as the first sign the Order's remaining architecture is breaking from inside.",
+        "heaven": "The formal framework cannot condemn deception when the deception is used to restore correct witness.",
+        "key": "Sathriel bonds. The Order's founding lie becomes visible.",
+        "quote": "A beautiful lie still leaves pressure on the truth beside it.",
+        "tags": [
+            "pu",
+            "cr"
+        ],
+        "tagNames": [
+            "deception domain",
+            "founding lie"
+        ]
+    },
+    {
+        "id": "OS6",
+        "color": "#e8c06a",
+        "title": "The Face They Wanted",
+        "couple": "Lior Bellweather & Asael",
+        "arc": "Inserted OS6 · Visibility Domain · Public Front",
+        "synopsis": "Lior Bellweather runs the Order's public-facing cover operation. Asael's domain is the art of being seen. Lior must defect publicly because her face is already known; visibility becomes witness instead of polish.",
+        "key": "Asael bonds. The Order loses control of its public face.",
+        "quote": "Being seen was dangerous. So was hiding forever.",
+        "tags": [
+            "g",
+            "sl"
+        ],
+        "tagNames": [
+            "visibility",
+            "public witness"
+        ]
+    },
+    {
+        "id": "OS7",
+        "color": "#5eead4",
+        "title": "What Runs Beneath",
+        "couple": "Constance Reyes & Batariel",
+        "arc": "Inserted OS7 · Hidden Waters · River Route",
+        "synopsis": "Constance Reyes has been running cargo through a river corridor, believing she was moving protected materials. Batariel reveals the hidden-water route has carried bindings, stolen relics, and erased people. Guilt becomes useful only when she redirects the route.",
+        "key": "Batariel bonds. The Order's hidden-water logistics are turned toward liberation.",
+        "quote": "The river had not been silent. It had been carrying what nobody wanted named.",
+        "tags": [
+            "t",
+            "cr"
+        ],
+        "tagNames": [
+            "hidden waters",
+            "logistics reversal"
+        ]
+    },
+    {
+        "id": "OS8",
+        "color": "#94a3b8",
+        "title": "The Fifth Defector",
+        "couple": "Threnody Ash & Samsapeel",
+        "arc": "Inserted OS8 · Threshold Domain · Fifth Defection",
+        "synopsis": "Threnody Ash controls doors, clearance levels, ritual entry points, and the rooms nobody admits exist. Samsapeel never forces a threshold. Threnody opens one because the people behind it deserve the outside.",
+        "key": "Samsapeel bonds. Threnody becomes the fifth defector and brings the Order's internal map.",
+        "quote": "A door is not holy because it is closed. It is holy when it opens correctly.",
+        "tags": [
+            "sl",
+            "cr"
+        ],
+        "tagNames": [
+            "threshold",
+            "fifth defector"
+        ]
+    },
+    {
+        "id": "OS9",
+        "color": "#7c3aed",
+        "title": "The Order’s Last Ledger",
+        "couple": "Ensemble",
+        "arc": "Inserted OS9 · Ledger Book · No New Bond",
+        "synopsis": "The defectors compare ledgers: money, relics, bloodlines, deaths, missing children, failed rituals, and the cost of every act the Order called necessary. The case becomes institutional, not personal.",
+        "key": "The last ledger contains a payment made before the Order officially existed.",
+        "quote": "The numbers had been confessing longer than the men had.",
+        "tags": [
+            "pu",
+            "g"
+        ],
+        "tagNames": [
+            "last ledger",
+            "ensemble"
+        ]
+    },
+    {
+        "id": "OS10",
+        "color": "#f87171",
+        "title": "The Seal’s True Cost",
+        "couple": "Ensemble",
+        "arc": "Inserted OS10 · Consent vs. Protection · No New Bond",
+        "synopsis": "The network learns what old seals cost and who paid without consent. The Order tries to rebuild an ancient seal using current defectors as components. Protection without consent is revealed as imprisonment.",
+        "key": "The old seal is exposed as powered by stolen agreement, not holiness.",
+        "quote": "A prison can call itself protection. The body inside still knows the difference.",
+        "tags": [
+            "cr",
+            "g"
+        ],
+        "tagNames": [
+            "seal cost",
+            "stolen agreement"
+        ]
+    },
+    {
+        "id": "OS11",
+        "color": "#64748b",
+        "title": "The Watchers Who Stayed",
+        "couple": "Ensemble",
+        "arc": "Inserted OS11 · Moral Split · Finale Setup",
+        "synopsis": "Saraqael's former colleagues face the same choice he made. Some refuse the Order. Some stay. Those who stay are not cartoon villains; they are afraid, loyal, ashamed, or unable to imagine forgiveness.",
+        "key": "Enough Watchers refuse the Order that OS12 can become the War for the World.",
+        "quote": "Not everyone who stayed believed the lie. Some only believed they were too late to leave it.",
+        "tags": [
+            "sl",
+            "g"
+        ],
+        "tagNames": [
+            "Watcher split",
+            "OS12 setup"
+        ]
+    },
+    {
+        id: "OS12", color: "#f87171",
+        title: "The War for the World", couple: "Ensemble \u00b7 Every Couple \u00b7 Every Faction",
+        arc: "Year 5 \u00b7 April \u00b7 3 AM \u00b7 The Seal",
+        synopsis: "Six months of preparation. Every defector's specific knowledge deployed. Every bond in the network active simultaneously. Every corridor holding.\n\nApril, 3 AM, Wednesday. The seal-closing ritual at Edna Mae's property. 443 practitioners. Every Watcher-witch couple. Every defector. Every corridor anchor from Alabama to New York.\n\nSix Wardens fly. The Leviathan's frequency holds the geological foundation. Brian Lee and Marisol Drake's architectural matrix \u2014 built in Della's herb shed over the preceding six months \u2014 is the ritual's structure. Mama Calhoun's ghost is present: the Web permits bone-line presences at events of this magnitude.\n\nThe Mother speaks.\n\nSatan sealed into the Catholic Church's institutional structure. Not imprisoned \u2014 sealed. The Church is the seal's housing because the Church's institutional architecture of guilt and compliance is the closest mortal-layer equivalent to Satan's specific wrath-substrate. The Church dissolves as an institution in the ritual's aftermath. The seal holds where the Church was.\n\nLucifer gives the ultimate sacrifice. Lucifer \u2014 once known as CAIN \u2014 swallows his pride and admits two wrongs: killing his brother ABEL at Babel, and locking SATAN away instead of trying to help him. (Abel and Satan are different beings: Cain murdered Abel; Lucifer later jailed Satan.) His reconciliation with himself heals his own soul frequency, and he STILL chooses to save the universe, becoming the binding agent of the new seal. His sacrifice returns his soul to the 0 state AND heals Satan's soul completely, returning it to 0 as well. The corrupted brother and the brother who wronged him both restored \u2014 the Hell-scale echo of Sano and Nepisano. This Merkaba formation is the Order of the Shadows Arc's Restoration event.\n\nEdna Mae passes the senior anchor seal to Pearlene. <em>The work continues. But not by me.</em>\n\nLate May: the gathering at Edna Mae's property. Children in the yard. The world exhales.",
+        hell: "Satan makes his final escape bid during the six-month preparation period \u2014 four supply chain attacks on the Pike County defense that Pearlene and Tobias Vale hold four for four. His operation dissolves in the seal's completion. Lucifer's sacrifice is the specific action that makes the seal permanent. The remaining Princes are without their eldest brother and without the institutional architecture that maintained their operations.",
+        heaven: "Metatron transmits the Council's acknowledgment of the seal's completion. His transmission includes: <em>the Web's authority is primary. The formal framework's jurisdiction in the network's corridors is advisory. The record is updated accordingly.</em> This is the transmission Raziel has been waiting for. He files it in every relevant archive simultaneously.",
+        key: "April 3 AM: Satan sealed. Vatican becomes seal site. Church dissolves. Lucifer's ultimate sacrifice. Edna Mae passes anchor seal to Pearlene. The world exhales.",
+        quote: "April. 3 AM. Wednesday.\n443 practitioners. Every couple.\nMama Calhoun\u2019s ghost present.\nSix Wardens fly. The Mother speaks.\n\nSatan sealed into the Catholic Church\u2019s institutional structure.\nThe Church dissolves.\nThe seal holds where the Church was.\n\nLucifer walks into the seal as its anchor.\nEdna Mae passes the senior anchor seal to Pearlene.\n\nThe work continues. But not by me.",
+        tags: ["cr", "cr", "cr"], tagNames: ["April 3 AM", "Satan sealed", "succession"],
+    },
+];
+const OS5_TIMELINE = [
+    { time: "Six months prior", key: false, body: "Brian Lee and Marisol Drake build the architectural matrix in Della's herb shed. The complete seal schematic from the 600-year archive assembled into a working ritual structure. Cassius and June recover the ritual component in France. Saraqael and Vania's final Vatican infiltration secures the last missing piece." },
+    { time: "During preparation", key: false, body: "<strong>Supply chain attacks: four attempts by Satan's operation on the Pike County defense.</strong> Pearlene and Tobias Vale hold four for four. The defense holds without the primary anchor's involvement — Edna Mae and Dixie are managing the six-Warden coordination." },
+    { time: "Dixie and Azazel", key: false, body: "Negotiate with six Wardens. The Warden positions must be held open during the ritual — the geological frequency cannot fracture at the moment of sealing. Six Wardens agree to fly the positions simultaneously with the ritual." },
+    { time: "April — the gathering", key: false, body: "443 practitioners. Every Watcher-witch couple. Every defector with a specific function. Mama Calhoun's ghost present — the Web permits bone-line presences at events of this magnitude. The warm room's frequency extended across the full property by Carla June." },
+    { time: "April 3 AM Wednesday", key: true, body: "<strong>The seal-closing ritual begins.</strong> Brian Lee and Marisol's architectural matrix activated. The Leviathan's frequency runs through Brian Lee as the geological foundation. The 443 practitioners in lateral contact provide the Web's frequency at full expression." },
+    { time: "The Mother speaks", key: true, body: "The Earth Mother speaks through the ritual's frequency at full expression. Not a transmission — a direct statement. The third time in the human-recorded era. The seal is recognized at the foundational level." },
+    { time: "Satan sealed", key: true, body: "<strong>Satan sealed into the Catholic Church's institutional structure.</strong> The Church's architecture of guilt and compliance becomes the seal's substrate. The Vatican is the seal site. The Church dissolves as an institution in the ritual's aftermath. The seal holds where the Church was." },
+    { time: "Lucifer's sacrifice", key: true, body: "<strong>Lucifer walks into the seal as its binding agent.</strong> The Prince of Pride who built the Order to maintain Satan's prison for six hundred years becomes the new seal's anchor. This is the ultimate sacrifice: the architect of the maintenance mechanism becoming the maintenance mechanism itself. Permanent." },
+    { time: "The succession", key: true, body: "<strong>Edna Mae passes the senior anchor seal to Pearlene.</strong> <em>The work continues. But not by me.</em> The Omni Witch who brokered the Web Compact gives the anchor function to the twenty-year-old who received the founding generation's weight. The succession holds." },
+    { time: "Metatron transmits", key: false, body: "The formal framework acknowledges: <em>the Web's authority is primary. The formal framework's jurisdiction in network corridors is advisory.</em> Raziel files it in every relevant archive." },
+    { time: "Late May", key: false, body: "The gathering at Edna Mae's property. Children in the yard. The world exhales. The work continues." },
+];
+const CANON = [
+    { c: "The Order of Shadows was Lucifer's mechanism for maintaining Satan's seal \u2014 not Hell's weapon against the mortal practitioners. The Order's seven founding brothers believed they were serving Hell's institutional interests. They were serving the prison's maintenance structure.", col: "#c4b5fd" },
+    { c: "The True Fallen binding locks the oath-taker's life force to the institution's continued operation. The oath-break is possible but the tearing costs something real. The warm room's accumulated frequency is the specific reason the warm room was the right location for Cassius's oath-break.", col: "#991b1b" },
+    { c: "The original four defectors open the arc; the inserted books add deception, visibility, hidden-water, and threshold bonds before the OS12 finale: Cassius (first, 203-year binding), Vania (second, 80 years of chosen silence), Marisol (third, Barbatos's daughter, the complete archive), Anselm (fourth departure \u2014 he died outside the oath, in the right place).", col: "#f87171" },
+    { c: "The complete 600-year Order archive, the full seal schematic, the Vatican seal fragment, and the founding generation's testimony are all in the network's possession by OS4. The network has more information about the Order's seal architecture than the Order's remaining members.", col: "#e8c06a" },
+    { c: "Brian Lee Combs is 25 during the OS arc. He is no longer the ten-year-old with the notebook. He pours coffee and means the question. He builds the architectural matrix in Della's herb shed. He holds the Leviathan's geological frequency as the ritual's foundation.", col: "#5eead4" },
+    { c: "Anselm dies in October, Year 5. Buried at the Maelin cemetery beside Tom Maelin. Two men who held their positions until the end and died in the right place. Edna Mae: the Mother has him.", col: "#64748b" },
+    { c: "April, 3 AM, Wednesday: the seal-closing ritual. 443 practitioners. Satan sealed into the Catholic Church's dissolved institutional structure. The Vatican is the seal site. The Church dissolves. The seal holds where the Church was.", col: "#f87171" },
+    { c: "Lucifer gives the ultimate sacrifice: himself as the new seal's binding agent. The Prince of Pride who built the Order to maintain Satan's prison becomes the prison's permanent anchor. Lucifer (once Cain) reconciles with himself \u2014 owning two wrongs: killing his brother Abel at Babel, and locking Satan away instead of helping him \u2014 which heals his soul frequency; he still chooses to save the universe. His sacrifice returns both his and Satan's souls to the 0 state.", col: "#991b1b" },
+    { c: "Edna Mae passes the senior anchor seal to Pearlene in OS12. The work continues. But not by me. Pearlene Calhoun is Senior Anchor from Year 5 onward.", col: "#5eead4" },
+    { c: "Metatron formally transmits: the Web's authority is primary. The formal framework's jurisdiction in network corridors is advisory. This transmission is filed in Raziel's foundational archive simultaneously with every network record that requires it.", col: "#94a3b8" },
+    { c: "The Divine Arc's cascade in DA1 is the aftershock of Satan's sealing. The Veil \u2014 the wall of protection at the outer edge of creation \u2014 had already been deteriorating for years; the sealing's frequency moving through the Church's institutional substrate destabilizes the Arcana layer's boundary and brings the weakened wall down. The arc anticipated the cost. The cost is the Divine Arc.", col: "#f87171" },
+    {
+        "c": "Order of Shadows now contains twelve books. OS5–OS11 are inserted before the original finale, and the old OS5 is preserved as OS12: The War for the World.",
+        "col": "#c4b5fd"
+    },
+    {
+        "c": "WW12 exposes the Order architecture; OS5 begins with the lie inside that architecture; OS12 remains the seal/war finale.",
+        "col": "#e8c06a"
+    },
+];
+function OSShadowBible() {
+    const [tab, setTab] = useState("premise");
+    return (React.createElement(React.Fragment, null,
+        React.createElement("style", null, css),
+        React.createElement("div", { className: "bible" },
+            React.createElement("header", { className: "header" },
+                React.createElement("div", { className: "series-label" }, "Series Bible \\u00b7 The Holler & Hellfire Universe"),
+                React.createElement("h1", { className: "main-title" }, "The Order of the Shadows"),
+                React.createElement("div", { className: "sub-title" }, "Five Books \\u00b7 Year 5 \\u00b7 The Defectors \\u00b7 The War \\u00b7 The Seal"),
+                React.createElement("p", { className: "tagline" },
+                    React.createElement("em", null, "The Order was not Hell\\u2019s weapon against the mortal practitioners."),
+                    React.createElement("br", null),
+                    "It was the seal\\u2019s maintenance structure.",
+                    React.createElement("br", null),
+                    "Six hundred years of brothers carrying a prison",
+                    React.createElement("br", null),
+                    "they were told was a weapon.",
+                    React.createElement("br", null),
+                    React.createElement("em", null, "More of them begin figuring it out, until the War for the World becomes unavoidable."))),
+            React.createElement("nav", { className: "tabs" }, TABS.map(t => React.createElement("button", { key: t.id, className: `tab${tab === t.id ? " active" : ""}`, onClick: () => setTab(t.id) }, t.l))),
+            tab === "premise" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "What This Arc Is"),
+                React.createElement("div", { className: "pull" },
+                    "Year 5. Ten years since the Web of the Weavers. Five years since the New Compact.",
+                    React.createElement("br", null),
+                    "The world has had a decade to settle into the new Web cosmology.",
+                    React.createElement("br", null),
+                    React.createElement("br", null),
+                    React.createElement("em", null, "Satan\\u2019s seal substrate has been failing since WMB6. His escape bid begins in Year 5. The Order is the mechanism that maintained his prison for six hundred years. And the Order is coming apart.")),
+                React.createElement("div", { className: "card key" },
+                    React.createElement("div", { className: "clabel" }, "The Arc\\u2019s Central Mechanism"),
+                    React.createElement("div", { className: "ctitle cr" }, "Four Defections. One Seal. One Sacrifice."),
+                    React.createElement("div", { className: "cbody" },
+                        "The arc is structured around four acts of specific courage \\u2014 each defection precisely different from the others, each one providing what the next requires:",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "Cassius"),
+                        " gives the network the enforcement protocol architecture and the target list. This is the intelligence the network needs to survive Heaven\\u2019s enforcement arm during the operation.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "Vania"),
+                        " gives the network the seal fragment and 40 years of Vatican sub-level observation. This is the specific piece the ritual requires and cannot reconstruct from the archive alone.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "Marisol"),
+                        " gives the network the complete 600-year archive and the full seal schematic. This is the architectural blueprint without which the ritual cannot be correctly designed.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "Anselm"),
+                        " gives the network the founding generation's testimony \\u2014 what the document cannot carry. This is the weight that makes the succession real rather than procedural.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("em", null, "Each defector arrived with exactly what the next step required. This is not coincidence. This is the Older Mechanism\\u2019s bond law operating at its full expression: the correct action produces the conditions for the next correct action."))),
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "clabel" }, "The Order\\u2019s True Architecture"),
+                    React.createElement("div", { className: "ctitle cr" }, "Lucifer\\u2019s Mechanism \\u2014 Not Hell\\u2019s Weapon"),
+                    React.createElement("div", { className: "cbody" },
+                        "Lucifer built the Order in 1414 to maintain Satan's seal through the Church's institutional structure. He told the other Princes the Order was Hell's greatest weapon against the mortal practitioners. It was the seal's maintenance structure dressed as a weapon so the Princes would protect it.\\n\\nThe seven founding brothers took the oath believing they were serving Hell's institutional interests. They were maintaining the geological suppression of the Leviathan above Satan's sealed position and the institutional architecture of the Church's fear-substrate simultaneously.\\n\\n",
+                        React.createElement("strong", null, "The Order's collapse was designed into its founding logic."),
+                        " Six hundred years was always the estimate. When the New Compact was ratified in WMB6 and the fear-substrate began failing, Lucifer already knew what OS5 would require. He had been preparing for it since 1414.")),
+                React.createElement("div", { className: "card gold" },
+                    React.createElement("div", { className: "clabel" }, "Series Position"),
+                    React.createElement("div", { className: "ctitle g" }, "Year 5 \\u00b7 After the Web \\u00b7 Before the Divine Arc"),
+                    React.createElement("div", { className: "cbody" },
+                        "The OS arc operates on the structural foundation the Web of the Weavers arc established:",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", { class: "g" }, "The 443 practitioners"),
+                        " in lateral contact (WW1) are the OS5 ritual's mechanism \\u2014 the frequency that makes the sealing possible at scale.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", { class: "g" }, "The Moon-Bride channel"),
+                        " (WW2) is running correctly during OS5 and carries the frequency of the Earth Mother's statement into the ritual's record.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", { class: "g" }, "The Omni Witch function"),
+                        " (WW3) is what allows Edna Mae to pass the anchor seal correctly to Pearlene in OS5 \\u2014 the transfer requires an Omni Witch witness.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "And what the OS arc establishes seeds the Divine Arc: ",
+                        React.createElement("em", null, "the cascade from Satan's sealing reaches every layer simultaneously in DA1. The Veil \\u2014 the wall of protection at the outer edge of creation \\u2014 has been deteriorating for years; the sealing's frequency is what finally brings the weakened wall down."))))),
+            tab === "defectors" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Four Defectors"),
+                React.createElement("p", { style: { fontSize: 13, color: "#5a1a1a", marginBottom: 12, lineHeight: 1.7 } }, "Each defection is architecturally specific. Each one provides what the next step requires. The sequence is not coincidence."),
+                React.createElement("div", { className: "def-grid" }, DEFECTORS.map(d => (React.createElement("div", { key: d.name, className: `def-card ${d.cls}` },
+                    React.createElement("span", { className: `dbadge ${d.bc}` }, d.badge),
+                    React.createElement("div", { className: "dnum" },
+                        d.num,
+                        d.formerName && React.createElement("span", { style: { marginLeft: 6, color: "#3d0012" } },
+                            "(formerly ",
+                            d.formerName,
+                            ")")),
+                    React.createElement("div", { className: "dname" }, d.name),
+                    React.createElement("div", { className: "drole", style: { color: d.roleColor } }, d.role),
+                    React.createElement("div", { className: "dbody", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: d.body.replace(/\n\n/g, "<br/><br/>") } }),
+                    React.createElement("div", { className: "dq", style: { whiteSpace: "pre-line" } }, d.quote),
+                    d.bond && React.createElement("div", { className: "dbond" }, d.bond))))),
+                React.createElement("div", { className: "sec" }, "Network \u2014 Key Players"),
+                React.createElement("div", { className: "def-grid" }, NETWORK.map(d => (React.createElement("div", { key: d.name, className: `def-card ${d.cls}` },
+                    React.createElement("span", { className: `dbadge ${d.bc}` }, d.badge),
+                    React.createElement("div", { className: "dname" }, d.name),
+                    React.createElement("div", { className: "drole", style: { color: d.roleColor } }, d.role),
+                    React.createElement("div", { className: "dbody", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: d.body.replace(/\n\n/g, "<br/><br/>") } }),
+                    React.createElement("div", { className: "dq", style: { whiteSpace: "pre-line" } }, d.quote),
+                    d.bond && React.createElement("div", { className: "dbond" }, d.bond))))))),
+            tab === "books" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Twelve Books"),
+                BOOKS.map(b => (React.createElement("div", { key: b.id, className: "book" },
+                    React.createElement("div", { className: "book-head" },
+                        React.createElement("div", { className: "book-id", style: { color: b.color, background: `${b.color}15`, borderRightColor: "#3d0012" } }, b.id),
+                        React.createElement("div", { className: "book-meta" },
+                            React.createElement("div", { className: "book-title" }, b.title),
+                            React.createElement("div", { className: "book-sub", style: { color: b.color } }, b.couple),
+                            React.createElement("div", { className: "book-arc" }, b.arc))),
+                    React.createElement("div", { className: "book-body", style: { borderLeft: `3px solid ${b.color}` } },
+                        React.createElement("div", { className: "bb-p", dangerouslySetInnerHTML: { __html: b.synopsis.replace(/\n\n/g, "</div><div class='bb-p'>") } }),
+                        b.hell && React.createElement("div", { className: "bb-p" },
+                            React.createElement("strong", { style: { fontFamily: "'Cinzel',serif", fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "#dc2626" } }, "Hell faction: "),
+                            b.hell),
+                        b.heaven && React.createElement("div", { className: "bb-p" },
+                            React.createElement("strong", { style: { fontFamily: "'Cinzel',serif", fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: "#748ffc" } }, "Heaven enforcement: "),
+                            b.heaven),
+                        React.createElement("div", { className: "bb-q", style: { borderLeftColor: b.color, whiteSpace: "pre-line" } }, b.quote),
+                        React.createElement("div", { className: "bb-p", style: { color: "#991b1b", fontSize: 12 } },
+                            React.createElement("strong", { style: { fontFamily: "'Cinzel',serif", fontSize: 9, letterSpacing: ".2em", textTransform: "uppercase", color: b.color } }, "Key: "),
+                            b.key),
+                        React.createElement("div", { style: { marginTop: 8 } }, b.tagNames.map((g, i) => React.createElement("span", { key: g, className: `tag ${b.tags[i]}` }, g))))))))),
+            tab === "war" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "OS5 \\u2014 The War for the World \\u00b7 April 3 AM Wednesday"),
+                React.createElement("div", { className: "pull" },
+                    "Six months of preparation.",
+                    React.createElement("br", null),
+                    "Every defector\\u2019s specific knowledge deployed.",
+                    React.createElement("br", null),
+                    "Every bond in the network active simultaneously.",
+                    React.createElement("br", null),
+                    "443 practitioners. Every corridor holding.",
+                    React.createElement("br", null),
+                    React.createElement("br", null),
+                    React.createElement("em", null, "April. 3 AM. Wednesday. The seal-closing ritual at Edna Mae\\u2019s property.")),
+                OS5_TIMELINE.map(r => (React.createElement("div", { key: r.time, className: `os5-row${r.key ? " key" : ""}` },
+                    React.createElement("div", { className: "os5-time" }, r.time),
+                    React.createElement("div", { className: "os5-body", dangerouslySetInnerHTML: { __html: r.body } })))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "Lucifer\\u2019s Sacrifice \\u2014 The Specific Meaning"),
+                React.createElement("div", { className: "card key" },
+                    React.createElement("div", { className: "clabel" }, "The Ultimate Sacrifice"),
+                    React.createElement("div", { className: "ctitle cr" }, "The Prince of Pride \\u00b7 The Architect of the Maintenance Structure \\u00b7 The Seal\\u2019s Anchor"),
+                    React.createElement("div", { className: "cbody" },
+                        "Lucifer built the Order in 1414 to maintain Satan's seal through the Church's institutional structure. He told the other Princes it was Hell's greatest weapon. He told the founding brothers they were serving Hell's interests. He spent six hundred years maintaining the lie because the lie was the mechanism.\\n\\nOS5 is the moment the mechanism fails. The Order is gone. The defectors have given the network everything it needs. The seal-closing ritual has the correct architecture, the correct fragment, the correct testimony. What it does not have is a permanent binding agent \\u2014 the seal requires something that will not dissolve as the Church's institutional structure dissolves.\\n\\nLucifer is the binding agent. He was always the binding agent. He built the maintenance structure. He knows what the maintenance structure requires when the maintenance structure fails. He walks into the seal.\\n\\n",
+                        React.createElement("em", null, "Lucifer was once CAIN. He committed two wrongs he must finally own: he murdered his brother ABEL at Babel, and he later locked SATAN away instead of helping him. (Abel and Satan are different beings.) He swallows his pride and admits both \\u2014 and that reconciliation with himself heals his own soul frequency, and he still chooses to save the universe."),
+                        "\\n\\nHis sacrifice returns his soul to the 0 state and heals Satan's soul completely, returning it to 0 as well. The Prince of Pride chose to hold \\u2014 not for glory, not for recognition, but because he finally understood, reconciled with what he had done, and became the brother he should have been. The Hell-scale echo of Sano and Nepisano: a brother-wound healed by reconciliation and sacrifice, both souls restored to perfect resonance.")),
+                React.createElement("div", { className: "card teal" },
+                    React.createElement("div", { className: "clabel" }, "The Succession"),
+                    React.createElement("div", { className: "ctitle t" }, "Edna Mae Passes the Seal to Pearlene"),
+                    React.createElement("div", { className: "cbody" },
+                        "The senior anchor seal is passed at the ritual's close. Not before \\u2014 the Omni Witch needs to hold the full Web frequency through the sealing's completion before the transfer can happen correctly. The moment Edna Mae passes the seal is the moment the ritual is confirmed complete: the seal holds, the succession is certain, the work continues.\\n\\n",
+                        React.createElement("em", null, "The work continues. But not by me."),
+                        "\\n\\nPearlene Calhoun, twenty years old, receives the senior anchor seal. She has already received Anselm's six weeks of testimony. She has held the Pike County defense four times against Satan's supply chain attacks. She has been at the ritual's center as the network's next holder.\\n\\nThe succession is the arc's emotional completion alongside the sealing. The war is not only what Satan is sealed into. It is what Pearlene is handed on the other side of it.")))),
+            tab === "canon" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "Permanent Canon"),
+                React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 8 } }, CANON.map((c, i) => (React.createElement("div", { key: i, className: "card", style: { borderLeftColor: c.col } },
+                    React.createElement("div", { className: "cbody" }, c.c))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "card key" },
+                    React.createElement("div", { className: "clabel" }, "The Arc\\u2019s Central Truth"),
+                    React.createElement("div", { className: "ctitle cr" }, "The Correct Action Produces the Conditions for the Next Correct Action"),
+                    React.createElement("div", { className: "cbody" },
+                        "The four defections are not separate events. They are a sequence in which each correct action produces the conditions the next one requires. Cassius\\u2019s intelligence lets the network survive Heaven's enforcement pressure. Vania's fragment completes the seal schematic. Marisol's archive provides the ritual architecture. Anselm's testimony makes the succession real.\\n\\nThis is the Older Mechanism\\u2019s bond law operating at the arc scale. Not magic. Not prophecy. The specific logic of what happens when people act correctly in sequence: the next step becomes possible because the previous step was done right.\\n\\n",
+                        React.createElement("em", null, "The compact holds. The network holds. Pearlene holds. The work continues."))),
+                React.createElement("div", { className: "orn" }, "\\u2726 \\u2726 \\u2726"),
+                React.createElement("div", { style: { textAlign: "center", color: "#3d0012", fontSize: 12, fontStyle: "italic", lineHeight: 1.8 } },
+                    "Four defectors. Six hundred years between them.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: "#f87171" } }, "The record was kept so the record could be given."),
+                    React.createElement("br", null),
+                    "April. 3 AM. Wednesday.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: "#5a1a1a" } }, "The work continues.")))))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(OSShadowBible));
+
+  </script>
+</body>
+</html>

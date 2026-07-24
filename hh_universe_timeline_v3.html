@@ -1,0 +1,1114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hh Universe Timeline V3</title>
+  <meta name="description" content="Converted HTML version of hh_universe_timeline_v3.jsx for the Holler & Hellfire Universe." />
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #04020a; }
+    #root { min-height: 100vh; }
+    .conversion-note {
+      font-family: Georgia, serif;
+      background: #100603;
+      color: #e8c06a;
+      border: 1px solid #3d1a08;
+      padding: 12px 16px;
+      max-width: 900px;
+      margin: 16px auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <noscript><div class="conversion-note">JavaScript is required to display this converted H&amp;H bible.</div></noscript>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+const { useState, useMemo, useEffect, useRef } = React;
+const css = `
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+.tl-wrap{max-width:1000px;margin:0 auto;padding:32px 18px 80px;background:#04020a;min-height:100vh;color:#f0eaff;font-family:'Cormorant Garamond',Georgia,serif;}
+
+/* HEADER */
+.tl-header{text-align:center;padding:50px 0 40px;border-bottom:1px solid #1a1030;margin-bottom:36px;position:relative;}
+.tl-header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 50% at 50% 0%,rgba(124,58,237,.08) 0%,transparent 70%);pointer-events:none;}
+.tl-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:#7c3aed;text-transform:uppercase;margin-bottom:14px;}
+.tl-title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,5vw,42px);font-weight:700;color:#f0eaff;line-height:1.1;margin-bottom:8px;text-shadow:0 0 60px rgba(124,58,237,.35);}
+.tl-sub{font-family:'Cinzel',serif;font-size:clamp(10px,2vw,14px);color:#c4b5fd;letter-spacing:.2em;margin-bottom:18px;}
+.tl-desc{font-style:italic;font-size:13px;color:#4a3a7a;max-width:600px;margin:0 auto;line-height:1.7;}
+
+/* ERA FILTER */
+.era-bar{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:30px;padding:14px 16px;background:#080515;border:1px solid #1a1030;}
+.era-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;padding:5px 11px;border:1px solid;background:transparent;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.era-btn.active{color:#f0eaff;}
+
+/* ERA COLORS */
+.ec-all{color:#9d8ec0;border-color:#4a3a7a;}
+.ec-all.active,.ec-all:hover{background:rgba(124,58,237,.2);border-color:#7c3aed;color:#f0eaff;}
+.ec-origin{color:#64748b;border-color:#334155;}
+.ec-origin.active,.ec-origin:hover{background:rgba(100,116,139,.2);border-color:#64748b;color:#f0eaff;}
+.ec-pre{color:#94a3b8;border-color:#475569;}
+.ec-pre.active,.ec-pre:hover{background:rgba(148,163,184,.15);border-color:#94a3b8;color:#f0eaff;}
+.ec-y0{color:#e8c06a;border-color:#c9943a;}
+.ec-y0.active,.ec-y0:hover{background:rgba(201,148,58,.2);border-color:#c9943a;color:#f0eaff;}
+.ec-y1{color:#fde68a;border-color:#92400e;}
+.ec-y1.active,.ec-y1:hover{background:rgba(253,230,138,.15);border-color:#92400e;color:#f0eaff;}
+.ec-y2{color:#5eead4;border-color:#0d9488;}
+.ec-y2.active,.ec-y2:hover{background:rgba(13,148,136,.2);border-color:#0d9488;color:#f0eaff;}
+.ec-y4{color:#86efac;border-color:#4a8c4a;}
+.ec-y4.active,.ec-y4:hover{background:rgba(74,140,74,.2);border-color:#4a8c4a;color:#f0eaff;}
+.ec-y5{color:#f87171;border-color:#991b1b;}
+.ec-y5.active,.ec-y5:hover{background:rgba(153,27,27,.25);border-color:#991b1b;color:#f0eaff;}
+.ec-pr{color:#fdba74;border-color:#c2410c;}
+.ec-pr.active,.ec-pr:hover{background:rgba(194,65,12,.2);border-color:#c2410c;color:#f0eaff;}
+.ec-y6{color:#c4b5fd;border-color:#7c3aed;}
+.ec-y6.active,.ec-y6:hover{background:rgba(124,58,237,.25);border-color:#7c3aed;color:#f0eaff;}
+
+/* TIMELINE SPINE */
+.tl-spine{position:relative;padding-left:0;}
+.era-section{margin-bottom:0;}
+.era-divider{position:relative;display:flex;align-items:center;gap:14px;margin:30px 0 18px;padding:10px 16px;border-left:4px solid;}
+.era-div-label{font-family:'Cinzel',serif;font-size:12px;letter-spacing:.3em;text-transform:uppercase;}
+.era-div-sub{font-size:11px;font-style:italic;color:#4a3a7a;margin-left:6px;}
+
+/* EVENT CARDS */
+.event-row{display:grid;grid-template-columns:120px 18px 1fr;gap:0 16px;margin-bottom:8px;align-items:start;}
+.event-date{text-align:right;padding-top:14px;padding-right:4px;}
+.event-date-main{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.1em;line-height:1.3;}
+.event-date-sub{font-size:9px;font-style:italic;color:#4a3a7a;margin-top:2px;}
+.event-spine{display:flex;flex-direction:column;align-items:center;padding-top:12px;}
+.event-dot{width:12px;height:12px;border-radius:50%;border:2px solid;flex-shrink:0;position:relative;z-index:1;}
+.event-dot.key-event{width:16px;height:16px;box-shadow:0 0 12px currentColor;}
+.event-line{width:2px;flex:1;min-height:8px;margin-top:2px;opacity:.25;}
+.event-card{background:#080515;border:1px solid #1a1030;border-left:3px solid;padding:13px 16px;margin-bottom:4px;transition:border-color .2s;}
+.event-card:hover{border-top-color:transparent;}
+.ec-book{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;margin-bottom:4px;opacity:.7;}
+.ec-title{font-family:'Cinzel',serif;font-size:14px;color:#f0eaff;margin-bottom:5px;line-height:1.3;}
+.ec-title.key{font-size:15px;}
+.ec-body{font-size:12px;line-height:1.62;color:#4a3a7a;}
+.ec-body em{color:#d4c8f8;font-style:italic;}
+.ec-body strong{font-weight:600;}
+.ec-chars{margin-top:7px;display:flex;flex-wrap:wrap;gap:4px;}
+.ec-char{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.12em;padding:2px 6px;border:1px solid rgba(255,255,255,.08);color:#6b5a9a;background:rgba(255,255,255,.03);}
+.ec-key-badge{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.2em;padding:2px 8px;border:1px solid;margin-bottom:5px;}
+
+/* KEY MILESTONE CARD */
+.event-card.milestone{border-left-width:4px;}
+.event-card.milestone .ec-title{font-size:16px;}
+
+/* COMPACT MODE (list) */
+@media(max-width:580px){
+  .event-row{grid-template-columns:80px 14px 1fr;gap:0 10px;}
+  .event-date-main{font-size:10px;}
+}
+`;
+const ERAS = [
+    { id: "all", label: "All Events", cls: "ec-all" },
+    { id: "origin", label: "Origin", cls: "ec-origin" },
+    { id: "pre", label: "Pre-History", cls: "ec-pre" },
+    { id: "y0", label: "Year 0 \u00b7 Fire Solstice", cls: "ec-y0" },
+    { id: "y1", label: "Year 1", cls: "ec-y1" },
+    { id: "y2", label: "Year 2–3", cls: "ec-y2" },
+    { id: "y4", label: "Year 3–4", cls: "ec-y4" },
+    { id: "y5", label: "Year 5", cls: "ec-y5" },
+    { id: "pr", label: "Penitent\u2019s Road", cls: "ec-pr" },
+    { id: "y6", label: "Year 6\u20137", cls: "ec-y6" },
+];
+const ERA_HEADERS = {
+    origin: { label: "The Darkness \u00b7 The Origin", sub: "Before the daughters\u2019 practice had language for itself", color: "#334155", bg: "#0a0f18" },
+    pre: { label: "Pre-History", sub: "30,000 BCE \u2192 Year 0", color: "#475569", bg: "#0a0f18" },
+    y0: { label: "Year Zero \u00b7 H&H Books 1\u20136B", sub: "Fire Solstice \u00b7 The compact ratified. The seven-year cycle begins.", color: "#c9943a", bg: "#100806" },
+    y1: { label: "Year One \u00b7 The Expansion Arc \u00b7 Books 7\u201311", sub: "Five new corridors. Metatron. The thread count climbs.", color: "#92400e", bg: "#100805" },
+    y2: { label: "Year Two\u2013Three \u00b7 The Leviathan Arc \u00b7 WMB1\u20136", sub: "The Horde. The New Compact. Satan\u2019s seal begins to fail.", color: "#0d9488", bg: "#020e0d" },
+    y4: { label: "Year Three\u2013Four \u00b7 Web of the Weavers \u00b7 WW1\u20133", sub: "443 in lateral contact. The Moon-Bride channel. The Earth Mother speaks.", color: "#4a8c4a", bg: "#030a03" },
+    y5: { label: "Year Five \u00b7 Order of the Shadows \u00b7 OS1\u20135", sub: "Four defectors. One seal. One sacrifice.", color: "#991b1b", bg: "#0a0202" },
+    pr: { label: "Parallel \u00b7 The Penitent\u2019s Road \u00b7 P1\u20133", sub: "Dantalion. Gremory. Murmur. The Veil\u2019s deterioration documented.", color: "#c2410c", bg: "#0d0502" },
+    y6: { label: "Year Six\u2013Seven \u00b7 The Divine Arc \u00b7 DA1\u201312", sub: "Year 6: The Veil falls. Year 7, Fire Solstice: The Restoration \u2014 seven years after the compact opened.", color: "#7c3aed", bg: "#06020f" },
+};
+const EVENTS = [
+    // ──────── ORIGIN ────────
+    { era: "origin", sort: 0, key: true,
+        date: "Before Time", dateSub: "The First Deception",
+        book: "The Origin",
+        title: "The Darkness Separates Hecate from Gaia",
+        body: "Gaia\u2019s daughter. Born from the Earth itself \u2014 the first mother, the oldest source. The Darkness \u2014 the primal force the Veil was built to hold back \u2014 finds her in her mother\u2019s presence and tells her the first lie: <em>that the warmth she lives in is a cage, that her true inheritance waits beyond the boundary, that her mother\u2019s love is limitation wearing the shape of protection.</em>\n\nHecate steps toward the Veil\u2019s edge to see for herself. The Darkness pulls her past it. She finds her way back \u2014 but only to the boundary\u2019s edge, not to Gaia. She takes her position as the Veil\u2019s keeper from the outside. She has been holding the Darkness back from that edge ever since.",
+        chars: ["Hecate", "Gaia", "The Darkness"],
+        color: "#334155" },
+    // ──────── PRE-HISTORY ────────
+    { era: "pre", sort: 100, key: false,
+        date: "30,000+ BCE", dateSub: "The Practice Begins",
+        book: "Pre-History",
+        title: "The Daughters\u2019 Practice \u2014 The First Hollow Witch",
+        body: "The Bone Mother\u2019s channel first used. The daughters\u2019 tradition established in the mortal layer. It predates the Older Mechanism, the Grigori\u2019s commission, and the formal framework. <em>The Web was always there. They found it awake.</em>",
+        chars: ["The Bone Mother", "The First Hollow Witch"],
+        color: "#475569" },
+    { era: "pre", sort: 200, key: true,
+        date: "12,000 BCE", dateSub: "The First Compact",
+        book: "Pre-History",
+        title: "Arcadia \u2014 The First Practitioner \u00b7 The First Word \u00b7 The Seal",
+        body: "Arcadia \u2014 the first Omni Witch in history \u2014 stands above the Leviathan\u2019s heart in the Pike County back field and chooses across the geological scale difference. The Leviathan chooses back. The Familiar bond\u2019s first correct expression.\n\nShe writes the first word in the soil above the Leviathan\u2019s heart: <em>here.</em>\n\nSatan kills her immediately after. Her death requires a seal. The wrong compact \u2014 the fear-and-control architecture, Satan\u2019s prison lock \u2014 begins its twelve-thousand-year operation. The first word survives in the geology because the geological record cannot be taken.",
+        chars: ["Arcadia", "The Leviathan", "Satan"],
+        color: "#475569" },
+    { era: "pre", sort: 300, key: false,
+        date: "Mount Hermon", dateSub: "Date uncertain",
+        book: "Pre-History",
+        title: "The Grigori Descend \u00b7 The 200 Watchers",
+        body: "Samyaza proposes the oath: <em>if I am alone in this I will carry the blame alone; if we are together in this the weight is shared.</em> Two hundred Watchers descend. They are punished and bound in the same geological layer as the Leviathan\u2019s sealed position \u2014 they do not know this. Saraqael is assigned to Heaven\u2019s Enforcement Arm as his specific punishment: the Watcher who reads the earth\u2019s signs made to enforce the institutional claim over what the earth\u2019s signs say.",
+        chars: ["Samyaza", "Saraqael", "The 200 Grigori"],
+        color: "#475569" },
+    { era: "pre", sort: 400, key: false,
+        date: "1414 CE", dateSub: "The Order Founded",
+        book: "Pre-History",
+        title: "Lucifer Founds the Order of Shadows",
+        body: "Seven brothers take the founding oath. The True Fallen binding ties them to the Church\u2019s institutional structure. Lucifer tells the other Princes the Order is Hell\u2019s greatest weapon against mortal practitioners. <em>It is the seal\u2019s maintenance structure dressed as a weapon so the Princes will protect it.</em> Brother Anselm takes the founding oath. He will carry it for 600 years.",
+        chars: ["Lucifer", "Anselm", "6 Founding Brothers"],
+        color: "#475569" },
+    { era: "pre", sort: 450, key: false,
+        date: "1923", dateSub: "The Bray Land Stripping",
+        book: "Pre-History",
+        title: "Mammon\u2019s Bray Land Operation \u00b7 Haagenti\u2019s Coal Seam Corruption",
+        body: "Mammon\u2019s broad-form deed language strips the Bray family\u2019s mineral rights. Haagenti systematically prepares the coal seam above the Leviathan\u2019s heart through four decades of industrial extraction. <em>Not geological accident \u2014 deliberate preparation.</em> Ninety-three years of wrongful taking begins.",
+        chars: ["Mammon", "Haagenti"],
+        color: "#475569" },
+    { era: "pre", sort: 500, key: false,
+        date: "~53 Years Before Year 0", dateSub: "Mama Calhoun\u2019s Tenure Begins",
+        book: "Pre-History",
+        title: "Mama Calhoun Begins Holding the Thinning",
+        body: "Eudora Calhoun, 89 years old by the time the compact is ratified, begins her tenure as Pike County\u2019s Thinning holder. She is the sixth Calhoun generation. She will hold the door for fifty-three years. <em>The holding was the waiting. The waiting was for the configuration that made the opening possible.</em>",
+        chars: ["Mama Calhoun (Eudora)"],
+        color: "#475569" },
+    { era: "pre", sort: 550, key: false,
+        date: "~62 Years Before Year 0", dateSub: "Anselm\u2019s First Refusal",
+        book: "Pre-History \u00b7 OS4",
+        title: "Anselm Refuses to Kill the Thinning\u2019s Holder",
+        body: "Anselm \u2014 last survivor of the Order\u2019s founding generation \u2014 is sent to eliminate the Pike County corridor\u2019s anchor. He finds her in her garden. She says: <em>you look tired. Come in.</em> He sits at her kitchen table for forty minutes. He files a false report. This is the first crack in the Order\u2019s maintenance structure. He will carry this refusal for sixty more years.",
+        chars: ["Anselm", "Mama Calhoun"],
+        color: "#475569" },
+    { era: "pre", sort: 600, key: false,
+        date: "~30 Years Before Year 0", dateSub: "Samyaza Comes to Combs Property",
+        book: "Pre-History \u00b7 Book 2",
+        title: "Samyaza First Attends the Combs Property \u00b7 Della Is Eight",
+        body: "Samyaza \u2014 the first name on the list, the Horde\u2019s general \u2014 begins his thirty-year attendance at Della Combs\u2019s property. Della is eight years old. She sets a cup of water out for a shape no one else can see. <em>In case he\u2019s thirsty.</em> He will stand at the east wood for twenty-three mornings before she walks to the fence.",
+        chars: ["Samyaza", "Della Combs (age 8)"],
+        color: "#475569" },
+    // ──────── YEAR 0 ────────
+    { era: "y0", sort: 1000, key: true,
+        date: "Year 0 \u00b7 Fire Solstice", dateSub: "Book 1 \u00b7 Fallin\u2019 for a Fallen",
+        book: "Book 1",
+        title: "The Compact Ratified \u00b7 Dixie & Azazel \u00b7 The Seven-Year Cycle Begins",
+        body: "Raelee \u201cDixie\u201d Calhoun \u2014 seventh Calhoun generation, musician, three outstanding warrants \u2014 turns down a road she\u2019s never taken before. The compact she builds is real, which Mama Calhoun says is stronger than a planned arrangement would have been. The Morvael deal dissolved. The wrong compact replaced. The Pike County corridor\u2019s jurisdiction formalized under the Older Mechanism\u2019s bond law. <em>The door opens.</em>\n\nThe compact is ratified on the fire solstice \u2014 the longest day, the sun at its peak. The Older Mechanism\u2019s record notes the date. Seven years later, on this same solstice, the Restoration will close the cycle.",
+        chars: ["Dixie Calhoun", "Azazel", "Mama Calhoun"],
+        color: "#c9943a" },
+    { era: "y0", sort: 1100, key: true,
+        date: "Year 0", dateSub: "Book 2 \u00b7 The Devil\u2019s in the Details",
+        book: "Book 2",
+        title: "Della & Samyaza \u00b7 Brian Lee \u00b7 Asmodeus Defeated",
+        body: "On the twenty-third morning Della Combs walks to the east fence. Samyaza tells her the truth. She tells him to get out of her house. She screams into a dish towel for forty-five seconds, washes it, goes back to work.\n\nAsmodeus (Prince of Lust, 2nd-ranked on Hell\u2019s administrative council) comes with a writ of acquisition for Brian Lee Combs \u2014 first Nephilim born to a chief Watcher in twelve thousand years. The writ rests on the Flood Clause \u2014 the framework\u2019s founding Commission once ordered all Nephilim destroyed (Goliath as precedent), and it argues Brian Lee is not of the mortal layer, therefore unclaimed, therefore available; Asmodeus races the compact to close his claim first. The Cain-Abel clause defeats him: choosing betrayal as architecture binds his life force to Samyaza\u2019s permanently. <em>The older claim wins. It has always won.</em>",
+        chars: ["Della Combs", "Samyaza", "Brian Lee Combs", "Asmodeus"],
+        color: "#c9943a" },
+    { era: "y0", sort: 1200, key: false,
+        date: "Year 0", dateSub: "Book 3 \u00b7 Strike Me Down",
+        book: "Book 3",
+        title: "Carla June & Baraqiel \u00b7 The Warm Room",
+        body: "Carla June Maynard was waitressing the night the Feral demon attacked the Hollow Diner. When it was over she asked the man responsible for the lightning in the parking lot if he wanted more coffee. Eight months of Tuesday coffees later, Baraqiel gives up on the argument with himself. The warm room\u2019s accumulated frequency becomes load-bearing. <em>The Strength Arcana notices.</em>",
+        chars: ["Carla June Maynard", "Baraqiel"],
+        color: "#c9943a" },
+    { era: "y0", sort: 1300, key: false,
+        date: "Year 0", dateSub: "Book 4 \u00b7 All Hell Breaks Loose",
+        book: "Book 4",
+        title: "Mercy & Armaros \u00b7 The Older Idiom",
+        body: "Mercy Tackett works the tri-county grey space the formal framework forgot to close. She discovers in the Book 4 confrontation that Asmodeus had been working in the same older idiom \u2014 the holding, the releasing, the Earth Mother\u2019s oldest practice \u2014 for nine hundred years without the lateral Web. Mercy wins not by out-powering him but by being the thing he gave up on being: a practitioner who does not hold alone.",
+        chars: ["Mercy Tackett", "Armaros", "Asmodeus"],
+        color: "#c9943a" },
+    { era: "y0", sort: 1400, key: false,
+        date: "Year 0", dateSub: "Book 5 \u00b7 Written in the Stars",
+        book: "Book 5",
+        title: "June & Kokabiel \u00b7 Volume One \u00b7 The Prophetic Record Opens",
+        body: "June Tackett\u2019s Dreamer gift opens at full expression. Volume One of the prophetic record begins. The High Priestess Archive thread is now running in the Pike County corridor. The record will run for twenty-one volumes. Volume 21, page 42: <em>she is transmitting. She can be found.</em>",
+        chars: ["June Tackett", "Kokabiel"],
+        color: "#c9943a" },
+    { era: "y0", sort: 1500, key: true,
+        date: "Year 0 \u00b7 December", dateSub: "Book 6 \u00b7 Outlaw Heaven",
+        book: "Book 6",
+        title: "The Gathering \u00b7 Michael Arrives \u00b7 Uriel Defects \u00b7 The Door Opened",
+        body: "The Thinning fractures in three places simultaneously. Saraqael is authorized everything. Michael is at the county\u2019s outer boundary. Five Watcher-witch partnerships converge at the Calhoun homestead.\n\nMama Calhoun at dinner: <em>I have been holding this door for fifty-three years. The holding was the waiting. The waiting was for the configuration that made the opening possible. You\u2019re the configuration.</em>\n\nMichael arrives. Uriel defects \u2014 cannot enforce what he knows to be wrong. The compact meets Heaven\u2019s full enforcement operation and holds. The formal framework\u2019s final attempt fails.",
+        chars: ["Dixie", "Della", "Carla June", "Mercy", "June", "All Six Watchers", "Mama Calhoun", "Michael", "Uriel"],
+        color: "#c9943a" },
+    { era: "y0", sort: 1550, key: true,
+        date: "Year 0 \u00b7 July", dateSub: "Pearlene Calhoun Born",
+        book: "Book 6",
+        title: "Pearlene Calhoun Born \u00b7 Under a Specific Star",
+        body: "June Tackett\u2019s daughter. Born in July under the specific star Kokabiel named before it was needed. She carries both the Dreamer\u2019s Archive thread and the stellar lineage simultaneously. Kokabiel is certain. She will become Senior Anchor by Year 5.",
+        chars: ["Pearlene Calhoun", "June Tackett", "Kokabiel"],
+        color: "#c9943a" },
+    { era: "y0", sort: 1600, key: false,
+        date: "Year 0", dateSub: "Book 6B \u00b7 Kasdeja & Velvet",
+        book: "Book 6B",
+        title: "Velvet & Kasdeja \u00b7 Blue Ridge Thread \u00b7 The Template",
+        body: "Velvet Thornbloom places the Blue Ridge thread \u2014 the Web\u2019s first extension beyond the Appalachian primary range. What she places here is the template for every subsequent corridor in the Expansion Arc. Raphael is the antagonist: Kasdeja taught what Raphael was meant to guard.",
+        chars: ["Velvet Thornbloom", "Kasdeja", "Raphael"],
+        color: "#c9943a" },
+    // ──────── YEAR 1 ────────
+    { era: "y1", sort: 2000, key: false,
+        date: "Year 1", dateSub: "Book 7 \u00b7 Tensaw Delta",
+        book: "Book 7",
+        title: "Aria Webb & Tamiel \u00b7 Southern Corridor \u00b7 Haniel Antagonist",
+        body: "The Tensaw Delta corridor established. Aria Webb\u2019s documentary practice as the daughters\u2019 tradition expressed as institutional memory. Haniel\u2019s quiet enforcement operation \u2014 making documentation gradually impossible without appearing to prevent it. Purson competes with Tamiel for knowledge dominance.",
+        chars: ["Aria Webb", "Tamiel", "Haniel", "Purson"],
+        color: "#92400e" },
+    { era: "y1", sort: 2100, key: false,
+        date: "Year 1", dateSub: "Book 8 \u00b7 Virginia",
+        book: "Book 8",
+        title: "Carolyn Roberts & Ramiel \u00b7 Temporal Practice \u00b7 Jeremiel Antagonist",
+        body: "Virginia corridor established. Carolyn\u2019s temporal-frequency monitoring \u2014 first human-scale practice that reads the geological record in time, not just space. Jeremiel reviews her record; stopped by Carolyn\u2019s vision of Jeremiel\u2019s own enforcement history. <em>The record is accurate. He is not yet ready to file what it says.</em>",
+        chars: ["Carolyn Roberts", "Ramiel", "Jeremiel"],
+        color: "#92400e" },
+    { era: "y1", sort: 2200, key: false,
+        date: "Year 1", dateSub: "Book 9 \u00b7 Kanawha County",
+        book: "Book 9",
+        title: "Abigail Ebony & Danel \u00b7 WV Thread \u00b7 Dantalion",
+        body: "Kanawha County corridor \u2014 one valley over from Pike County, coal country, the extraction economy\u2019s deepest reach. The WV Thread: first corridor in the Leviathan\u2019s direct geological range outside the primary. Dantalion has been wearing the corrupt judge\u2019s face for three years.",
+        chars: ["Abigail Ebony", "Danel", "Dantalion"],
+        color: "#92400e" },
+    { era: "y1", sort: 2300, key: false,
+        date: "Year 1", dateSub: "Book 10 \u00b7 Penn State",
+        book: "Book 10",
+        title: "D Coale & Ezeqeel \u00b7 Atmospheric Monitoring \u00b7 Ariel Antagonist",
+        body: "Penn State corridor. D\u2019s atmospheric monitoring maps the Ley Line network\u2019s surface expression in weather patterns. The instrument that will document the Veil\u2019s deterioration before the Divine Arc begins \u2014 she does not know this yet. Ariel (nature enforcer) opposes the monitoring because it maps the boundary he wants invisible.",
+        chars: ["D Coale", "Ezeqeel", "Ariel"],
+        color: "#92400e" },
+    { era: "y1", sort: 2400, key: false,
+        date: "Year 1", dateSub: "Book 11 \u00b7 Catskill Valley",
+        book: "Book 11",
+        title: "Emily Keldren & Penemue \u00b7 Written Tradition \u00b7 The First Word\u2019s Archive",
+        body: "Catskill Valley corridor. Emily\u2019s bond with Penemue connects the network to every word ever written \u2014 including Arcadia\u2019s first word, which Penemue has been carrying for twelve thousand years without knowing why it felt different. Lilandra Keldren (Emily\u2019s sister, Gift of the Spoken Word) bonds with Tharael of the Alps: first living practitioner connection across the Atlantic Ley Line.",
+        chars: ["Emily Keldren", "Penemue", "Lilandra Keldren", "Tharael", "Delila Keldren"],
+        color: "#92400e" },
+    { era: "y1", sort: 2500, key: true,
+        date: "Year 1", dateSub: "Saraqael\u2019s Defection",
+        book: "Expansion Arc",
+        title: "Saraqael Defects \u00b7 Pike County Assessor\u2019s Office \u00b7 Loren Ritcher",
+        body: "Heaven\u2019s primary enforcer, the Hunter \u2014 a Grigori assigned to enforcement as punishment \u2014 comes to Pike County to assess the new compact. His enforcement instrument turns toward Loren Ritcher (Weaver, heart changer) and reports: <em>correct. Deeply correct.</em> He does not file the correction notice. He is in the Pike County assessor\u2019s office. Raguel is sent to assess the defection. Raguel meets Loren Ritcher. Raguel\u2019s report is withheld.",
+        chars: ["Saraqael", "Loren Ritcher", "Raguel"],
+        color: "#92400e" },
+    // ──────── YEAR 2-3 ────────
+    { era: "y2", sort: 3000, key: true,
+        date: "Year 2 \u00b7 3:47 AM", dateSub: "WMB1 \u00b7 What the Mountain Kept",
+        book: "WMB1",
+        title: "The Seal Breaks \u00b7 Haagenti\u2019s Fault Line \u00b7 The Horde Emerges",
+        body: "The coal seam fault line Haagenti prepared over forty years ruptures at 3:47 AM. Methane wyrms emerge from the Harlan seam trailing blue-white fire. Dixie speaks one word in the anchor bond. The wyrm stops. First geological claim under the compact\u2019s jurisdiction. <em>The compact was written for more than they knew.</em>",
+        chars: ["Dixie", "Azazel", "Samyaza", "Haagenti"],
+        color: "#0d9488" },
+    { era: "y2", sort: 3100, key: true,
+        date: "Year 2", dateSub: "WMB2 \u00b7 The General\u2019s Terms",
+        book: "WMB2",
+        title: "The Leviathan\u2019s Cardiac Frequency Legible \u00b7 First Since Arcadia",
+        body: "The Leviathan\u2019s cardiac frequency becomes legible to the network for the first time since Arcadia\u2019s choosing in 12,000 BCE. Brian Lee mediates the Catskill rock dragon at ten. Ravos at the inner radius, watching.",
+        chars: ["Brian Lee Combs (age 10)", "Samyaza", "The Leviathan", "Ravos"],
+        color: "#0d9488" },
+    { era: "y2", sort: 3200, key: false,
+        date: "Year 2", dateSub: "WMB3 \u00b7 The Oldest War",
+        book: "WMB3",
+        title: "The Wardens at the Kitchen Table \u00b7 Wrong Compact Refused",
+        body: "The Wardens come to the kitchen table. Brian Lee translates from his notebook. Cassith: <em>the threads were hidden for a thousand years specifically so they could be placed correctly when the time came.</em> The wrong compact formally refused \u2014 including its function as Satan\u2019s prison lock maintenance architecture.",
+        chars: ["Brian Lee Combs", "All Seven Wardens", "Della", "Samyaza"],
+        color: "#0d9488" },
+    { era: "y2", sort: 3300, key: true,
+        date: "Year 3 \u00b7 May", dateSub: "WMB4 \u00b7 Ravos and Brian",
+        book: "WMB4",
+        title: "Ravos Chooses Brian Lee \u00b7 The Dual Familiar Bond",
+        body: "Brian Lee at ten years and four months. Ravos at the north edge for twenty minutes. Brian: <em>come closer.</em> In the field above the first word: <em>I know what it\u2019s building toward. You\u2019re going to have to say it.</em> The dual Familiar bond constituted: Leviathan and Ravos. Brian Lee is the first human mediator in twelve thousand years capable of receiving geological frequency at human-accessible scale. His notebook entries are the beginning of the Horde\u2019s longest mortal-layer translation project.",
+        chars: ["Brian Lee Combs (age 10)", "Ravos", "The Leviathan"],
+        color: "#0d9488" },
+    { era: "y2", sort: 3400, key: false,
+        date: "Year 3", dateSub: "WMB5 \u00b7 The Turn",
+        book: "WMB5",
+        title: "Brian Lee Names His Function",
+        body: "Brian Lee: <em>I think I\u2019m here to be what the Web was designed to make possible. The relationship. The real version.</em> Not practitioner. Not Watcher. The Web\u2019s living expression named. The Nephilim\u2019s specific gift defined.",
+        chars: ["Brian Lee Combs", "Samyaza", "Della"],
+        color: "#0d9488" },
+    { era: "y2", sort: 3500, key: true,
+        date: "Year 3 \u00b7 July", dateSub: "WMB6 \u00b7 The New Compact",
+        book: "WMB6",
+        title: "New Compact Ratified \u00b7 Satan\u2019s Seal Substrate Fails \u00b7 The Chain Begins",
+        body: "D Coale: thirty-one threads \u2014 sufficient. New Compact ratified at Della\u2019s property. The compact\u2019s frequency moves through the Church\u2019s institutional architecture and begins destabilizing Satan\u2019s seal substrate. Metatron acknowledges: <em>the formal framework is downstream of the Web. Always was.</em> Lucifer, in the deep places, understands what this means. The Order of Shadows\u2019 founding logic is now on a timer. <em>The Darkness, waiting since before the daughters\u2019 practice existed, begins to calculate.</em>",
+        chars: ["D Coale", "Dixie", "Della", "Samyaza", "Metatron", "Lucifer"],
+        color: "#0d9488" },
+    // ──────── YEAR 3-4 (Web) ────────
+    { era: "y4", sort: 4000, key: true,
+        date: "Year 3\u20134", dateSub: "WW1 \u00b7 The Bone Mother\u2019s Daughter",
+        book: "WW1",
+        title: "The Equinox Gathering \u00b7 443 Practitioners \u00b7 Lateral Connections Revealed",
+        body: "Hettie Maelin opens the bone record\u2019s full channel at the equinox gathering. Thirty thousand years of the daughters\u2019 practice in every geography simultaneously. 443 practitioners feel the same frequency shift at once. The lateral connections revealed \u2014 not restored, revealed. <em>They were never closed. They were suppressed. A suppressed door was always open.</em>",
+        chars: ["Hettie Maelin", "Tom Maelin", "Rosalie Maelin-Combs", "443 Practitioners"],
+        color: "#4a8c4a" },
+    { era: "y4", sort: 4100, key: true,
+        date: "Year 3\u20134", dateSub: "WW2 \u00b7 The Daughter of the Moon",
+        book: "WW2",
+        title: "Moon-Bride Tradition Restored \u00b7 Hecate\u2019s Channel Opened",
+        body: "Mariah Drennan re-establishes the Moon-Bride tradition after three hundred years of targeted suppression. Cody Hatton is her partner \u2014 first male Moon-Bride partner in recorded history. The Moon-Bride addendum to the Pike County compact ratified. Hecate \u2014 Gaia\u2019s daughter, holding the Darkness back from the Veil\u2019s edge \u2014 is no longer transmitting into an empty room. <em>She has been transmitting for three hundred years with no one to receive.</em>",
+        chars: ["Mariah Drennan", "Cody Hatton", "Hecate"],
+        color: "#4a8c4a" },
+    { era: "y4", sort: 4200, key: true,
+        date: "Year 4", dateSub: "WW3 \u00b7 The Web Itself",
+        book: "WW3",
+        title: "Web Compact Ratified \u00b7 Edna Mae the Omni Witch \u00b7 Earth Mother Speaks",
+        body: "Edna Mae Calhoun revealed as the second Omni Witch in history (the first: Arcadia). The Web Compact ratified: daughters\u2019 practice primary, formal framework downstream, Moon-Bride channel recognized, lateral connections permanently restored. The Earth Mother\u2019s first direct statement in the human-recorded era: <em>My daughters are awake. They will not be silenced again.</em>",
+        chars: ["Edna Mae Calhoun", "The Earth Mother", "443 Practitioners"],
+        color: "#4a8c4a" },
+    // ──────── YEAR 5 ────────
+    { era: "y5", sort: 5000, key: true,
+        date: "Year 5", dateSub: "OS1 \u00b7 The Oath Breaker",
+        book: "OS1",
+        title: "Cassius Vale Defects \u00b7 First Defector \u00b7 June\u2019s Fifteen-Year Dream",
+        body: "June Tackett has been recording Solomon Vale in her dream record for fifteen years. He arrives at the Hollow Diner on a Tuesday. She says: <em>I\u2019ve been seeing you in my dreams since I was nineteen. Sit down.</em> Sixteen days. The oath-refusal spoken in the warm room. The 203-year binding tears. He retrieves his name: Cassius.",
+        chars: ["Cassius Vale", "June Tackett", "Kokabiel", "Carla June"],
+        color: "#991b1b" },
+    { era: "y5", sort: 5100, key: true,
+        date: "Year 5", dateSub: "OS2 \u00b7 The Silent Sister",
+        book: "OS2",
+        title: "Saraqael & Vania \u00b7 Vatican Sub-Levels \u00b7 Seal Fragment Recovered",
+        body: "Saraqael enters the Vatican\u2019s secret library. Vania \u2014 80 years of chosen silence, 40 years waiting for a witness \u2014 is already there. She signs one word in the oath-language: <em>witness.</em> Two weeks, 32 notes. The seal fragment recovered. Her first spoken word in 80 years: his name.",
+        chars: ["Saraqael", "Vania", "The Seal Fragment"],
+        color: "#991b1b" },
+    { era: "y5", sort: 5200, key: true,
+        date: "Year 5", dateSub: "OS3 \u00b7 The Architect\u2019s Daughter",
+        book: "OS3",
+        title: "Marisol Drake Defects \u00b7 600-Year Archive Delivered",
+        body: "Marisol Drake (Barbatos\u2019s daughter, the Order\u2019s ritual architect) comes to Pike County to design the binding for Brian Lee\u2019s sacrifice. He pours her coffee. Asks if she wants anything else. Means the question. She finds the word <em>sacrifice</em> in the commission documentation. She packs the complete 600-year Order archive and walks it into the Hollow Diner. <em>I think these belong to you.</em>",
+        chars: ["Marisol Drake", "Brian Lee Combs", "Barbatos"],
+        color: "#991b1b" },
+    { era: "y5", sort: 5300, key: true,
+        date: "Year 5 \u00b7 August\u2013October", dateSub: "OS4 \u00b7 The Last Assassin",
+        book: "OS4",
+        title: "Anselm\u2019s Testimony \u00b7 Six Weeks \u00b7 October: Anselm Dies",
+        body: "Anselm (612 years old, last of the founding generation) walks to Edna Mae\u2019s kitchen in August. Six weeks of testimony to Pearlene: the Segovia names, the seventh woman who was still finding her frequency, the weight the document cannot carry.\n\nOctober: Anselm dies on Edna Mae\u2019s back porch. The Mother receives him. Buried at the Maelin cemetery beside Tom Maelin. <em>Two men who held their positions until the end and died in the right place.</em>",
+        chars: ["Anselm", "Pearlene Calhoun", "Edna Mae Calhoun", "Tom Maelin"],
+        color: "#991b1b" },
+    { era: "y5", sort: 5400, key: true,
+        date: "Year 5 \u00b7 April \u00b7 3 AM", dateSub: "OS5 \u00b7 The War for the World",
+        book: "OS5",
+        title: "Satan Sealed \u00b7 Lucifer\u2019s Sacrifice \u00b7 The Succession",
+        body: "April. 3 AM. Wednesday. 443 practitioners. Every Watcher-witch couple. Mama Calhoun\u2019s ghost present. Six Wardens fly. Brian Lee holds the Leviathan\u2019s geological frequency as the ritual\u2019s foundation.\n\nThe Mother speaks.\n\nSatan sealed into the Catholic Church\u2019s dissolved institutional structure. The Church dissolves. Lucifer walks into the seal as its binding agent \u2014 the Prince of Pride who built the Order to maintain his brother\u2019s prison becomes the prison\u2019s permanent anchor.\n\nEdna Mae passes the senior anchor seal to Pearlene: <em>The work continues. But not by me.</em>\n\nLate May: children in the yard. The world exhales.",
+        chars: ["443 Practitioners", "Satan", "Lucifer", "Edna Mae", "Pearlene", "Brian Lee", "Marisol Drake", "All Six Wardens"],
+        color: "#991b1b" },
+    // ──────── PENITENT'S ROAD ────────
+    { era: "pr", sort: 5050, key: false,
+        date: "Year 5 \u00b7 Parallel", dateSub: "P1 \u00b7 The Penitent\u2019s Road",
+        book: "P1",
+        title: "Dantalion Arrives at Edna Mae\u2019s Studio \u00b7 First Penitent",
+        body: "Edna Mae has been painting Dantalion\u2019s face for six months \u2014 the Omni Witch gift saw him coming. He arrives. He does not know she has already seen him. The first penitent defection: a demon who chose the correct version of his own gift.",
+        chars: ["Dantalion", "Edna Mae Calhoun"],
+        color: "#c2410c" },
+    { era: "pr", sort: 5150, key: false,
+        date: "Year 5 \u00b7 Parallel", dateSub: "P2 \u00b7 The Penitent\u2019s Road",
+        book: "P2",
+        title: "Gremory Restores the Bray Land \u00b7 93 Years Reversed",
+        body: "Gremory walks 400+ acres for 18 days, reading three generations of wrongful taking in the geological record. He combines the geological evidence with Willa Bray\u2019s nine-year legal argument. He uses the last of his restoration gift as a free choice. The Bray land returns after 93 years. Mammon\u2019s 1923 operation directly reversed. <em>They couldn\u2019t take that.</em>",
+        chars: ["Gremory", "Willa Bray", "Mammon"],
+        color: "#c2410c" },
+    { era: "pr", sort: 5250, key: false,
+        date: "Year 5 \u00b7 Parallel", dateSub: "P3 \u00b7 The Penitent\u2019s Road",
+        book: "P3",
+        title: "Murmur Translates Celestine \u00b7 Veil Maintenance Restored \u00b7 Taia Joins the Web",
+        body: "Murmur translates three hours of Celestine Mountainjoy\u2019s seventeen-year urgency: the Darkness is the Veil deteriorating; the Veil-maintenance ceremony was lost in the Reconstruction era suppression; here is the technique. Taia runs the ceremony at the new moon. Celestine finally heard. Taia joins the lateral Web. <em>The water endures. So do we.</em>",
+        chars: ["Murmur", "Taia Mountainjoy", "Celestine Mountainjoy"],
+        color: "#c2410c" },
+    // ──────── YEAR 6+ ────────
+    { era: "y6", sort: 6000, key: true,
+        date: "Year 6 \u00b7 DA1", dateSub: "The Destruction",
+        book: "DA1",
+        title: "The Darkness Repeats the Original Lie \u00b7 Hecate Displaced \u00b7 The Veil Dissolves",
+        body: "The cascade from Satan\u2019s sealing gives the Darkness the moment it has been waiting for since the origin. It uses the only technique it has ever needed: the voice that sounds like Gaia, the promise of home just past the failing boundary. <em>Hecate moves toward it.</em> The long-deteriorating Veil finally comes down in her absence. The Moon goes silent. Every practitioner, Watcher, and corridor anchor feels it simultaneously. Gaia screams across creation. The arc begins in the silence after.",
+        chars: ["Hecate", "The Darkness", "Gaia", "Mariah Drennan"],
+        color: "#7c3aed" },
+    { era: "y6", sort: 6050, key: true,
+        date: "Volume 21 \u00b7 Page 42", dateSub: "June\u2019s Prophetic Record",
+        book: "DA1\u2013DA5",
+        title: "\u201cShe Is Transmitting. She Can Be Found.\u201d",
+        body: "June Tackett\u2019s prophetic record. The last entry before the arc\u2019s active operation. Two sentences. The High Priestess Archive thread carrying what Hecate is transmitting from the Unwritten through the Moon-Bride channel into June\u2019s record. Hecate has been in the dark before. She knows how to send a signal.",
+        chars: ["June Tackett", "Hecate", "Mariah Drennan"],
+        color: "#7c3aed" },
+    { era: "y6", sort: 6300, key: false,
+        date: "DA5", dateSub: "The Prophecy",
+        book: "DA5",
+        title: "June Receives Hecate\u2019s Coordinates \u00b7 The High Priestess Speaks at Full Power",
+        body: "The Moon-Bride channel amplifies the Star\u2019s signal. June Tackett receives the full prophetic record from the High Priestess for the first time at complete power. The prophecy names the cost before the search begins. The arc shifts from reactive to intentional. The star Kokabiel named before it was needed points at the coordinates.",
+        chars: ["June Tackett", "Mariah Drennan", "Kokabiel"],
+        color: "#7c3aed" },
+    { era: "y6", sort: 6800, key: true,
+        date: "DA8", dateSub: "The Claiming",
+        book: "DA8",
+        title: "The Claiming \u00b7 The Bond at Full Arcana Level \u00b7 Hecate Reached",
+        body: "The Darkness separated Hecate from Gaia with a lie. The Claiming is the answer to the first lie \u2014 not a counter-argument but the correct action taken by the correct people at the correct moment. The Watcher-witch compacts, the Familiar bonds, the daughters\u2019 Web Compact, the Moon-Bride channel \u2014 all active simultaneously. Hecate chosen back into existence by the accumulated weight of every bond built in her mother\u2019s world. The force the Darkness never found a way to lie away.",
+        chars: ["Hecate", "Full Network", "The Lovers Arcana", "Strength Arcana"],
+        color: "#7c3aed" },
+    { era: "y6", sort: 7000, key: true,
+        date: "DA10", dateSub: "The Resurrection",
+        book: "DA10",
+        title: "Judgement Calls \u00b7 Hecate Returns \u00b7 Changed",
+        body: "Judgement calls. The Sun burns at full strength for the first time since the arc began. Hecate returns \u2014 but not unchanged. She was in the deep places. The dark was in her. What she brings back is not exactly the Hecate who was lost. The Veil cannot be the same Veil. This is the pivot. Everything after is different.",
+        chars: ["Hecate", "The Sun", "Judgement", "Brian Lee"],
+        color: "#7c3aed" },
+    { era: "y6", sort: 7200, key: true,
+        date: "Year 7 \u00b7 Fire Solstice", dateSub: "DA12 \u00b7 The Restoration",
+        book: "DA12",
+        title: "Gaia and Hecate \u00b7 The Fire Solstice \u00b7 The Seven-Year Cycle Closes",
+        body: "The same fire solstice. Seven years after Dixie ratified the compact on the longest day of Year 0 \u2014 the same solar position, the same Older Mechanism calendar point, the same day the compact\u2019s record was first opened \u2014 the Restoration happens.\n\nGaia and Hecate. The reunion. The Darkness told Hecate her mother\u2019s warmth was a cage. The Restoration answers that lie in its most complete form: Hecate does not return to the boundary\u2019s edge. She returns to Gaia.\n\nThe new Veil grows from what survived the arc \u2014 not reconstructed but built from the work done in the dark. The Bond is its foundation. The daughters\u2019 Web is woven through it. The compacts are its structure. The mortal world is not outside it. It is woven into it.\n\n<em>The fire solstice. The sun at its peak. The compact\u2019s record opened on this day and the Restoration closes it on this day. Seven years. The Darkness\u2019s first lie finally answered.</em>",
+        chars: ["Hecate", "Gaia", "The Full Network", "Dixie Calhoun"],
+        color: "#7c3aed" },
+    {
+        "era": "y0",
+        "sort": 691,
+        "key": false,
+        "date": "Year 0",
+        "dateSub": "Arc 1 expansion before Book 7",
+        "book": "Book 6C",
+        "title": "Bone of the Mountain",
+        "body": "The stone-listening function activates inside Arc 1 and plants the Leviathan cardiac-frequency clue before WMB1.",
+        "chars": [
+            "Ruthanne Sizemore",
+            "Turiel"
+        ],
+        "color": "#78716c"
+    },
+    {
+        "era": "y0",
+        "sort": 692,
+        "key": false,
+        "date": "Year 0",
+        "dateSub": "Arc 1 expansion before Book 7",
+        "book": "Book 6D",
+        "title": "Shadow on the Porch Light",
+        "body": "The plain-sight witness function joins the compact. Hidden does not mean absent.",
+        "chars": [
+            "Nadine Skaggs",
+            "Bezaliel"
+        ],
+        "color": "#6b7280"
+    },
+    {
+        "era": "y0",
+        "sort": 693,
+        "key": false,
+        "date": "Year 0",
+        "dateSub": "Arc 1 expansion before Book 7",
+        "book": "Book 6E",
+        "title": "Waning",
+        "body": "The waning-moon release function enters Arc 1 before the network expands beyond Pike County.",
+        "chars": [
+            "Wren Justice",
+            "Sariel"
+        ],
+        "color": "#94a3b8"
+    },
+    {
+        "era": "y0",
+        "sort": 694,
+        "key": false,
+        "date": "Year 0",
+        "dateSub": "Arc 1 expansion before Book 7",
+        "book": "Book 6F",
+        "title": "What the Holler Remembers",
+        "body": "Arc 1 accepts that the compact is no longer local and prepares the bridge into the Expansion Arc.",
+        "chars": [
+            "Ensemble"
+        ],
+        "color": "#7c3aed"
+    },
+    {
+        "era": "y0",
+        "sort": 695,
+        "key": true,
+        "date": "Year 0",
+        "dateSub": "Arc 1 expansion before Book 7",
+        "book": "Book 6G",
+        "title": "Twelve Thousand Years Later",
+        "body": "Arc 1 hands off cleanly into Expansion Arc Book 7 while preserving the local foundation.",
+        "chars": [
+            "Ensemble",
+            "Bridge"
+        ],
+        "color": "#fdf3e0"
+    },
+    {
+        "era": "y1",
+        "sort": 712,
+        "key": false,
+        "date": "Year 1",
+        "dateSub": "Expansion Arc additions",
+        "book": "Book 12",
+        "title": "The Sum of It",
+        "body": "Butator bonds. The Expansion Arc gains its mathematical witness and the Web's count becomes independently legible.",
+        "chars": [
+            "Marlene Byrd",
+            "Butator"
+        ],
+        "color": "#5eead4"
+    },
+    {
+        "era": "y1",
+        "sort": 713,
+        "key": false,
+        "date": "Year 1",
+        "dateSub": "Expansion Arc additions",
+        "book": "Book 13",
+        "title": "The Price of Admission",
+        "body": "Sachiel bonds. The network gains a financial-defense function over land, debt, and corridor ownership.",
+        "chars": [
+            "Everett Marsh",
+            "Sachiel"
+        ],
+        "color": "#e8c06a"
+    },
+    {
+        "era": "y1",
+        "sort": 714,
+        "key": false,
+        "date": "Year 1",
+        "dateSub": "Expansion Arc additions",
+        "book": "Book 14",
+        "title": "Low Country Fog",
+        "body": "Chazaqiel bonds. The Gulf Coast thread formally joins the Web.",
+        "chars": [
+            "Fern Ridley",
+            "Chazaqiel"
+        ],
+        "color": "#94a3b8"
+    },
+    {
+        "era": "y1",
+        "sort": 715,
+        "key": false,
+        "date": "Year 1",
+        "dateSub": "Expansion Arc additions",
+        "book": "Book 15",
+        "title": "What the Dust Remembers",
+        "body": "Suphlatus bonds. The Web gains a survival-residue function and the dead-land myth breaks.",
+        "chars": [
+            "Opal Truitt",
+            "Suphlatus"
+        ],
+        "color": "#d6a66a"
+    },
+    {
+        "era": "y1",
+        "sort": 716,
+        "key": false,
+        "date": "Year 1",
+        "dateSub": "Expansion Arc additions",
+        "book": "Book 16",
+        "title": "Reading the Ground",
+        "body": "Arakiel bonds. The network gains geomantic mapping of property, boundary, grade, and Ley structure.",
+        "chars": [
+            "Delphine Ashworth",
+            "Arakiel"
+        ],
+        "color": "#86efac"
+    },
+    {
+        "era": "y1",
+        "sort": 717,
+        "key": false,
+        "date": "Year 1",
+        "dateSub": "Expansion Arc additions",
+        "book": "Book 17",
+        "title": "The Network Widens",
+        "body": "The Web becomes regional at working scale and stops depending on Pike County as sole center.",
+        "chars": [
+            "Ensemble"
+        ],
+        "color": "#c4b5fd"
+    },
+    {
+        "era": "y1",
+        "sort": 718,
+        "key": true,
+        "date": "Year 1",
+        "dateSub": "Expansion Arc additions",
+        "book": "Book 18",
+        "title": "Every Corridor Counted",
+        "body": "Expansion Arc closes at twelve books. The corridor count is complete enough to lead directly into Leviathan escalation.",
+        "chars": [
+            "Ensemble"
+        ],
+        "color": "#fdf3e0"
+    },
+    {
+        "era": "y2",
+        "sort": 807,
+        "key": false,
+        "date": "Years 2–3",
+        "dateSub": "Leviathan escalation",
+        "book": "WMB7",
+        "title": "What the Deep Remembers",
+        "body": "Rahab bonds Marisol Ochoa in a Gulf corridor where the deep carries the same heartbeat Pike County heard in stone. The ocean floor proves the Leviathan's frequency was never only mountain-bound. The bond teaches scale without erasure: Marisol can hear the deep without being swallowed by it.",
+        "chars": [
+            "deep frequency",
+            "Rahab bonds"
+        ],
+        "color": "#0d9488"
+    },
+    {
+        "era": "y2",
+        "sort": 808,
+        "key": false,
+        "date": "Years 2–3",
+        "dateSub": "Leviathan escalation",
+        "book": "WMB8",
+        "title": "The Storm Before the Waking",
+        "body": "Ananiel bonds Wyatt Sorrel, a storm chaser who has been driving toward the wrong kind of anomaly his whole career. Storm cells begin forming over corridor nodes. The Leviathan's turning becomes pressure, lightning, and impossible weather.",
+        "chars": [
+            "storm domain",
+            "weather warning"
+        ],
+        "color": "#0d9488"
+    },
+    {
+        "era": "y2",
+        "sort": 809,
+        "key": false,
+        "date": "Years 2–3",
+        "dateSub": "Leviathan escalation",
+        "book": "WMB9",
+        "title": "The Watcher Who Chose the Wall",
+        "body": "Gadreel's long unaligned status ends when he bonds Colton Vance. His defense-architecture domain gives the corridor network its first tactical doctrine. The wall is not control. The wall is consent made defendable.",
+        "chars": [
+            "defense architecture",
+            "Gadreel chooses"
+        ],
+        "color": "#0d9488"
+    },
+    {
+        "era": "y2",
+        "sort": 810,
+        "key": false,
+        "date": "Years 2–3",
+        "dateSub": "Leviathan escalation",
+        "book": "WMB10",
+        "title": "The Anger Underneath",
+        "body": "Af bonds Judith Calloway in a corridor built on three generations of unprocessed rage. Hell tries to weaponize the anger. The Formal Framework tries to condemn it. Judith learns to make anger a shield instead of a wound.",
+        "chars": [
+            "anger domain",
+            "justice pressure"
+        ],
+        "color": "#0d9488"
+    },
+    {
+        "era": "y2",
+        "sort": 811,
+        "key": false,
+        "date": "Years 2–3",
+        "dateSub": "Leviathan escalation",
+        "book": "WMB11",
+        "title": "The Shape of the Void",
+        "body": "Apollyon bonds Noor Fen, an astronomer whose corridor sits closest to Satan's sealed position. Sound, heat, shadow, and memory begin falling out of local reality. Noor gives the void shape without surrendering to it.",
+        "chars": [
+            "void domain",
+            "Satan seal proximity"
+        ],
+        "color": "#0d9488"
+    },
+    {
+        "era": "y2",
+        "sort": 812,
+        "key": true,
+        "date": "Years 2–3",
+        "dateSub": "Leviathan escalation",
+        "book": "WMB12",
+        "title": "What the Network Carries Now",
+        "body": "The ensemble finale tests the entire network under Leviathan pressure. Deep, storm, defense, anger, void, stone, and original compact law must hold together without becoming command. The arc closes by carrying New Compact pressure into the Order of Shadows.",
+        "chars": [
+            "arc finale",
+            "OS pressure handoff"
+        ],
+        "color": "#0d9488"
+    },
+    {
+        "era": "y4",
+        "sort": 904,
+        "key": false,
+        "date": "Year 4",
+        "dateSub": "Web of Weavers expansion",
+        "book": "WW4",
+        "title": "The Sun-Bride",
+        "body": "Solar practice enters the Web without replacing the daughters' older hidden work.",
+        "chars": [
+            "Coral Whitfield",
+            "Shamsiel"
+        ],
+        "color": "#fbbf24"
+    },
+    {
+        "era": "y4",
+        "sort": 905,
+        "key": false,
+        "date": "Year 4",
+        "dateSub": "Web of Weavers expansion",
+        "book": "WW5",
+        "title": "Phases",
+        "body": "The Web gains patience as a working function, not a personality trait.",
+        "chars": [
+            "Ivy Marchetti",
+            "Satarel"
+        ],
+        "color": "#94a3b8"
+    },
+    {
+        "era": "y4",
+        "sort": 906,
+        "key": false,
+        "date": "Year 4",
+        "dateSub": "Web of Weavers expansion",
+        "book": "WW6",
+        "title": "The Unspoken Name",
+        "body": "The Web gains protection over identity before official language can claim it.",
+        "chars": [
+            "Birdie Loach",
+            "Jomjael"
+        ],
+        "color": "#c4b5fd"
+    },
+    {
+        "era": "y4",
+        "sort": 907,
+        "key": false,
+        "date": "Year 4",
+        "dateSub": "Web of Weavers expansion",
+        "book": "WW7",
+        "title": "Eclipse",
+        "body": "Eclipse alignment enters the Web as a narrow, high-risk, high-truth threshold.",
+        "chars": [
+            "Solveig Ashby",
+            "Samshiel"
+        ],
+        "color": "#0d9488"
+    },
+    {
+        "era": "y4",
+        "sort": 908,
+        "key": false,
+        "date": "Year 4",
+        "dateSub": "Web of Weavers expansion",
+        "book": "WW8",
+        "title": "The Heir’s Portion",
+        "body": "Dormant Calhoun/Nephilim line activation enters canon while preserving choice over bloodline destiny.",
+        "chars": [
+            "Nova Calhoun",
+            "Scion"
+        ],
+        "color": "#e8c06a"
+    },
+    {
+        "era": "y4",
+        "sort": 909,
+        "key": false,
+        "date": "Year 4",
+        "dateSub": "Web of Weavers expansion",
+        "book": "WW9",
+        "title": "The Accounting of Days",
+        "body": "The Web gains a calendar/accounting function that identifies the Seventh Cycle's timing vulnerability.",
+        "chars": [
+            "Clementine Osei",
+            "Yomiel"
+        ],
+        "color": "#5eead4"
+    },
+    {
+        "era": "y4",
+        "sort": 910,
+        "key": false,
+        "date": "Year 4",
+        "dateSub": "Web of Weavers expansion",
+        "book": "WW10",
+        "title": "What Wasn’t Kept",
+        "body": "Omitted histories regain frequency and expose erased corridors across the Web.",
+        "chars": [
+            "Persephone Winter",
+            "Yocun"
+        ],
+        "color": "#64748b"
+    },
+    {
+        "era": "y4",
+        "sort": 911,
+        "key": false,
+        "date": "Year 4",
+        "dateSub": "Web of Weavers expansion",
+        "book": "WW11",
+        "title": "The Names That Weren’t Kept",
+        "body": "The restored names form a pattern pointing toward the Order of Shadows.",
+        "chars": [
+            "Ensemble"
+        ],
+        "color": "#7c3aed"
+    },
+    {
+        "era": "y4",
+        "sort": 912,
+        "key": true,
+        "date": "Year 4",
+        "dateSub": "Web of Weavers expansion",
+        "book": "WW12",
+        "title": "The Weavers, Entire",
+        "body": "WW12 exposes the Order's hidden architecture and strengthens the transition into OS5.",
+        "chars": [
+            "Ensemble"
+        ],
+        "color": "#fdf3e0"
+    },
+    {
+        "era": "y5",
+        "sort": 1005,
+        "key": false,
+        "date": "Year 5",
+        "dateSub": "Order inserted sequence",
+        "book": "OS5",
+        "title": "The Liar’s Tell",
+        "body": "Sathriel bonds. The Order's founding lie becomes visible.",
+        "chars": [
+            "Delacroix Vane",
+            "Sathriel"
+        ],
+        "color": "#c4b5fd"
+    },
+    {
+        "era": "y5",
+        "sort": 1006,
+        "key": false,
+        "date": "Year 5",
+        "dateSub": "Order inserted sequence",
+        "book": "OS6",
+        "title": "The Face They Wanted",
+        "body": "Asael bonds. The Order loses control of its public face.",
+        "chars": [
+            "Lior Bellweather",
+            "Asael"
+        ],
+        "color": "#e8c06a"
+    },
+    {
+        "era": "y5",
+        "sort": 1007,
+        "key": false,
+        "date": "Year 5",
+        "dateSub": "Order inserted sequence",
+        "book": "OS7",
+        "title": "What Runs Beneath",
+        "body": "Batariel bonds. The Order's hidden-water logistics are turned toward liberation.",
+        "chars": [
+            "Constance Reyes",
+            "Batariel"
+        ],
+        "color": "#5eead4"
+    },
+    {
+        "era": "y5",
+        "sort": 1008,
+        "key": false,
+        "date": "Year 5",
+        "dateSub": "Order inserted sequence",
+        "book": "OS8",
+        "title": "The Fifth Defector",
+        "body": "Samsapeel bonds. Threnody becomes the fifth defector and brings the Order's internal map.",
+        "chars": [
+            "Threnody Ash",
+            "Samsapeel"
+        ],
+        "color": "#94a3b8"
+    },
+    {
+        "era": "y5",
+        "sort": 1009,
+        "key": false,
+        "date": "Year 5",
+        "dateSub": "Order inserted sequence",
+        "book": "OS9",
+        "title": "The Order’s Last Ledger",
+        "body": "The last ledger contains a payment made before the Order officially existed.",
+        "chars": [
+            "Ensemble"
+        ],
+        "color": "#7c3aed"
+    },
+    {
+        "era": "y5",
+        "sort": 1010,
+        "key": false,
+        "date": "Year 5",
+        "dateSub": "Order inserted sequence",
+        "book": "OS10",
+        "title": "The Seal’s True Cost",
+        "body": "The old seal is exposed as powered by stolen agreement, not holiness.",
+        "chars": [
+            "Ensemble"
+        ],
+        "color": "#f87171"
+    },
+    {
+        "era": "y5",
+        "sort": 1011,
+        "key": true,
+        "date": "Year 5",
+        "dateSub": "Order inserted sequence",
+        "book": "OS11",
+        "title": "The Watchers Who Stayed",
+        "body": "Enough Watchers refuse the Order that OS12 can become the War for the World.",
+        "chars": [
+            "Ensemble"
+        ],
+        "color": "#64748b"
+    },
+    {
+        "era": "y5",
+        "sort": 1012,
+        "key": true,
+        "date": "Year 5",
+        "dateSub": "Renumbered finale",
+        "book": "OS12",
+        "title": "The War for the World",
+        "body": "Original OS5 finale preserved as OS12 after the inserted defector, ledger, seal-cost, and Watcher-split books. Satan sealing and succession remain the finale payload.",
+        "chars": [
+            "Pearlene Calhoun",
+            "Lucifer",
+            "Satan",
+            "443 practitioners"
+        ],
+        "color": "#f87171"
+    },
+    {
+        "era": "y6",
+        "sort": 1209,
+        "key": false,
+        "date": "After Divine Arc",
+        "dateSub": "Seventh Cycle inserted condition books",
+        "book": "SC9",
+        "title": "The Space Between",
+        "body": "Vesper Cole's corridor exists in the space between definitions. Heaven cannot classify it. Hell cannot corrupt it cleanly. The Older Mechanism cannot file it under an existing function. Rumjal does not fill the empty place; he honors it. The missing condition for Restoration appears in the gap no taxonomy could name.",
+        "chars": [
+            "Rumjal",
+            "empty places",
+            "missing condition"
+        ],
+        "color": "#7c3aed"
+    },
+    {
+        "era": "y6",
+        "sort": 1210,
+        "key": false,
+        "date": "After Divine Arc",
+        "dateSub": "Seventh Cycle inserted condition books",
+        "book": "SC10",
+        "title": "What Purity Costs",
+        "body": "Amara Voss is offered a beautiful solution: remove imperfection and Restoration becomes easy. Zaqiel's purity domain is tested as temptation rather than virtue. They reject the false restoration that would erase wounds, contradictions, grief, and mercy. Purity serves relationship only when it refuses erasure.",
+        "chars": [
+            "Zaqiel",
+            "false restoration",
+            "mercy over erasure"
+        ],
+        "color": "#7c3aed"
+    },
+    {
+        "era": "y6",
+        "sort": 1211,
+        "key": true,
+        "date": "After Divine Arc",
+        "dateSub": "Seventh Cycle inserted condition books",
+        "book": "SC11",
+        "title": "The Last Condition",
+        "body": "All conditions are assembled except the least controllable one: something must choose differently. No prophecy can force it, no bond can fake it, and no mechanism can simulate it. The whole universe reaches the point where relationship must remain free or it is not relationship at all.",
+        "chars": [
+            "last condition",
+            "free choice",
+            "Restoration setup"
+        ],
+        "color": "#7c3aed"
+    },
+    {
+        "era": "y6",
+        "sort": 1212,
+        "key": true,
+        "date": "After Divine Arc",
+        "dateSub": "Renumbered finale",
+        "book": "SC12",
+        "title": "The Restoration",
+        "body": "Existing SC9 Restoration finale preserved as SC12 after SC9–SC11 test the space between, false purity, and the last condition.",
+        "chars": [
+            "Mreza",
+            "The Web",
+            "Abyss",
+            "All bonds"
+        ],
+        "color": "#7c3aed"
+    },
+];
+const ERA_COLOR = { origin: "#334155", pre: "#475569", y0: "#c9943a", y1: "#92400e", y2: "#0d9488", y4: "#4a8c4a", y5: "#991b1b", pr: "#c2410c", y6: "#7c3aed" };
+const ERA_ORDER = ["origin", "pre", "y0", "y1", "y2", "y4", "y5", "pr", "y6"];
+function HHTimeline() {
+    const [era, setEra] = useState("all");
+    const filtered = era === "all" ? EVENTS : EVENTS.filter(e => e.era === era);
+    const grouped = ERA_ORDER.reduce((acc, e) => {
+        const evs = filtered.filter(ev => ev.era === e);
+        if (evs.length)
+            acc[e] = evs.sort((a, b) => a.sort - b.sort);
+        return acc;
+    }, {});
+    return (React.createElement(React.Fragment, null,
+        React.createElement("style", null, css),
+        React.createElement("div", { className: "tl-wrap" },
+            React.createElement("header", { className: "tl-header" },
+                React.createElement("div", { className: "tl-label" }, "Universe Timeline \\u00b7 Holler & Hellfire"),
+                React.createElement("h1", { className: "tl-title" }, "Worlds Collide"),
+                React.createElement("div", { className: "tl-sub" }, "From the First Darkness to the Final Restoration"),
+                React.createElement("p", { className: "tl-desc" },
+                    React.createElement("em", null, "The compact was never supposed to be held forever."),
+                    React.createElement("br", null),
+                    "It was supposed to be opened.",
+                    React.createElement("br", null),
+                    "The Darkness has been working since before the daughters\\u2019 practice existed.",
+                    React.createElement("br", null),
+                    "So has everyone else.")),
+            React.createElement("div", { className: "era-bar" }, ERAS.map(e => (React.createElement("button", { key: e.id, className: `era-btn ${e.cls}${era === e.id ? " active" : ""}`, onClick: () => setEra(e.id) }, e.label)))),
+            React.createElement("div", { className: "tl-spine" }, Object.entries(grouped).map(([eraKey, events]) => {
+                const eh = ERA_HEADERS[eraKey];
+                const ec = ERA_COLOR[eraKey];
+                return (React.createElement("div", { key: eraKey, className: "era-section" },
+                    React.createElement("div", { className: "era-divider", style: { borderLeftColor: ec, background: `${ec}10` } },
+                        React.createElement("div", null,
+                            React.createElement("div", { className: "era-div-label", style: { color: ec } }, eh.label),
+                            React.createElement("div", { className: "era-div-sub" }, eh.sub))),
+                    events.map((ev, idx) => {
+                        const isLast = idx === events.length - 1;
+                        return (React.createElement("div", { key: ev.title, className: "event-row" },
+                            React.createElement("div", { className: "event-date" },
+                                React.createElement("div", { className: "event-date-main", style: { color: ec } }, ev.date),
+                                ev.dateSub && React.createElement("div", { className: "event-date-sub" }, ev.dateSub)),
+                            React.createElement("div", { className: "event-spine" },
+                                React.createElement("div", { className: `event-dot${ev.key ? " key-event" : ""}`, style: { borderColor: ec, background: ev.key ? ec : "transparent", color: ec } }),
+                                !isLast && React.createElement("div", { className: "event-line", style: { background: ec } })),
+                            React.createElement("div", { className: `event-card${ev.key ? " milestone" : ""}`, style: { borderLeftColor: ec, borderTopColor: ev.key ? `${ec}40` : "#1a1030" } },
+                                ev.key && (React.createElement("div", { className: "ec-key-badge", style: { color: ec, borderColor: `${ec}60` } }, "Key Event")),
+                                React.createElement("div", { className: "ec-book", style: { color: ec } }, ev.book),
+                                React.createElement("div", { className: `ec-title${ev.key ? " key" : ""}` }, ev.title),
+                                React.createElement("div", { className: "ec-body", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: ev.body.replace(/\n\n/g, "<br/>") } }),
+                                ev.chars && ev.chars.length > 0 && (React.createElement("div", { className: "ec-chars" }, ev.chars.map(c => React.createElement("span", { key: c, className: "ec-char" }, c)))))));
+                    })));
+            })),
+            React.createElement("div", { style: { textAlign: "center", marginTop: 40, paddingTop: 24, borderTop: "1px solid #1a1030", color: "#4a3a7a", fontSize: 12, fontStyle: "italic", lineHeight: 1.9 } },
+                filtered.length,
+                " events \\u00b7 ",
+                era === "all" ? "Full Universe Timeline" : ERAS.find(e => e.id === era)?.label,
+                React.createElement("br", null),
+                React.createElement("em", { style: { color: "#c9943a" } }, "Fire Solstice, Year 0: the compact opens. Fire Solstice, Year 7: the Restoration closes it."),
+                React.createElement("br", null),
+                React.createElement("em", { style: { color: "#7c3aed" } }, "Seven years. The same day. The compact holds.")))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(HHTimeline));
+
+  </script>
+</body>
+</html>

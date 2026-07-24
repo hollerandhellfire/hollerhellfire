@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>02Expansion Arc Series Bible</title>
+  <meta name="description" content="Converted HTML version of 02expansion_arc_series_bible.jsx for the Holler & Hellfire Universe." />
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #04020a; }
+    #root { min-height: 100vh; }
+    .conversion-note {
+      font-family: Georgia, serif;
+      background: #100603;
+      color: #e8c06a;
+      border: 1px solid #3d1a08;
+      padding: 12px 16px;
+      max-width: 900px;
+      margin: 16px auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <noscript><div class="conversion-note">JavaScript is required to display this converted H&amp;H bible.</div></noscript>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+/* ============================================================
+   CANON AUTHORITY NOTE
+   The Codex (universe_canon_bible.jsx) is the SUPREME canon
+   authority for the H&H Universe. This file SPECIALIZES /
+   EXPANDS / ORGANIZES / DISPLAYS canon and does not supersede
+   The Codex on core universe truth. Objective metaphysical
+   truth lives in The Codex; perceived/in-world truth may differ.
+   ============================================================ */
+const { useState, useMemo, useEffect, useRef } = React;
+const css = `
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.bible{max-width:940px;margin:0 auto;padding:32px 20px 60px;background:#04020a;min-height:100vh;color:#fdf3e0;font-family:'Cormorant Garamond',Georgia,serif;}
+.header{text-align:center;padding:50px 0 36px;border-bottom:1px solid #3a2408;margin-bottom:36px;position:relative;}
+.header::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,#c9943a);}
+.series-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:#c9943a;text-transform:uppercase;margin-bottom:14px;}
+.main-title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,5vw,38px);font-weight:700;color:#fdf3e0;line-height:1.2;margin-bottom:8px;text-shadow:0 0 40px rgba(201,148,58,.35);}
+.sub-title{font-family:'Cinzel',serif;font-size:clamp(11px,2.5vw,16px);color:#e8c06a;letter-spacing:.2em;margin-bottom:20px;}
+.tagline{font-style:italic;font-size:15px;color:#9e7d48;max-width:600px;margin:0 auto;line-height:1.7;}
+.tabs{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:28px;border-bottom:1px solid #3a2408;padding-bottom:14px;}
+.tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.25em;text-transform:uppercase;padding:7px 14px;border:1px solid #3a2408;background:transparent;color:#9e7d48;cursor:pointer;transition:all .2s;}
+.tab:hover{border-color:#c9943a;color:#e8c06a;}
+.tab.active{background:rgba(201,148,58,.18);border-color:#c9943a;color:#fdf3e0;}
+.sec{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#c9943a;margin:22px 0 14px;padding-bottom:7px;border-bottom:1px solid #3a2408;}
+.card{background:#0a0602;border:1px solid #3a2408;border-left:3px solid #c9943a;padding:16px 20px;margin-bottom:12px;}
+.card.tl{border-left-color:#0d9488;}
+.card.cr{border-left-color:#dc2626;}
+.card.pu{border-left-color:#7c3aed;}
+.card.gr{border-left-color:#059669;}
+.clabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;color:#5c3d18;text-transform:uppercase;margin-bottom:5px;}
+.ctitle{font-family:'Cinzel',serif;font-size:15px;color:#fdf3e0;margin-bottom:6px;}
+.ctitle.gd{color:#e8c06a;}
+.ctitle.tl{color:#5eead4;}
+.ctitle.pu{color:#d8b4fe;}
+.cbody{font-size:13px;line-height:1.75;color:#9e7d48;}
+.cbody em{color:#fdf3e0;font-style:italic;}
+.cbody strong{color:#e8c06a;font-weight:600;}
+.pull{border-left:3px solid #c9943a;padding:16px 20px;background:rgba(201,148,58,.07);margin:16px 0;font-size:15px;font-style:italic;line-height:1.8;color:#fdf3e0;}
+.stack{display:flex;flex-direction:column;align-items:center;gap:0;margin:18px 0;}
+.sr{width:100%;max-width:520px;padding:10px 16px;text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.2em;border:1px solid;}
+.sr.main{background:rgba(201,148,58,.12);border-color:#c9943a;color:#fdf3e0;}
+.sr.here{background:rgba(201,148,58,.28);border-color:#e8c06a;color:#fdf3e0;font-size:12px;}
+.sr.next{background:rgba(13,148,136,.1);border-color:#0d9488;color:#5eead4;}
+.sr.prev{background:rgba(124,58,237,.08);border-color:#7c3aed;color:#d8b4fe;}
+.sarr{font-size:16px;color:#5c3d18;line-height:1;padding:2px 0;}
+.snote{font-size:9px;color:#5c3d18;font-family:'Cormorant Garamond',serif;font-style:italic;margin-top:3px;}
+.alist{display:flex;flex-direction:column;gap:10px;margin-top:12px;}
+.abook{display:grid;grid-template-columns:54px 1fr;background:#0a0602;border:1px solid #3a2408;overflow:hidden;transition:border-color .2s;}
+.abook:hover{border-color:#c9943a;}
+.anum-col{background:rgba(201,148,58,.13);border-right:1px solid #3a2408;display:flex;align-items:center;justify-content:center;font-family:'Cinzel Decorative',serif;font-size:13px;color:#c9943a;padding:12px 6px;}
+.acont{padding:12px 16px;}
+.atitle{font-family:'Cinzel',serif;font-size:13px;color:#fdf3e0;margin-bottom:3px;}
+.aeng{font-size:11px;color:#c9943a;font-style:italic;margin-bottom:6px;}
+.ab{font-size:12px;color:#5c3d18;line-height:1.6;font-style:italic;}
+.aloc{font-size:11px;color:#9e7d48;margin-bottom:4px;letter-spacing:.05em;}
+.tag{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.2em;text-transform:uppercase;padding:2px 6px;border:1px solid;margin-right:4px;margin-bottom:3px;}
+.tag.g{color:#e8c06a;border-color:#c9943a;}
+.tag.t{color:#5eead4;border-color:#0d9488;}
+.tag.p{color:#d8b4fe;border-color:#7c3aed;}
+hr.rule{border:none;border-top:1px solid #3a2408;margin:24px 0;}
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:10px;margin-top:10px;}
+.char-card{background:#0a0602;border:1px solid #3a2408;border-left:3px solid #c9943a;padding:14px 16px;transition:border-color .2s;}
+.char-card:hover{border-color:#e8c06a;}
+.char-card.key{background:rgba(201,148,58,.05);}
+.char-card.watcher{border-left-color:#9e7d48;}
+.char-card.warden{border-left-color:#0d9488;}
+.cname{font-family:'Cinzel',serif;font-size:13px;color:#fdf3e0;margin-bottom:2px;}
+.crole{font-size:10px;color:#c9943a;font-style:italic;margin-bottom:5px;letter-spacing:.05em;}
+.cdesc{font-size:12px;color:#9e7d48;line-height:1.6;}
+.cdesc em{color:#fdf3e0;font-style:italic;}
+.cloc{display:inline-block;margin-top:6px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.2em;color:#e8c06a;border:1px solid #3a2408;padding:2px 8px;}
+.corridor-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:10px;}
+.corridor-card{background:#0a0602;border:1px solid #3a2408;border-top:3px solid #c9943a;padding:14px 16px;}
+.corridor-card.warden-linked{border-top-color:#0d9488;}
+.cbook{font-family:'Cinzel Decorative',serif;font-size:12px;color:#c9943a;margin-bottom:4px;}
+.ccorridor{font-family:'Cinzel',serif;font-size:13px;color:#fdf3e0;margin-bottom:2px;}
+.cregion{font-size:10px;color:#e8c06a;font-style:italic;margin-bottom:7px;}
+.cthread{font-size:12px;color:#9e7d48;line-height:1.55;}
+.cthread em{color:#fdf3e0;font-style:italic;}
+.cwarden{margin-top:8px;padding-top:7px;border-top:1px solid #3a2408;font-size:11px;color:#5eead4;font-style:italic;}
+.orn{text-align:center;font-size:18px;color:#5c3d18;margin:18px 0;letter-spacing:10px;}
+`;
+const TABS = [
+    { id: "premise", l: "Premise" },
+    { id: "chars", l: "Characters" },
+    { id: "corridors", l: "Corridors & Wardens" },
+    { id: "books", l: "The 12 Books" },
+    { id: "tone", l: "Tone & Canon" },
+];
+const BOOKS = [
+    {
+        n: "Book 7", title: "The Secrets We Keep",
+        couple: "Aria Webb & Tamiel",
+        loc: "Tensaw Delta, Alabama",
+        color: "#c9943a",
+        role: "Head Anchor / Journalist · Southern Network",
+        gift: "Documentary witness. Aria doesn't just observe — she records. Her journalist's practice is the Weaver tradition expressed as institutional memory. The Tensaw Delta corridor becomes the southern network's documentation center.",
+        warden: "The Alabama coast's proximity to the Atlantic basin connects this corridor to the atmospheric Ley Line system D Coale will map from Penn State.",
+        tags: ["g", "g"], tagNames: ["southern corridor", "documentation anchor"],
+        key: "The Tensaw Delta thread established. The network's first southern anchor. The first corridor where the Weaver practice is formally documented in journalistic form — which means it will survive institutional suppression in a new way.",
+    },
+    {
+        n: "Book 8", title: "Thunder & Vision",
+        couple: "Carolyn Roberts & Ramiel",
+        loc: "Virginia Corridor",
+        color: "#c9943a",
+        role: "Chief Seer / Temporal Practitioner",
+        gift: "Temporal-frequency monitoring — the capacity to read the corridor's condition not just in the present but in its accumulated history and forward resonance. Carolyn's practice is oriented in time, not just space.",
+        warden: "The Virginia corridor sits in the Appalachian system's northern reach — still within Morvael's dissolved range, now the compact's Web thread. The temporal-frequency monitoring Carolyn establishes is the first human practice that can detect geological-scale time.",
+        tags: ["g", "t"], tagNames: ["temporal monitoring", "Appalachian range"],
+        key: "The temporal-frequency monitoring capacity added to the network. The first practice that reads the corridor in time rather than just space. Ramiel bonds.",
+    },
+    {
+        n: "Book 9", title: "The Weight of Judgment",
+        couple: "Abigail Ebony & Danel",
+        loc: "Kanawha County, West Virginia",
+        color: "#e8c06a",
+        role: "WV Thread Head Anchor",
+        gift: "The West Virginia corridor is geologically the closest to Pike County in the network. Abigail's practice operates at the coal country's specific intersection of human industry and geological depth — the same terrain as Brian Lee's corridor, one valley over.",
+        warden: "Kanawha County sits within the direct geological reach of the Leviathan's eastern expression. The WV Thread's establishment is the first corridor explicitly in the Leviathan's secondary range. The thread placement here is felt by the Leviathan — though it does not yet speak.",
+        tags: ["g", "t", "t"], tagNames: ["WV Thread", "Leviathan's range", "coal country"],
+        key: "The WV Thread established — the first corridor in the Leviathan's direct geological range outside Pike County. Danel bonds. The Leviathan feels the new thread.",
+    },
+    {
+        n: "Book 10", title: "Eye of the Storm",
+        couple: "Dianna 'D' Coale & Ezeqeel",
+        loc: "Penn State, Pennsylvania",
+        color: "#c9943a",
+        role: "Atmospheric Monitoring Layer",
+        gift: "D's practice is scientific in method and Weaver in nature. Her atmospheric monitoring maps the Ley Line network's surface expression — the weather patterns that the Wardens use as their primary communication medium. What she builds becomes the tool that will detect the Web's sufficient thread count for the New Compact AND the Veil's deterioration before the Divine Arc begins.",
+        warden: "The Pennsylvania corridor sits at the northern node of the eastern Appalachian Web range. D's atmospheric monitoring is the first human-scale tool that can read the Wardens' communications. She can hear them before they fully wake.",
+        tags: ["g", "t", "t"], tagNames: ["atmospheric monitoring", "Warden signal detection", "Ley Line mapping"],
+        key: "The atmospheric monitoring layer established. The tool that will detect the Web's sufficient thread count (WMB6) and the Veil's deterioration (pre-Divine Arc). D and Ezeqeel bond.",
+    },
+    {
+        n: "Book 11", title: "First Word",
+        couple: "Emily Keldren & Penemue",
+        loc: "Catskill Valley, New York",
+        color: "#e8c06a",
+        role: "Written Tradition Anchor",
+        gift: "Penemue carries every word ever written. The Catskill Valley corridor is the written tradition's anchor — the place where the practice's documentation meets its oldest archive. The book's title is not coincidence: Arcadia's first word is in the geological record at Pike County. Penemue has been carrying it for twelve thousand years.",
+        warden: "The Catskills are the northern terminus of the Appalachian system before the range loses definition into the Hudson Valley. The Catskill corridor connects to the Rocky Mountain system via the secondary Ley Line node that Ilavar (youngest Warden) is still learning. The Catskill rock dragon incident in WMB2/WMB4 happens in this corridor.",
+        tags: ["g", "t", "p"], tagNames: ["first word / Arcadia", "Penemue's archive", "Catskill corridor"],
+        key: "The written tradition anchor established. Penemue's archive — every word ever written including Arcadia's first word — joins the network. Emily and Penemue bond. The Catskill corridor is where Brian Lee will mediate his first major geological creature (WMB4).",
+    },
+    {
+        "n": "Book 12",
+        "title": "The Sum of It",
+        "couple": "Marlene Byrd & Butator",
+        "loc": "Penn State / Public Weather Data",
+        "color": "#5eead4",
+        "role": "Thread-Count Mathematician · External Derivation",
+        "gift": "Marlene independently derives the Web's thread-count equation from public weather data, proving the compact is leaving measurable atmospheric traces.",
+        "warden": "Her model confirms what D Coale's instruments have been hearing: the Web can be counted, but only through relationship, not control.",
+        "tags": [
+            "t",
+            "g"
+        ],
+        "tagNames": [
+            "thread-count equation",
+            "calculation domain"
+        ],
+        "key": "Butator bonds. The Expansion Arc gains its mathematical witness and the Web's count becomes independently legible."
+    },
+    {
+        "n": "Book 13",
+        "title": "The Price of Admission",
+        "couple": "Everett Marsh & Sachiel",
+        "loc": "Small-Town Banking Corridor",
+        "color": "#e8c06a",
+        "role": "Moral Accounting · Land Debt Defender",
+        "gift": "Everett has spent years refusing to foreclose on corridor families without knowing why it mattered. Sachiel reveals coin as a domain of moral weight, not greed.",
+        "warden": "Mammon's deed architecture has a coin-shaped hole in it; Everett has been standing in that hole the whole time.",
+        "tags": [
+            "g",
+            "cr"
+        ],
+        "tagNames": [
+            "coin domain",
+            "Mammon counterweight"
+        ],
+        "key": "Sachiel bonds. The network gains a financial-defense function over land, debt, and corridor ownership."
+    },
+    {
+        "n": "Book 14",
+        "title": "Low Country Fog",
+        "couple": "Fern Ridley & Chazaqiel",
+        "loc": "Gulf Coast Fog Corridor",
+        "color": "#94a3b8",
+        "role": "Mist Anchor · Hidden Gulf Thread",
+        "gift": "Fern's fogbound corridor redirects lost people instead of trapping them. Chazaqiel's mist domain reveals concealment as protection when it serves witness.",
+        "warden": "The Gulf thread proves the network's best-hidden corridor has been active beneath weather everyone dismissed as ordinary coastal fog.",
+        "tags": [
+            "t",
+            "g"
+        ],
+        "tagNames": [
+            "mist domain",
+            "Gulf corridor"
+        ],
+        "key": "Chazaqiel bonds. The Gulf Coast thread formally joins the Web."
+    },
+    {
+        "n": "Book 15",
+        "title": "What the Dust Remembers",
+        "couple": "Opal Truitt & Suphlatus",
+        "loc": "Kansas Dust Corridor",
+        "color": "#d6a66a",
+        "role": "Dust Memory Holder · Drought-Land Thread",
+        "gift": "Opal's family has swept, stored, and blessed dust for generations. Suphlatus teaches that dust is not absence; it is what remains and still remembers.",
+        "warden": "The Kansas corridor proves a land written off as dead can still hold a thread from the Dust Bowl forward.",
+        "tags": [
+            "g",
+            "t"
+        ],
+        "tagNames": [
+            "dust memory",
+            "drought corridor"
+        ],
+        "key": "Suphlatus bonds. The Web gains a survival-residue function and the dead-land myth breaks."
+    },
+    {
+        "n": "Book 16",
+        "title": "Reading the Ground",
+        "couple": "Delphine Ashworth & Arakiel",
+        "loc": "County Survey Network",
+        "color": "#86efac",
+        "role": "Geomantic Surveyor · Boundary Reader",
+        "gift": "Delphine has unconsciously mapped Ley Line geometry into property surveys for fifteen years. Arakiel reveals that boundary work is sacred when it protects the land's true shape.",
+        "warden": "The survey geometry exposes secondary Ley nodes that bridge Expansion into the Leviathan Arc.",
+        "tags": [
+            "t",
+            "g"
+        ],
+        "tagNames": [
+            "earth signs",
+            "survey geometry"
+        ],
+        "key": "Arakiel bonds. The network gains geomantic mapping of property, boundary, grade, and Ley structure."
+    },
+    {
+        "n": "Book 17",
+        "title": "The Network Widens",
+        "couple": "Ensemble",
+        "loc": "All Expansion Corridors",
+        "color": "#c4b5fd",
+        "role": "Ensemble Pressure Book · No New Bond",
+        "gift": "The network learns lateral contact across ten new corridors without collapsing into command hierarchy.",
+        "warden": "D, Marlene, Delphine, and the older anchors compare data, weather, maps, and memory until the Web produces its first self-generated warning.",
+        "tags": [
+            "pu",
+            "t"
+        ],
+        "tagNames": [
+            "ensemble network",
+            "no new bond"
+        ],
+        "key": "The Web becomes regional at working scale and stops depending on Pike County as sole center."
+    },
+    {
+        "n": "Book 18",
+        "title": "Every Corridor Counted",
+        "couple": "Ensemble Finale",
+        "loc": "Network-Wide Census / Thread Count",
+        "color": "#fdf3e0",
+        "role": "Arc Finale · Completed Corridor Count",
+        "gift": "The Web counts itself through relationship, not authority, answering a false census designed to classify and control it.",
+        "warden": "The completed count leads directly into WMB7; when the count completes, the Leviathan hears it.",
+        "tags": [
+            "g",
+            "t"
+        ],
+        "tagNames": [
+            "arc finale",
+            "Leviathan setup"
+        ],
+        "key": "Expansion Arc closes at twelve books. The corridor count is complete enough to lead directly into Leviathan escalation."
+    },
+];
+const CHARS = [
+    { key: true, name: "Aria Webb", role: "Head Anchor · Journalist · Tensaw Delta, AL", watcher: "Tamiel", desc: "The southern network's documentary witness. Her journalist's practice is the daughters' tradition expressed as institutional memory — the Weaver gift applied to the keeping of records that survive suppression. The first corridor anchor outside the Appalachian range proper.", loc: "Tensaw Delta, Alabama" },
+    { key: true, name: "Carolyn Roberts", role: "Chief Seer · Temporal Practitioner · Virginia", watcher: "Ramiel", desc: "Her practice is oriented in time. The corridor's condition readable not just in the present but in its accumulated history and forward resonance. The first network practitioner with temporal-frequency monitoring — the capacity to read the geological record in time rather than just space.", loc: "Virginia Corridor" },
+    { key: true, name: "Abigail Ebony", role: "WV Thread Head Anchor · Kanawha County, WV", watcher: "Danel", desc: "The West Virginia coal country is one valley over from Pike County. Her practice operates at the intersection of human industry and geological depth — the same terrain as Brian Lee's corridor. The WV Thread's establishment is the first corridor explicitly in the Leviathan's secondary range.", loc: "Kanawha County, West Virginia" },
+    { key: true, name: "Dianna 'D' Coale", role: "Atmospheric Monitoring Layer · Penn State, PA", watcher: "Ezeqeel", desc: "Scientific in method, Weaver in nature. Her atmospheric monitoring maps the Ley Line network's surface expression in weather patterns — the medium the Wardens use to communicate. She will detect the Web's sufficient thread count for the New Compact. She will detect the Veil's deterioration before the Divine Arc. She builds the tool the universe needs.", loc: "Penn State, Pennsylvania" },
+    { key: true, name: "Emily Keldren", role: "Written Tradition Anchor · Catskill Valley, NY", watcher: "Penemue", desc: "The practice's documentation meets its oldest archive here. Her bond with Penemue is the network's connection to every word ever written — including Arcadia's first word, which Penemue has been carrying for twelve thousand years without knowing why it felt significant.", loc: "Catskill Valley, New York" },
+    { watcher: true, name: "Tamiel", role: "Watcher · Bonded to Aria Webb", desc: "The southern corridor's Watcher. Bonds with Aria in the Tensaw Delta, establishing the network's first anchor outside the Appalachian range proper." },
+    { watcher: true, name: "Ramiel", role: "Watcher · Bonded to Carolyn Roberts", desc: "Bonds with Carolyn in Virginia. His domain is adjacent to the temporal frequency range — the specific resonance of something that has existed long enough to be readable in time." },
+    { watcher: true, name: "Danel", role: "Watcher · Bonded to Abigail Ebony", desc: "Bonds with Abigail in the West Virginia coal country. His bonding is felt by the Leviathan — the first bond in the Leviathan's direct geological range that is not the Pike County primary." },
+    { watcher: true, name: "Ezeqeel", role: "Watcher · Bonded to D Coale", desc: "The atmospheric domain's specific Watcher. His bond with D transforms her scientific monitoring into Weaver-frequency atmospheric reading. He can hear the Wardens in the weather before they fully wake." },
+    { watcher: true, name: "Penemue", role: "Watcher · Carries Every Word Ever Written · Bonded to Emily", desc: "Has been carrying Arcadia's first word for twelve thousand years. Has not known why it felt different from everything else in the archive. The bond with Emily Keldren — the written tradition anchor — is the moment the archive's specific significance to the Leviathan Arc becomes accessible to the network." },
+    {
+        "key": true,
+        "name": "Marlene Byrd",
+        "role": "Thread-count mathematics · Book 12",
+        "watcher": "Butator",
+        "desc": "Practitioner anchor for Book 12. Her corridor function: thread-count mathematics; derives the Web's equation from public weather data. The bond with Butator adds the Angel of Calculations domain to the Expansion Arc while keeping the theology centered on chosen relationship and correct witness.",
+        "loc": "Book 12"
+    },
+    {
+        "watcher": true,
+        "name": "Butator",
+        "role": "Watcher · Angel of Calculations · Bonded to Marlene Byrd",
+        "desc": "Activated in Book 12. His domain serves the Web by making thread-count mathematics; derives the Web's equation from public weather data legible without replacing consent, trust, or the practitioner's choosing."
+    },
+    {
+        "key": true,
+        "name": "Everett Marsh",
+        "role": "Moral accounting · Book 13",
+        "watcher": "Sachiel",
+        "desc": "Practitioner anchor for Book 13. Her corridor function: moral accounting; protects corridor land through debt, deed, and refusal to foreclose. The bond with Sachiel adds the Angel of Coin domain to the Expansion Arc while keeping the theology centered on chosen relationship and correct witness.",
+        "loc": "Book 13"
+    },
+    {
+        "watcher": true,
+        "name": "Sachiel",
+        "role": "Watcher · Angel of Coin · Bonded to Everett Marsh",
+        "desc": "Activated in Book 13. His domain serves the Web by making moral accounting; protects corridor land through debt, deed, and refusal to foreclose legible without replacing consent, trust, or the practitioner's choosing."
+    },
+    {
+        "key": true,
+        "name": "Fern Ridley",
+        "role": "Fogbound gulf corridor anchor · Book 14",
+        "watcher": "Chazaqiel",
+        "desc": "Practitioner anchor for Book 14. Her corridor function: fogbound Gulf corridor anchor; reads concealment without surrendering to confusion. The bond with Chazaqiel adds the Angel of Mists domain to the Expansion Arc while keeping the theology centered on chosen relationship and correct witness.",
+        "loc": "Book 14"
+    },
+    {
+        "watcher": true,
+        "name": "Chazaqiel",
+        "role": "Watcher · Angel of Mists · Bonded to Fern Ridley",
+        "desc": "Activated in Book 14. His domain serves the Web by making fogbound Gulf corridor anchor; reads concealment without surrendering to confusion legible without replacing consent, trust, or the practitioner's choosing."
+    },
+    {
+        "key": true,
+        "name": "Opal Truitt",
+        "role": "Dust bowl memory-holder · Book 15",
+        "watcher": "Suphlatus",
+        "desc": "Practitioner anchor for Book 15. Her corridor function: Dust Bowl memory-holder; proves reduced land can still carry a thread. The bond with Suphlatus adds the Angel of Dust domain to the Expansion Arc while keeping the theology centered on chosen relationship and correct witness.",
+        "loc": "Book 15"
+    },
+    {
+        "watcher": true,
+        "name": "Suphlatus",
+        "role": "Watcher · Angel of Dust · Bonded to Opal Truitt",
+        "desc": "Activated in Book 15. His domain serves the Web by making Dust Bowl memory-holder; proves reduced land can still carry a thread legible without replacing consent, trust, or the practitioner's choosing."
+    },
+    {
+        "key": true,
+        "name": "Delphine Ashworth",
+        "role": "Geomantic surveyor · Book 16",
+        "watcher": "Arakiel",
+        "desc": "Practitioner anchor for Book 16. Her corridor function: geomantic surveyor; maps Ley geometry into property boundaries. The bond with Arakiel adds the Signs of the Earth domain to the Expansion Arc while keeping the theology centered on chosen relationship and correct witness.",
+        "loc": "Book 16"
+    },
+    {
+        "watcher": true,
+        "name": "Arakiel",
+        "role": "Watcher · Signs of the Earth · Bonded to Delphine Ashworth",
+        "desc": "Activated in Book 16. His domain serves the Web by making geomantic surveyor; maps Ley geometry into property boundaries legible without replacing consent, trust, or the practitioner's choosing."
+    },
+];
+const CORRIDORS = [
+    { book: "Book 7", corridor: "Tensaw Delta", region: "Alabama · Southern Network", warden_linked: false,
+        thread: "The first corridor outside the Appalachian range proper. The Atlantic coastal Web thread connecting the eastern range to the Gulf Coast system.",
+        warden: null,
+        significance: "The southern network's documentary anchor. The delta's specific geography — where freshwater meets saltwater, the crossroads quality — gives the corridor a frequency that conducts the Web's lateral connections across environmental boundaries." },
+    { book: "Book 8", corridor: "Virginia Corridor", region: "Virginia · Appalachian Northern Range", warden_linked: true,
+        thread: "Still within Morvael's dissolved range — now the compact's Web thread. The Virginia thread connects the Pike County primary to the northern Appalachian network.",
+        warden: "Morvael's dissolved position holds this thread",
+        significance: "The temporal-frequency monitoring established here makes the corridor's history readable in both directions. The first evidence that the Appalachian system's geological record is legible to human practitioners." },
+    { book: "Book 9", corridor: "Kanawha County", region: "West Virginia · Leviathan's Eastern Range", warden_linked: true,
+        thread: "Explicitly within the Leviathan's secondary geological range. The WV Thread is the first corridor thread that the Leviathan can feel being placed.",
+        warden: "Morvael's dissolved position · Leviathan secondary range",
+        significance: "The Leviathan feels the WV Thread being placed. This is the first evidence in the arc of the geological depth the Expansion Arc is waking. The coal country's specific intersection of industry and geology makes this thread placement the most seismically significant of the five books." },
+    { book: "Book 10", corridor: "Penn State", region: "Pennsylvania · Atmospheric Layer · Northern Node", warden_linked: true,
+        thread: "The northern node of the eastern Appalachian Web range. D's atmospheric monitoring maps the Ley Line network's surface expression — the first human tool that reads the Warden communications medium.",
+        warden: "Tharael (Alps) begins to detect the North American signal strengthening",
+        significance: "D's atmospheric work is the most technically significant contribution in the arc. She is building the instrument that will confirm 31 threads = sufficient for the New Compact (WMB6) and will document the Veil's deterioration before the Divine Arc begins. She can hear the Wardens before they fully wake." },
+    { book: "Book 11", corridor: "Catskill Valley", region: "New York · Written Tradition · Appalachian Northern Terminus", warden_linked: true,
+        thread: "The northern terminus of the Appalachian system before the range loses definition. Secondary Ley Line node connecting to Ilavar's Rocky Mountain position.",
+        warden: "Ilavar (Rockies) · secondary Ley Line node · Catskill rock dragon corridor (WMB4)",
+        significance: "Penemue's archive joins the network. The Catskills are the location of Brian Lee's first major geological creature mediation (WMB4) — a rock dragon oriented along the secondary Ley Line connection between the Catskills and Ilavar's Rocky Mountain range." },
+    {
+        "book": "Book 12",
+        "corridor": "Thread-Count Equation",
+        "region": "Penn State / public atmospheric data",
+        "warden_linked": true,
+        "thread": "Calculation becomes witness when Marlene derives the Web's equation independently.",
+        "warden": "Butator's calculation domain cross-checks D Coale's monitoring",
+        "significance": "The count can be understood but not owned; relationship remains the unit of measure."
+    },
+    {
+        "book": "Book 13",
+        "corridor": "Coin / Land Record Corridor",
+        "region": "Small-town banking network",
+        "warden_linked": false,
+        "thread": "Everett's refusal to foreclose preserves corridor families through moral accounting.",
+        "warden": null,
+        "significance": "Mammon's legal economy gets its first direct counterweight in the Expansion Arc."
+    },
+    {
+        "book": "Book 14",
+        "corridor": "Low Country Fog",
+        "region": "Gulf Coast",
+        "warden_linked": true,
+        "thread": "Mist conceals a Gulf thread that has been redirecting the lost rather than trapping them.",
+        "warden": "Gulf atmospheric layer connects to the Leviathan's open-water frequency",
+        "significance": "The Web extends through fog, salt air, and hidden coastland."
+    },
+    {
+        "book": "Book 15",
+        "corridor": "Kansas Dust Corridor",
+        "region": "Drought Plains / Dust Bowl memory",
+        "warden_linked": false,
+        "thread": "Dust remembers what drought and displacement could not erase.",
+        "warden": null,
+        "significance": "The dead-land myth breaks; survival residue becomes Web evidence."
+    },
+    {
+        "book": "Book 16",
+        "corridor": "Survey Geometry Corridor",
+        "region": "County survey lines / property boundaries",
+        "warden_linked": true,
+        "thread": "Delphine's survey maps reveal Ley geometry hidden in ordinary boundary work.",
+        "warden": "Secondary Ley nodes bridged toward WMB7",
+        "significance": "The Web gains a way to protect land through shape, deed, and line."
+    },
+];
+const WARDEN_SIGNAL = [
+    { warden: "Morvael", status: "COMPLETED", range: "Appalachians", note: "His dissolved position holds three new Web threads from the Expansion Arc (Virginia, WV, Catskills). His completion enabled the compact. The Expansion Arc's threads are running through his legacy." },
+    { warden: "Tharael", status: "STIRRING", range: "Alps", note: "Begins to detect the North American Ley Line signal strengthening as D Coale's atmospheric monitoring maps the network. Not yet speaking — but aware." },
+    { warden: "Cassith", status: "STIRRING", range: "Caucasus", note: "Feels the Web's frequency change as five new correctly bonded corridors join the network. The ancient Near East node registers every shift in the Older Mechanism's compact law." },
+    { warden: "Vorath", status: "PRESENT", range: "Andes", note: "The South American node is the quietest during the Expansion Arc — the network's growth is primarily North American. Vorath is awake but not yet in active communication with the expanding system." },
+    { warden: "Ilavar", status: "STIRRING", range: "Rockies", note: "The Catskill corridor's establishment triggers a secondary Ley Line signal in Ilavar's range. The Catskill rock dragon — which will be central in WMB4 — is disoriented by the new thread placement. Ilavar is beginning to feel the North American network cohere." },
+];
+const TONE = [
+    { l: "Each book is a new kind of knowing", b: "The five books are not repeating the Pike County model — each corridor has its own practice, its own gift, its own specific relationship to the geological and atmospheric layers. The expansion is not replication. It is the Web discovering that the correct practice looks different in a delta than in a coal holler." },
+    { l: "The Wardens are in the background", b: "No Warden speaks directly in the Expansion Arc books. But their stirring is felt — in the specific way D's atmospheric readings begin to show patterns that have no meteorological explanation, in the way the WV Thread placement produces a tremor Abigail has no geological precedent for, in the way Penemue pauses over one specific entry in the archive before he fully understands why." },
+    { l: "The network is not imposed — it assembles", b: "None of the five heroines are recruited to a cause. They arrive at their practice through their own histories, their own gifts, their own corridors. The network assembles because the correct compact's frequency attracts the practitioners who belong in it. This is the daughters' tradition's specific character: you don't build the Web. You find that it was always there." },
+    { l: "D Coale is the arc's most structurally significant character", b: "She is building instruments, not performing practice. Her atmospheric monitoring is the arc's most consequential gift to the universe — it will confirm the New Compact's timing (WMB6), it will document the Veil's deterioration (pre-Divine Arc), it will map the Warden communication medium. She doesn't know any of this yet. She is running the models." },
+];
+const CANON = [
+    "The network expands from a Pike County-specific operation to a multi-corridor web across ten new corridors during Year 1.",
+    "Each new corridor adds its Web thread to the Ley Line network — the total thread count grows toward the 31 that D will confirm as sufficient for the New Compact.",
+    "The WV Thread (Book 9) is the first corridor thread the Leviathan can feel from the geological depth — the first evidence from outside Pike County that the Web is being correctly constituted.",
+    "D Coale's atmospheric monitoring (Book 10) is the instrument that will confirm 31 threads = sufficient (WMB6) and document the Veil's deterioration (pre-Divine Arc).",
+    "Penemue's archive (Book 11) carries Arcadia's first word — *here* — among every word ever written. The significance of this becomes legible in WMB4 when Brian Lee mediates the Catskill rock dragon in the corridor Emily holds.",
+    "Tharael (Alps) and Ilavar (Rockies) begin to detect the North American Ley Line signal strengthening during the Expansion Arc — the first Warden awareness of the network's growth beyond the Appalachian primary.",
+    "The Expansion Arc's five corridors establish the global network that the Leviathan Arc, the Web of Weavers Arc, and the Divine Arc will build upon. The gathering that begins here makes everything else possible.",
+    "Expansion Arc now contains twelve books: existing Books 7–11 plus Books 12–18. Book 18 completes the corridor count and leads directly into WMB7.",
+    "The completed count is relational, not bureaucratic. Every corridor counted means every witness honored, not every corridor controlled.",
+];
+function ExpansionBible() {
+    const [tab, setTab] = useState("premise");
+    return (React.createElement(React.Fragment, null,
+        React.createElement("style", null, css),
+        React.createElement("div", { className: "bible" },
+            React.createElement("header", { className: "header" },
+                React.createElement("div", { className: "series-label" }, "Series Bible \u00B7 The Holler & Hellfire Universe"),
+                React.createElement("h1", { className: "main-title" }, "The Corridor Expands"),
+                React.createElement("div", { className: "sub-title" }, "The Expansion Arc \u00B7 Books 7\u201318 \u00B7 Year 1"),
+                React.createElement("p", { className: "tagline" },
+                    "The compact is solid. Pike County is held.",
+                    React.createElement("br", null),
+                    React.createElement("em", null, "The Web has always been larger than one corridor."),
+                    React.createElement("br", null),
+                    "Five new bonds. Ten new corridors. The global gathering begins.",
+                    React.createElement("br", null),
+                    "The Wardens are starting to feel it.")),
+            React.createElement("nav", { className: "tabs" }, TABS.map(t => React.createElement("button", { key: t.id, className: `tab${tab === t.id ? " active" : ""}`, onClick: () => setTab(t.id) }, t.l))),
+            tab === "premise" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Arc in Context"),
+                React.createElement("div", { className: "pull" },
+                    "The compact has been solid for a year. The Pike County corridor holds. The anchor work is maintenance.",
+                    React.createElement("br", null),
+                    React.createElement("br", null),
+                    "What happens in Year 1 is not a crisis \u2014 it is recognition. The correct compact's frequency is attracting the practitioners who belong in it, in corridors across the eastern seaboard and beyond. Five new Watcher bonds. Five new Web threads placed. Ten new corridors entering the Ley Line network.",
+                    React.createElement("br", null),
+                    React.createElement("br", null),
+                    React.createElement("em", null, "The Wardens, in the deep places, begin to feel the gathering.")),
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "clabel" }, "Why This Arc Exists"),
+                    React.createElement("div", { className: "ctitle gd" }, "The Leviathan Cannot Wake Into a Single Corridor"),
+                    React.createElement("div", { className: "cbody" },
+                        "The New Compact \u2014 ratified in WMB6 \u2014 requires the Web's frequency to be sufficiently constituted before its authority can hold. D Coale will confirm in Year 2 that ",
+                        React.createElement("strong", null, "31 correctly placed threads are sufficient."),
+                        " The Expansion Arc is the arc that gets the thread count from the 6 placed in Books 1\u20136 toward the 31 the New Compact needs.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "Each of the five Expansion Arc books places a new thread. Each bond is a new node in the Ley Line network. Each corridor's practitioner adds their specific gift to the Web's frequency.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "The Leviathan is feeling this. It cannot yet speak. But every new thread placed is felt in the deep position.")),
+                React.createElement("div", { className: "card tl" },
+                    React.createElement("div", { className: "clabel" }, "The Arc's Most Significant Contribution"),
+                    React.createElement("div", { className: "ctitle tl" }, "D Coale Builds the Instrument"),
+                    React.createElement("div", { className: "cbody" },
+                        "The atmospheric monitoring layer D establishes at Penn State is the most structurally significant gift in the arc. She does not know this yet. She is running models.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "What she builds will:",
+                        React.createElement("br", null),
+                        "\u2022 Confirm 31 threads = sufficient for the New Compact (WMB6, July Year 2)",
+                        React.createElement("br", null),
+                        "\u2022 Map the Warden communication medium \u2014 the Ley Lines expressed as weather",
+                        React.createElement("br", null),
+                        "\u2022 Document the Veil's deterioration before the Divine Arc begins",
+                        React.createElement("br", null),
+                        "\u2022 Give Taia Mountainjoy the scientific framework for the Veil-maintenance ceremony (Penitent's Road)",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("em", null, "She is running the models. She will run them forty times before she is sure."))),
+                React.createElement("div", { className: "card pu" },
+                    React.createElement("div", { className: "clabel" }, "The Archive Connection"),
+                    React.createElement("div", { className: "ctitle pu" }, "Penemue Has Been Carrying the First Word for Twelve Thousand Years"),
+                    React.createElement("div", { className: "cbody" },
+                        "Penemue carries every word ever written. Among those words is Arcadia's first word \u2014 ",
+                        React.createElement("em", null, "here"),
+                        " \u2014 written in the soil above the Leviathan's heart twelve thousand years ago and rendered into the written record through the geological inscription's translation.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "He has carried it without knowing why it felt different from everything else in the archive. The bond with Emily Keldren in the Catskill Valley \u2014 the written tradition anchor \u2014 is the moment the archive's connection to the Leviathan Arc becomes accessible to the network.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "Brian Lee will mediate a rock dragon in Emily's corridor in WMB4. The Catskill corridor is the first evidence of how far the Leviathan's geological range extends.")),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "Series Position"),
+                React.createElement("div", { className: "stack" },
+                    React.createElement("div", { className: "sr prev" },
+                        "H&H BOOKS 1\u20136 \u2014 YEAR 0",
+                        React.createElement("div", { className: "snote" }, "The compact ratified \u00B7 Pike County established \u00B7 the foundation")),
+                    React.createElement("div", { className: "sarr" }, "\u2193"),
+                    React.createElement("div", { className: "sr here" },
+                        "THE EXPANSION ARC (BOOKS 7\u201318) \u2014 YEAR 1",
+                        React.createElement("div", { className: "snote" }, "Ten new corridors \u00B7 five new bonds \u00B7 the Web grows toward sufficiency \u00B7 the Wardens stir")),
+                    React.createElement("div", { className: "sarr" }, "\u2193"),
+                    React.createElement("div", { className: "sr next" },
+                        "THE LEVIATHAN ARC \u2014 YEAR 2",
+                        React.createElement("div", { className: "snote" }, "31 threads sufficient \u00B7 Ravos chooses Brian Lee \u00B7 the New Compact ratified")),
+                    React.createElement("div", { className: "sarr" }, "\u2193"),
+                    React.createElement("div", { className: "sr next" },
+                        "THE WEB OF THE WEAVERS \u2014 YEAR 4",
+                        React.createElement("div", { className: "snote" }, "The daughters wake \u00B7 443 practitioners \u00B7 Moon-Bride channel")),
+                    React.createElement("div", { className: "sarr" }, "\u2193"),
+                    React.createElement("div", { className: "sr next" },
+                        "THE ORDER OF THE SHADOWS \u2014 YEAR 5",
+                        React.createElement("div", { className: "snote" }, "The defectors \u00B7 the war \u00B7 the seal \u00B7 the cascade")),
+                    React.createElement("div", { className: "sarr" }, "\u2193"),
+                    React.createElement("div", { className: "sr next" },
+                        "THE DIVINE ARC \u2014 YEARS 6\u20137",
+                        React.createElement("div", { className: "snote" }, "The Arcana layer engages \u00B7 Hecate lost \u00B7 the Restoration \u00B7 the five Merkaba formations close")),
+                    React.createElement("div", { className: "sarr" }, "\u2193"),
+                    React.createElement("div", { className: "sr next" },
+                        "THE SEVENTH CYCLE ARC \u2014 THE SEVEN YEARS AFTER",
+                        React.createElement("div", { className: "snote" }, "First Contact forced onto Earth at the Restoration \u00B7 the direct confrontation with the Abyss \u00B7 the last cycle holds or ends"))))),
+            tab === "chars" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Ten Heroines"),
+                React.createElement("div", { className: "char-grid" }, CHARS.filter(c => c.key).map(c => (React.createElement("div", { key: c.name, className: "char-card key" },
+                    React.createElement("div", { className: "cname" }, c.name),
+                    React.createElement("div", { className: "crole" }, c.role),
+                    React.createElement("div", { className: "cdesc", dangerouslySetInnerHTML: { __html: c.desc } }),
+                    c.watcher && React.createElement("div", { style: { marginTop: 7, fontSize: 11, color: "#9e7d48", fontStyle: "italic" } },
+                        "\u27E1 Bonded: ",
+                        c.watcher),
+                    c.loc && React.createElement("span", { className: "cloc" }, c.loc))))),
+                React.createElement("div", { className: "sec" }, "The Ten Watchers"),
+                React.createElement("div", { className: "char-grid" }, CHARS.filter(c => c.watcher === true).map(c => (React.createElement("div", { key: c.name, className: "char-card watcher" },
+                    React.createElement("div", { className: "cname" }, c.name),
+                    React.createElement("div", { className: "crole" }, c.role),
+                    React.createElement("div", { className: "cdesc", dangerouslySetInnerHTML: { __html: c.desc } }))))),
+                React.createElement("div", { className: "sec" }, "Warden Status \u2014 What They Feel During Year 1"),
+                React.createElement("div", { className: "char-grid" }, WARDEN_SIGNAL.map(w => (React.createElement("div", { key: w.warden, className: "char-card warden" },
+                    React.createElement("div", { className: "cname" }, w.warden),
+                    React.createElement("div", { className: "crole", style: { color: "#5eead4" } },
+                        w.status,
+                        " \u00B7 ",
+                        w.range),
+                    React.createElement("div", { className: "cdesc" }, w.note))))))),
+            tab === "corridors" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Ten New Corridors"),
+                React.createElement("p", { style: { fontSize: 13, color: "#5c3d18", marginBottom: 14, lineHeight: 1.7 } }, "Each corridor established in the Expansion Arc adds a Web thread to the Ley Line network. The thread count at arc's end brings the network toward the 31 D Coale will confirm as sufficient for the New Compact."),
+                React.createElement("div", { className: "corridor-grid" }, CORRIDORS.map(c => (React.createElement("div", { key: c.book, className: `corridor-card${c.warden_linked ? " warden-linked" : ""}` },
+                    React.createElement("div", { className: "cbook" }, c.book),
+                    React.createElement("div", { className: "ccorridor" }, c.corridor),
+                    React.createElement("div", { className: "cregion" }, c.region),
+                    React.createElement("div", { className: "cthread", dangerouslySetInnerHTML: { __html: c.thread } }),
+                    React.createElement("div", { className: "cthread", style: { marginTop: 7 }, dangerouslySetInnerHTML: { __html: c.significance } }),
+                    c.warden && React.createElement("div", { className: "cwarden" },
+                        "\u27E1 Warden connection: ",
+                        c.warden))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "The Ley Line Network \u2014 How It Grows"),
+                React.createElement("div", { className: "card tl" },
+                    React.createElement("div", { className: "clabel" }, "Thread Count Progress"),
+                    React.createElement("div", { className: "ctitle tl" }, "From 6 Threads to Sufficient"),
+                    React.createElement("div", { className: "cbody" },
+                        "At the start of the Expansion Arc (Year 1), the network holds 6 correctly placed threads from Books 1\u20136 \u2014 the Pike County primary plus five supporting threads from the initial H&H bondings.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "The Expansion Arc adds a thread with each new corridor bond. By the arc's end, the count is moving toward the 31 D will confirm as sufficient.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "Three of Ravos's seventeen thread locations in WMB1 are at secondary Ley Line nodes between the Expansion Arc's corridors"),
+                        " \u2014 meaning the Expansion Arc's thread placements are precisely where the Leviathan Arc's geological work needs them.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "D doesn't know this yet. She is mapping the atmospheric layer. She will run the models forty times. The answer will be: ",
+                        React.createElement("em", null, "sufficient. The compact can happen now."))),
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "clabel" }, "The Warden Communication Medium"),
+                    React.createElement("div", { className: "ctitle gd" }, "Why D Coale Can Hear Them"),
+                    React.createElement("div", { className: "cbody" },
+                        "The Wardens communicate through the Ley Lines' surface expression \u2014 the atmospheric weather patterns that run along the routes the Ley Lines follow. D's atmospheric monitoring at Penn State maps these patterns with scientific precision, which means she is, without fully understanding it, mapping Warden communications.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "When Tharael of the Alps begins to detect the North American signal, D's instruments register an anomalous high-pressure system over the Atlantic that has no meteorological origin. She flags it in her documentation and keeps running the models.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("em", null, "She will run the models for two years before she understands what she's been hearing."))))),
+            tab === "books" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Twelve Books \u2014 The Expansion Arc"),
+                React.createElement("div", { className: "alist" }, BOOKS.map(b => (React.createElement("div", { className: "abook", key: b.n },
+                    React.createElement("div", { className: "anum-col", style: { color: b.color } }, b.n),
+                    React.createElement("div", { className: "acont" },
+                        React.createElement("div", { className: "atitle" }, b.title),
+                        React.createElement("div", { className: "aloc" },
+                            b.couple,
+                            " \u00B7 ",
+                            b.loc),
+                        React.createElement("div", { className: "aeng" }, b.role),
+                        React.createElement("div", { className: "ab" }, b.gift),
+                        b.warden && React.createElement("div", { style: { marginTop: 6, fontSize: 11, color: "#5eead4", fontStyle: "italic", borderTop: "1px solid #3a2408", paddingTop: 5 } },
+                            "\u27E1 Warden connection: ",
+                            b.warden),
+                        React.createElement("div", { style: { marginTop: 6, fontSize: 12, color: "#9e7d48", lineHeight: 1.55 } },
+                            React.createElement("strong", { style: { color: "#e8c06a", fontFamily: "'Cinzel',serif", fontSize: 9, letterSpacing: ".2em" } }, "KEY ESTABLISHMENT: "),
+                            b.key),
+                        React.createElement("div", { style: { marginTop: 7 } }, b.tagNames.map((g, i) => React.createElement("span", { key: g, className: `tag ${b.tags[i]}` }, g)))))))))),
+            tab === "tone" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "Tone Notes"),
+                React.createElement("div", { style: { marginBottom: 22 } }, TONE.map(n => (React.createElement("div", { className: "card", key: n.l, style: { marginBottom: 10 } },
+                    React.createElement("div", { className: "clabel" }, n.l),
+                    React.createElement("div", { className: "cbody" }, n.b))))),
+                React.createElement("div", { className: "sec" }, "Permanent Canon"),
+                React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 7 } }, CANON.map((c, i) => (React.createElement("div", { key: i, className: "card ge", style: { borderLeftColor: "#c9943a" } },
+                    React.createElement("div", { className: "cbody", dangerouslySetInnerHTML: { __html: c.replace(/\*(.*?)\*/g, "<em>$1</em>") } }))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "The Arc in One Sentence Per Book"),
+                React.createElement("div", { className: "pull" }, "Book 7: The southern network finds its witness."),
+                React.createElement("div", { className: "pull" }, "Book 8: The corridor learns to read itself in time."),
+                React.createElement("div", { className: "pull" }, "Book 9: The Leviathan feels the new thread \u2014 one valley over from where it has always been."),
+                React.createElement("div", { className: "pull" }, "Book 10: D runs the models. She is building something she doesn't have a name for yet."),
+                React.createElement("div", { className: "pull" }, "Book 11: Penemue has been carrying the first word for twelve thousand years. He finally understands why."),
+                React.createElement("div", { className: "orn" }, "\u2726 \u2726 \u2726"),
+                React.createElement("div", { style: { textAlign: "center", color: "#5c3d18", fontSize: 12, fontStyle: "italic", lineHeight: 1.8 } },
+                    "The compact holds in Pike County.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: "#e8c06a" } }, "The Web has always been larger than one corridor."),
+                    React.createElement("br", null),
+                    "Ten bonds. Ten new threads.",
+                    React.createElement("br", null),
+                    "The Wardens are starting to feel the gathering.",
+                    React.createElement("br", null),
+                    "The mountain is keeping this \u2014 for now."))))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(ExpansionBible));
+
+  </script>
+</body>
+</html>
