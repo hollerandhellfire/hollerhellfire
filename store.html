@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Store · Holler &amp; Hellfire</title>
+<meta name="description" content="Official Holler &amp; Hellfire store — books, music, merchandise, and expansion-era canon products fulfilled through Fourthwall.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --bg:#080706;
+  --bg2:#120d0a;
+  --panel:#15100d;
+  --panel2:#1d1510;
+  --gold:#c9922a;
+  --gold2:#e8b84b;
+  --bone:#f0ddb0;
+  --bone2:#c8a96e;
+  --ash:#a09080;
+  --dim:#65594a;
+  --crimson:#8b0000;
+  --blood:#b30000;
+  --line:rgba(201,146,42,.22);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(ellipse 80% 45% at 50% -10%,rgba(201,146,42,.14),transparent 65%),
+    radial-gradient(ellipse 70% 55% at 100% 15%,rgba(139,0,0,.16),transparent 60%),
+    linear-gradient(180deg,#080706,#0d0806 50%,#050403);
+  color:var(--bone);
+  font-family:Georgia,'Times New Roman',serif;
+  min-height:100vh;
+  line-height:1.65;
+}
+a{color:inherit}
+.family-bar{
+  position:sticky;top:0;z-index:50;
+  display:flex;justify-content:center;align-items:center;gap:.55rem;flex-wrap:wrap;
+  padding:.78rem 1rem;
+  background:rgba(5,4,3,.92);
+  border-bottom:1px solid var(--line);
+  backdrop-filter:blur(12px);
+  font-family:Cinzel,Georgia,serif;
+}
+.family-bar a{
+  text-decoration:none;
+  color:var(--ash);
+  font-size:.72rem;
+  letter-spacing:.09em;
+  text-transform:uppercase;
+  transition:color .2s ease;
+}
+.family-bar a:hover,.family-bar a.active{color:var(--gold2)}
+.family-bar .sep{color:var(--dim);font-size:.8rem}
+.hero{
+  text-align:center;
+  padding:clamp(4rem,8vw,7rem) 1.4rem 3.5rem;
+}
+.kicker,.section-kicker{
+  font-family:Cinzel,Georgia,serif;
+  color:var(--gold);
+  letter-spacing:.32em;
+  text-transform:uppercase;
+  font-size:.72rem;
+  margin-bottom:1rem;
+}
+h1,h2,h3,.brand{
+  font-family:Cinzel,Georgia,serif;
+  letter-spacing:.04em;
+}
+h1{
+  font-size:clamp(2.6rem,8vw,5.7rem);
+  line-height:.95;
+  color:var(--bone);
+  text-shadow:0 0 48px rgba(201,146,42,.28);
+}
+h1 span,.gold{color:var(--gold2)}
+.hero-sub{
+  margin:1.2rem auto 0;
+  max-width:760px;
+  color:var(--bone2);
+  font-size:clamp(1.05rem,2.5vw,1.35rem);
+  font-style:italic;
+}
+.hero-actions{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;margin-top:2rem}
+.btn{
+  display:inline-block;text-decoration:none;
+  font-family:Cinzel,Georgia,serif;
+  font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;
+  border:1px solid var(--gold);
+  padding:.86rem 1.25rem;
+  color:var(--gold2);
+  background:rgba(201,146,42,.05);
+  transition:transform .2s,border-color .2s,background .2s;
+}
+.btn:hover{transform:translateY(-2px);border-color:var(--gold2);background:rgba(201,146,42,.14)}
+.btn.primary{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#110b05;border-color:var(--gold2);font-weight:bold}
+.wrap{max-width:1180px;margin:0 auto;padding:0 1.25rem 4rem}
+.section{padding:3rem 0;border-top:1px solid var(--line)}
+.section h2,.contact-section h2{
+  text-align:center;
+  font-size:clamp(1.8rem,4vw,2.8rem);
+  margin-bottom:.7rem;
+  color:var(--bone);
+}
+.section-lede{
+  text-align:center;
+  max-width:780px;
+  margin:0 auto 2rem;
+  color:var(--bone2);
+  font-style:italic;
+}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem}
+.info-card,.product-card{
+  background:linear-gradient(180deg,rgba(29,21,16,.96),rgba(12,8,6,.96));
+  border:1px solid var(--line);
+  border-left:3px solid var(--gold);
+  padding:1.2rem;
+  box-shadow:0 14px 35px rgba(0,0,0,.22);
+}
+.info-card h3,.product-title{color:var(--gold2);font-size:1.05rem;margin-bottom:.45rem}
+.info-card p,.product-sub{color:var(--bone2);font-size:.96rem}
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin:2rem 0}
+.stat{
+  text-align:center;
+  padding:1.2rem;
+  border:1px solid var(--line);
+  background:rgba(201,146,42,.05);
+}
+.stat .num{font-family:Cinzel,Georgia,serif;font-size:2.2rem;color:var(--gold2);line-height:1}
+.stat .lbl{font-family:Cinzel,Georgia,serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--dim);margin-top:.3rem}
+.callout{
+  margin:2rem auto;
+  max-width:920px;
+  border:1px solid rgba(139,0,0,.38);
+  border-left:4px solid var(--blood);
+  background:rgba(139,0,0,.12);
+  padding:1.3rem 1.5rem;
+  color:var(--bone2);
+}
+.callout strong{color:var(--gold2)}
+.contact-section{
+  max-width:1180px;margin:0 auto 3rem;padding:3rem 1.25rem;
+  border-top:1px solid var(--line);
+}
+.contact-section h2 span{color:var(--gold2)}
+.contact-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,420px);gap:1.5rem;margin-top:1.8rem}
+.contact-copy,.contact-form{
+  background:linear-gradient(180deg,rgba(29,21,16,.95),rgba(12,8,6,.95));
+  border:1px solid var(--line);
+  padding:1.4rem;
+}
+.contact-copy h3{color:var(--gold2);margin-bottom:.7rem}
+.contact-copy p,.contact-list{color:var(--bone2)}
+.contact-list{list-style:none;margin-top:1rem}
+.contact-list li{padding:.42rem 0;border-bottom:1px solid rgba(201,146,42,.1)}
+.contact-list strong{display:inline-block;width:1.6rem}
+.contact-form{display:flex;flex-direction:column;gap:.9rem}
+.contact-form label{
+  display:flex;flex-direction:column;gap:.35rem;
+  font-family:Cinzel,Georgia,serif;font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--gold2);
+}
+.contact-form input,.contact-form select,.contact-form textarea{
+  width:100%;border:1px solid rgba(201,146,42,.28);
+  background:#0b0705;color:var(--bone);
+  padding:.75rem;font:inherit;letter-spacing:normal;text-transform:none;
+}
+.contact-form textarea{min-height:120px;resize:vertical}
+.contact-form button{
+  cursor:pointer;border:1px solid var(--gold);
+  background:linear-gradient(180deg,var(--gold2),var(--gold));
+  color:#120b05;padding:.9rem 1.1rem;
+  font-family:Cinzel,Georgia,serif;letter-spacing:.16em;text-transform:uppercase;font-weight:bold;
+}
+footer{
+  border-top:1px solid var(--line);
+  padding:2.5rem 1rem;
+  text-align:center;
+  color:var(--dim);
+  background:#040302;
+}
+footer .brand{color:var(--gold2);font-size:1rem;margin-bottom:.45rem;text-transform:uppercase}
+footer a{text-decoration:none;color:var(--ash)}
+footer a:hover{color:var(--gold2)}
+.footer-links{display:flex;justify-content:center;flex-wrap:wrap;gap:1rem;margin:1rem 0;font-family:Cinzel,Georgia,serif;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em}
+@media(max-width:720px){
+  .family-bar{position:relative}
+  .family-bar .sep{display:none}
+  .contact-grid{grid-template-columns:1fr}
+}
+
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1.1rem}
+.product-card{display:flex;flex-direction:column;min-height:100%}
+.product-art{
+  height:260px;display:flex;align-items:center;justify-content:center;
+  background:
+    radial-gradient(circle at 40% 15%,rgba(201,146,42,.16),transparent 35%),
+    linear-gradient(145deg,#120a09,#050403);
+  border:1px solid rgba(201,146,42,.12);
+  margin-bottom:1rem;
+  text-align:center;
+  color:rgba(232,184,75,.58);
+  font-family:Cinzel,Georgia,serif;
+  font-size:clamp(1.45rem,4vw,2.15rem);
+  line-height:1.15;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.product-meta{
+  display:flex;justify-content:space-between;align-items:center;gap:.75rem;
+  margin-top:auto;padding-top:1rem;border-top:1px solid rgba(201,146,42,.12);
+}
+.product-tag{
+  display:inline-block;
+  font-family:Cinzel,Georgia,serif;
+  font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;
+  color:var(--bone);background:rgba(139,0,0,.65);
+  border:1px solid rgba(179,0,0,.8);
+  padding:.22rem .5rem;margin-bottom:.7rem;
+}
+.product-price{font-family:Cinzel,Georgia,serif;color:var(--gold2);font-size:.82rem}
+.product-link{
+  font-family:Cinzel,Georgia,serif;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;
+  text-decoration:none;color:var(--gold2);
+  border:1px solid var(--gold);padding:.48rem .72rem;
+}
+.product-link:hover{background:rgba(201,146,42,.14)}
+.store-banner{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:2rem}
+
+</style>
+</head>
+<body>
+<nav class="family-bar" aria-label="Holler and Hellfire family navigation">
+  <a href="index.html">The Universe</a>
+  <span class="sep">&bull;</span>
+  <a href="kaylin_renea_author.html">Books · Kaylin Renea</a>
+  <span class="sep">&bull;</span>
+  <a href="holler_hellfire_records.html">Music · H&amp;H Records</a>
+  <span class="sep">&bull;</span>
+  <a href="brian_lee_webb_website.html">Brian Lee Webb</a>
+  <span class="sep">&bull;</span>
+  <a href="webbs_entrepenureship.html">Webbs Entrepreneurship</a>
+  <span class="sep">&bull;</span>
+  <a href="blog.html">The Hollow</a>
+  <span class="sep">&bull;</span>
+  <a href="store.html" class="active">Merch</a>
+  <span class="sep">&bull;</span>
+  <a href="epk.html">EPK</a>
+  <span class="sep">&bull;</span>
+  <a href="bible.html">The Codex</a>
+</nav>
+
+<header class="hero">
+  <div class="kicker">Official Holler &amp; Hellfire Store</div>
+  <h1>The <span>Store</span></h1>
+  <p class="hero-sub">Books · Music · Merch · Pike County, Kentucky<br>All orders fulfilled through Fourthwall.</p>
+  <div class="hero-actions">
+    <a class="btn primary" href="https://dixie-deadshot-shop.fourthwall.com" target="_blank" rel="noopener">Shop on Fourthwall ↗</a>
+    <a class="btn" href="books.html">Explore the Saga</a>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="section">
+    <div class="store-banner">
+      <div>
+        <div class="section-kicker">Expansion Canon</div>
+        <h2 style="text-align:left;margin-bottom:.3rem">The universe is expanding.</h2>
+        <p style="color:var(--bone2)">The store now reflects the expanded H&amp;H structure: 7 arcs, 84 book slots, 37 new book slots/additions, 26 finalized Grigori/practitioner bonds, and 11 ensemble/plot books.</p>
+      </div>
+      <a class="btn" href="bible.html">Open the Codex</a>
+    </div>
+    <div class="callout"><strong>Upload repair:</strong> broken target attributes, placeholder links, misspelled email text, malformed product image markup, and dead JavaScript buttons have been corrected.</div>
+  </section>
+
+  <section class="section">
+    <div class="section-kicker">Books</div>
+    <h2>Novels</h2>
+    <p class="section-lede">Core titles and Fourthwall book listings. Expanded-arc products can be added here as they go live.</p>
+    <div class="product-grid">
+      <article class="product-card">
+  <div class="product-art">Book<br>One</div>
+  <span class="product-tag">Novel</span>
+  <h3 class="product-title">Fallin&#x27; for a Fallen</h3>
+  <p class="product-sub">Dixie &amp; Azazel · Book One</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/fallin-for-a-fallen" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">Book<br>Two</div>
+  <span class="product-tag">Novel</span>
+  <h3 class="product-title">The Devil&#x27;s in the Details</h3>
+  <p class="product-sub">Della &amp; Samyaza · Book Two</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/the-devils-in-the-details" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">Book<br>Three</div>
+  <span class="product-tag">Novel</span>
+  <h3 class="product-title">Strike Me Down</h3>
+  <p class="product-sub">Carla June &amp; Baraqiel · Book Three</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/strike-me-down" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">Book<br>Four</div>
+  <span class="product-tag">Novel</span>
+  <h3 class="product-title">All Hell Breaks Loose</h3>
+  <p class="product-sub">Mercy &amp; Armaros · Book Four</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">Book<br>Five</div>
+  <span class="product-tag">Novel</span>
+  <h3 class="product-title">Written in the Stars</h3>
+  <p class="product-sub">June &amp; Kokabiel · Book Five</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">Book<br>Six</div>
+  <span class="product-tag">Finale</span>
+  <h3 class="product-title">Outlaw Heaven</h3>
+  <p class="product-sub">All Couples · Book Six</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-kicker">Music</div>
+    <h2>Dixie Deadshot Catalog</h2>
+    <p class="section-lede">Album volumes tied to the books and the mortal music layer of the universe.</p>
+    <div class="product-grid">
+      <article class="product-card">
+  <div class="product-art">Dead<br>Reckoning</div>
+  <span class="product-tag">EP</span>
+  <h3 class="product-title">Dead Reckoning EP</h3>
+  <p class="product-sub">Dixie Deadshot · 5 Tracks</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/dead-reckoning-album" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">Fallin'<br>for<br>a<br>Fallen</div>
+  <span class="product-tag">Vol I</span>
+  <h3 class="product-title">Fallin&#x27; for a Fallen</h3>
+  <p class="product-sub">Dixie Deadshot · 8 Tracks</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/fallin-for-a-fallen-vol-i" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">The<br>Devil's<br>in<br>the<br>Details</div>
+  <span class="product-tag">Vol II</span>
+  <h3 class="product-title">The Devil&#x27;s in the Details</h3>
+  <p class="product-sub">Dixie Deadshot · 10 Tracks</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/the-devils-in-the-details-vol-ii" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">Strike<br>Me<br>Down</div>
+  <span class="product-tag">Vol III</span>
+  <h3 class="product-title">Strike Me Down</h3>
+  <p class="product-sub">Dixie Deadshot · 10 Tracks</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/strike-me-down-vol-iii" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">All<br>Hell<br>Breaks<br>Loose</div>
+  <span class="product-tag">Vol IV</span>
+  <h3 class="product-title">All Hell Breaks Loose</h3>
+  <p class="product-sub">Dixie Deadshot · 10 Tracks</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/all-hell-breaks-loose-album-vol-iv" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">Written<br>in<br>the<br>Stars</div>
+  <span class="product-tag">Vol V</span>
+  <h3 class="product-title">Written in the Stars</h3>
+  <p class="product-sub">Dixie Deadshot · 10 Tracks</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/written-in-the-stars-vol-v" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">Outlaw<br>Heaven</div>
+  <span class="product-tag">Vol VI</span>
+  <h3 class="product-title">Outlaw Heaven</h3>
+  <p class="product-sub">Dixie Deadshot · 10 Tracks</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/outlaw-heaven-vol-vi" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-kicker">Merch</div>
+    <h2>Apparel &amp; Universe Goods</h2>
+    <p class="section-lede">Logo merch, music merch, and expansion-era drops for the H&amp;H audience.</p>
+    <div class="product-grid">
+      <article class="product-card">
+  <div class="product-art">H&amp;H</div>
+  <span class="product-tag">Apparel</span>
+  <h3 class="product-title">Holler &amp; Hellfire Hoodie</h3>
+  <p class="product-sub">Classic logo · Black</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/dead-reckoning-hoodie" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">Dixie<br>Deadshot</div>
+  <span class="product-tag">Apparel</span>
+  <h3 class="product-title">Dixie Deadshot Wanted Poster Tee</h3>
+  <p class="product-sub">Outlaw country rap · Pike County</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com/products/dixie-deadshot-wanted-poster-tee" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article><article class="product-card">
+  <div class="product-art">The<br>Corridors<br>Are<br>Open</div>
+  <span class="product-tag">Canon Drop</span>
+  <h3 class="product-title">The Corridors Are Open Collection</h3>
+  <p class="product-sub">Expansion-era merch concepts · rolling out with the 12-book arc build</p>
+  <div class="product-meta">
+    <span class="product-price">View price</span>
+    <a class="product-link" href="https://dixie-deadshot-shop.fourthwall.com" target="_blank" rel="noopener">Buy →</a>
+  </div>
+</article>
+    </div>
+  </section>
+</main>
+
+<section id="contact" class="contact-section">
+  <div class="section-kicker">Let's Build Together</div>
+  <h2>Get in <span>Touch</span></h2>
+  <div class="contact-grid">
+    <div class="contact-copy">
+      <h3>Ready to partner with Webbs Entrepreneurship?</h3>
+      <p>Whether you're an artist looking for a label home, a reader of the Holler &amp; Hellfire Universe, a collaborator with a bold idea, or an investor ready to back something real — reach out.</p>
+      <ul class="contact-list">
+        <li><strong>✉</strong> <a href="mailto:webbs.entrepreneurship@hollerandhellfire.net">webbs.entrepreneurship@hollerandhellfire.net</a></li>
+        <li><strong>🎵</strong> Holler &amp; Hellfire Records — artist inquiries</li>
+        <li><strong>📖</strong> Holler &amp; Hellfire Universe — book, media, and licensing partnerships</li>
+        <li><strong>💼</strong> Webbs Entrepreneurship — business and consulting</li>
+      </ul>
+    </div>
+    <form class="contact-form" action="mailto:webbs.entrepreneurship@hollerandhellfire.net" method="post" enctype="text/plain">
+      <label>Your Name
+        <input name="name" type="text" placeholder="Full name">
+      </label>
+      <label>Email Address
+        <input name="email" type="email" placeholder="you@example.com">
+      </label>
+      <label>I'm Interested In
+        <select name="interest">
+          <option value="">Select a venture…</option>
+          <option>Holler &amp; Hellfire Records — Artist Inquiry</option>
+          <option>Holler &amp; Hellfire Universe — Media/Publishing</option>
+          <option>Webbs Entrepreneurship — Business Partnership</option>
+          <option>Creative Consulting</option>
+          <option>General Inquiry</option>
+        </select>
+      </label>
+      <label>Message
+        <textarea name="message" placeholder="Tell us about your project or inquiry…"></textarea>
+      </label>
+      <button type="submit">Send Message</button>
+    </form>
+  </div>
+</section>
+<footer>
+  <div class="brand">Holler &amp; Hellfire Universe</div>
+  <div>www.hollerandhellfire.net</div>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="books.html">Books</a>
+    <a href="holler_hellfire_records.html">Music</a>
+    <a href="store.html">Store</a>
+    <a href="bible.html">The Codex</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <p>&copy; 2026 Holler &amp; Hellfire Universe · Novels by Kaylin Renea · Music by Dixie Deadshot · A Webbs Entrepreneurship Production</p>
+  <p><em>For Mama Calhoun. Who held the door.</em></p>
+</footer>
+</body>
+</html>

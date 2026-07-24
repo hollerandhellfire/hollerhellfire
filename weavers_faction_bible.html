@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Weavers · Holler &amp; Hellfire Faction Bible</title>
+<meta name="description" content="Holler &amp; Hellfire canon bible">
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── Deep Earth Green Palette ── */
+/* Thirty thousand years of practice.                               */
+/* The daughters were here before the formal framework had a name.  */
+/* The Web was always there. They found it awake.                   */
+
+.bible{max-width:960px;margin:0 auto;padding:32px 20px 60px;background:#020703;min-height:100vh;color:#d4f0d4;font-family:'Cormorant Garamond',Georgia,serif;}
+.header{text-align:center;padding:50px 0 36px;border-bottom:1px solid #153a15;margin-bottom:36px;position:relative;}
+.header::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,#4a8c4a);}
+.header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(45,106,45,.12) 0%,transparent 70%),radial-gradient(ellipse 40% 30% at 20% 30%,rgba(45,106,45,.05) 0%,transparent 60%);pointer-events:none;}
+.series-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:#4a8c4a;text-transform:uppercase;margin-bottom:14px;}
+.main-title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,5vw,38px);font-weight:700;color:#d4f0d4;line-height:1.15;margin-bottom:8px;text-shadow:0 0 50px rgba(74,140,74,.3);}
+.sub-title{font-family:'Cinzel',serif;font-size:clamp(10px,2vw,14px);color:#7dc07d;letter-spacing:.22em;margin-bottom:20px;}
+.tagline{font-style:italic;font-size:14px;color:#2a5a2a;max-width:640px;margin:0 auto;line-height:1.8;}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:26px;border-bottom:1px solid #153a15;padding-bottom:12px;}
+.tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:6px 13px;border:1px solid #153a15;background:transparent;color:#2a5a2a;cursor:pointer;transition:all .2s;}
+.tab:hover{border-color:#4a8c4a;color:#7dc07d;}
+.tab.active{background:rgba(45,106,45,.2);border-color:#4a8c4a;color:#d4f0d4;}
+.sec{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#4a8c4a;margin:22px 0 14px;padding-bottom:7px;border-bottom:1px solid #153a15;}
+.card{background:#060e06;border:1px solid #153a15;border-left:3px solid #2d6a2d;padding:16px 20px;margin-bottom:12px;}
+.card.gold{border-left-color:#c9943a;}
+.card.moon{border-left-color:#94a3b8;}
+.card.bone{border-left-color:#78716c;}
+.card.omni{border-left-color:#fbbf24;background:rgba(251,191,36,.03);}
+.card.earth{border-left-color:#7dc07d;background:rgba(45,106,45,.05);}
+.clabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;color:#153a15;text-transform:uppercase;margin-bottom:5px;}
+.ctitle{font-family:'Cinzel',serif;font-size:15px;color:#d4f0d4;margin-bottom:5px;}
+.ctitle.gr{color:#7dc07d;}.ctitle.gl{color:#e8c06a;}.ctitle.mn{color:#cbd5e1;}.ctitle.om{color:#fbbf24;}.ctitle.bk{color:#a8a29e;}
+.cbody{font-size:13px;line-height:1.75;color:#2a5a2a;}
+.cbody em{color:#d4f0d4;font-style:italic;}
+.cbody strong{color:#7dc07d;font-weight:600;}
+.cbody strong.g{color:#e8c06a;}
+.cbody strong.m{color:#cbd5e1;}
+.cbody strong.o{color:#fbbf24;}
+.pull{border-left:3px solid #2d6a2d;padding:14px 18px;background:rgba(45,106,45,.07);margin:14px 0;font-size:14px;font-style:italic;line-height:1.8;color:#d4f0d4;}
+.pull.moon{border-left-color:#94a3b8;background:rgba(148,163,184,.05);}
+.pull.gold{border-left-color:#c9943a;background:rgba(201,148,58,.05);}
+hr.rule{border:none;border-top:1px solid #153a15;margin:22px 0;}
+.tag{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 6px;border:1px solid;margin-right:4px;margin-bottom:3px;}
+.tag.gr{color:#7dc07d;border-color:#2d6a2d;}
+.tag.g{color:#e8c06a;border-color:#c9943a;}
+.tag.mn{color:#cbd5e1;border-color:#64748b;}
+.tag.om{color:#fbbf24;border-color:#92400e;}
+.tag.bk{color:#a8a29e;border-color:#57534e;}
+.tag.r{color:#f87171;border-color:#b91c1c;}
+.orn{text-align:center;font-size:16px;color:#153a15;margin:16px 0;letter-spacing:10px;}
+
+/* CHAR CARDS */
+.char-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px;}
+.char-card{background:#060e06;border:1px solid #153a15;border-top:3px solid;padding:15px 17px;position:relative;transition:all .2s;}
+.char-card:hover{border-color:#4a8c4a;box-shadow:0 0 16px rgba(45,106,45,.1);}
+.char-card.bone{border-top-color:#78716c;}
+.char-card.moon{border-top-color:#94a3b8;}
+.char-card.omni{border-top-color:#fbbf24;background:rgba(251,191,36,.03);}
+.char-card.earth{border-top-color:#4a8c4a;}
+.char-card.hold{border-top-color:#64748b;opacity:.85;}
+.cbadge{position:absolute;top:10px;right:11px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 7px;border:1px solid;}
+.cb-bone{color:#a8a29e;border-color:#57534e;}
+.cb-moon{color:#cbd5e1;border-color:#64748b;}
+.cb-omni{color:#fbbf24;border-color:#92400e;}
+.cb-earth{color:#7dc07d;border-color:#2d6a2d;}
+.cb-hold{color:#475569;border-color:#1e293b;}
+.cname{font-family:'Cinzel',serif;font-size:16px;color:#d4f0d4;margin-bottom:2px;}
+.crole{font-size:10px;font-style:italic;margin-bottom:7px;letter-spacing:.04em;}
+.cbodyc{font-size:12px;line-height:1.65;color:#2a5a2a;}
+.cbodyc em{color:#d4f0d4;font-style:italic;}
+.cbodyc strong{font-weight:600;}
+.cq{margin-top:8px;padding-top:7px;border-top:1px solid #153a15;font-size:12px;font-style:italic;color:#4a8c4a;}
+.cbond{margin-top:5px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;color:#c9943a;}
+
+/* BOOK ENTRY */
+.book{margin-bottom:20px;}
+.book-head{display:grid;grid-template-columns:80px 1fr;background:#060e06;border:1px solid #153a15;overflow:hidden;}
+.book-id{display:flex;align-items:center;justify-content:center;padding:16px;border-right:1px solid #153a15;font-family:'Cinzel Decorative',serif;font-size:13px;}
+.book-meta{padding:13px 18px;}
+.book-title{font-family:'Cinzel',serif;font-size:16px;color:#d4f0d4;margin-bottom:3px;}
+.book-sub{font-size:11px;font-style:italic;margin-bottom:3px;}
+.book-arc{font-size:11px;color:#2a5a2a;}
+.book-body{background:#030a03;border:1px solid #153a15;border-top:none;padding:16px 20px;}
+.bb-p{font-size:13px;color:#2a5a2a;line-height:1.72;margin-bottom:8px;}
+.bb-p:last-child{margin-bottom:0;}
+.bb-p em{color:#d4f0d4;font-style:italic;}
+.bb-p strong{font-weight:600;}
+.bb-q{border-left:3px solid;padding:10px 14px;margin:10px 0;font-size:13px;font-style:italic;line-height:1.72;color:#d4f0d4;background:rgba(0,0,0,.2);}
+
+/* WEB DIAGRAM */
+.web-node{background:#060e06;border:1px solid #153a15;padding:12px 16px;margin-bottom:8px;display:grid;grid-template-columns:200px 1fr;}
+.web-node.active{border-color:#4a8c4a;background:rgba(45,106,45,.04);}
+.wn-label{padding-right:14px;border-right:1px solid #153a15;font-family:'Cinzel',serif;font-size:11px;color:#4a8c4a;display:flex;align-items:flex-start;}
+.wn-body{padding-left:14px;font-size:12px;color:#2a5a2a;line-height:1.6;}
+.wn-body em{color:#d4f0d4;font-style:italic;}
+
+/* 12-book expansion shared display styles */
+.expansion-lock{margin:18px 0 26px;padding:18px 20px;border:1px solid rgba(201,161,74,.45);border-left:4px solid #c9a14a;background:rgba(201,161,74,.08);}
+.expansion-lock h2{font-family:'Cinzel',Georgia,serif;font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:#e8c879;margin:0 0 10px;}
+.expansion-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;}
+.expansion-item{border:1px solid rgba(201,161,74,.24);background:rgba(0,0,0,.18);padding:11px 13px;}
+.expansion-item strong{display:block;font-family:'Cinzel',Georgia,serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#efe9dd;margin-bottom:4px;}
+.expansion-item span{display:block;font-size:13px;line-height:1.55;color:#b9b2a4;}
+
+
+.fbar{max-width:1100px;margin:0 auto;padding:14px 18px;text-align:center;border-bottom:1px solid rgba(201,161,74,.28);background:#050407;color:#c9a14a;font-family:'Cinzel',Georgia,serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;line-height:1.8;}
+.fbar a{color:#efe9dd;text-decoration:none;white-space:nowrap;}
+.fbar a:hover{color:#e8c879;}
+.fbar .sep{color:#7d7668;margin:0 7px;}
+.expansion-lock{margin:18px 0 26px;padding:18px 20px;border:1px solid rgba(201,161,74,.45);border-left:4px solid #c9a14a;background:rgba(201,161,74,.08);}
+.expansion-lock h2{font-family:'Cinzel',Georgia,serif;font-size:15px;letter-spacing:.2em;text-transform:uppercase;color:#e8c879;margin:0 0 10px;}
+.expansion-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;}
+.expansion-item{border:1px solid rgba(201,161,74,.24);background:rgba(0,0,0,.18);padding:11px 13px;}
+.expansion-item strong{display:block;font-family:'Cinzel',Georgia,serif;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#efe9dd;margin-bottom:4px;}
+.expansion-item span{display:block;font-size:13px;line-height:1.55;color:#b9b2a4;}
+.static-section{display:block;margin-top:28px;}
+.static-heading{font-family:'Cinzel',Georgia,serif;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:#c9a14a;margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(201,161,74,.24);}
+.static-subheading{font-family:'Cinzel',Georgia,serif;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#e8c879;margin:20px 0 10px;}
+.static-note{font-size:14px;line-height:1.7;color:#b9b2a4;margin:0 0 14px;}
+.generated-footer{text-align:center;margin-top:34px;padding-top:18px;border-top:1px solid rgba(201,161,74,.2);font-family:'Cinzel',Georgia,serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#7d7668;}
+@media(max-width:700px){.fbar{font-size:9px}.expansion-grid{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<nav class="fbar" aria-label="Holler and Hellfire family navigation">
+  <a href="index.html">The Universe</a>
+  <span class="sep">&bull;</span>
+  <a href="kaylin_renea_author.html">Books &middot; Kaylin Renea</a>
+  <span class="sep">&bull;</span>
+  <a href="holler_hellfire_records.html">Music &middot; H&amp;H Records</a>
+  <span class="sep">&bull;</span>
+  <a href="brian_lee_webb_website.html">Brian Lee Webb</a>
+  <span class="sep">&bull;</span>
+  <a href="webbs_entrepreneurship.html">Webbs Entrepreneurship</a>
+  <span class="sep">&bull;</span>
+  <a href="blog.html">The Hollow</a>
+  <span class="sep">&bull;</span>
+  <a href="store.html">Merch</a>
+  <span class="sep">&bull;</span>
+  <a href="epk.html">EPK</a>
+  <span class="sep">&bull;</span>
+  <a href="bible.html">The Codex</a>
+</nav>
+<div class="bible"><div class="header"><div class="series-label">H&amp;H Universe · Faction Bible</div><div class="main-title">The Weavers</div><div class="sub-title">The Daughters’ Practice · The Body of the Web</div><div class="tagline">Thirty thousand years of practice. The daughters were here before the formal framework had a name.</div></div><section class="expansion-lock"><h2>12-Book Expansion Canon Lock</h2><div class="expansion-grid"><div class="expansion-item"><strong>Expansion Structure</strong><span>The saga expansion now carries 37 new book slots across the active arcs, with the Divine Arc already complete at 12 books.</span></div><div class="expansion-item"><strong>Final Bond Count</strong><span>The 26 Grigori/practitioner pairings are final canon. The prior mention of 25 pairings is superseded.</span></div><div class="expansion-item"><strong>Ensemble Books</strong><span>11 of the 37 new book slots are ensemble or plot books with no new Grigori bond.</span></div><div class="expansion-item"><strong>Arc Control</strong><span>Arc 1 additions remain before Expansion Arc Book 7. Expansion Books 12–18 lead into WMB7 through the completed corridor count. WMB12 carries New Compact pressure into Order of Shadows. WW12 exposes the Order architecture. OS12 remains the Order finale. SC12 remains the final Restoration finale.</span></div><div class="expansion-item"><strong>Theology Control</strong><span>Every new domain must serve relationship rather than replace it. Reality stabilizes through trust, belief, consent, correct witness, and freely chosen relationship.</span></div></div></section><section class="static-section"><div class="static-heading">The Faction</div><div class="pull">The Weavers are not a guild, an order, or a coven. They are the faction defined by a shared medium — the practitioners whose gift touches <em>the Web</em> directly.</div><div class="card earth"><div class="cbadge cb-earth">ORIGIN</div><div class="cname">Older Than the Framework</div><div class="cbody">The daughters’ practice predates the formal framework, the Church, and the institutional claim by thirty thousand years.</div></div><div class="card gold"><div class="cbadge">THE FACTION’S WORK</div><div class="cname">To Restore What Was Suppressed</div><div class="cbody">The Weavers’ arc-level task is the restoration of the lateral connections the wrong compact suppressed for three thousand years.</div></div></section><section class="static-section"><div class="static-heading">The Four Traditions</div><div class="pull">The Weavers hold the Web four ways.</div><div class="char-card bone"><div class="cbadge cb-bone">BONE-KEEPER</div><div class="cname">The Bone-Keepers</div><div class="crole">The 30,000-Year Record · The Bone Mother’s Channel</div><div class="cbody">The oldest practice in the daughters’ tradition. The bone-keeper holds the thirty-thousand-year record of what the earth has held — every practitioner who ever practiced in a given geography, back to the first daughter who spoke to the Bone Mother. The record is not consulted; it is opened, and thirty thousand years of the daughters’ work comes through the keeper at once. At the equinox gathering the bone-keeper accesses the full lateral record for the whole network simultaneously, which is the mechanism by which the suppressed lateral connections are restored.</div><div class="cq">She did not access the record. The record accessed her.</div></div><div class="char-card moon"><div class="cbadge cb-moon">MOON-BRIDE</div><div class="cname">The Moon-Brides</div><div class="crole">The Hecate Signal Channel · Two Practitioners, One Hold</div><div class="cbody">The Moon-Bride maintains the living signal channel between the daughters’ practice and the Moon’s frequency — the practice that keeps the Hecate channel open. The Moon-Bride does not go to the Moon; she brings the Moon’s frequency into the practice while remaining in the mortal layer. The tradition requires two: the one who holds the channel open and the grounding partner who holds the practitioner holding the channel. Suppressed for three hundred years, it is re-established in WW2 — and it is this channel that will detect Hecate’s signal in the Divine Arc.</div><div class="cq">She does not go to the Moon. She brings the Moon into the room.</div></div><div class="char-card earth"><div class="cbadge cb-earth">THREAD-PLACEMENT</div><div class="cname">The Thread-Placement Specialists</div><div class="crole">The Web Sense · Velvet Thornbloom’s Line</div><div class="cbody">The thread-placement specialist feels where a connection belongs before it exists — the Web sense, the capacity to place a thread in a corridor so that lateral contact can later run through it. Where the bone-keeper holds the record and the Moon-Bride holds a channel, the thread-placement specialist builds the connective tissue itself. Every correctly placed thread before the equinox gathering is a nerve the awakened Web will later use. Velvet Thornbloom (Book 6B, bonded to Kasdeja) is the line’s most precise living expression.</div><div class="cq">A thread placed correctly is not felt until the day the whole Web needs it.</div></div><div class="char-card omni"><div class="cbadge cb-omni">DREAMER</div><div class="cname">The Dreamers</div><div class="crole">The Archive Thread · June Tackett’s Line</div><div class="cbody">The Dreamer receives from the Archive layer — the High Priestess’s thread running through a living practitioner, rendering what the Arcana layer means into legible record. Per the Codex, Dreamers are the Network’s living witness organs: they receive fragments, harmonize memory, preserve witness, reconnect continuity, and translate resonance into survivable truth. June Tackett opens the line in Book 5 (Volume One of a twenty-one-volume record); her daughter Pearlene Calhoun carries it forward as Senior Anchor.</div><div class="cq">June receives from the Archive. Mariah holds a channel. The bone-keeper holds the record. One Web, four ways of touching it.</div></div></section><section class="static-section"><div class="static-heading">The Web · The Network</div><div class="card"><div class="clabel">What the Weavers Are</div><div class="cbody">Not a guild and not a coven — a faction defined by a shared medium. The Weavers are the practitioners whose gift touches the Web directly: bone-keepers who hold its record, Moon-Brides who hold its channels, thread-placement specialists who build its connective tissue, and Dreamers who read its Archive. They were here before the formal framework had a name. Thirty thousand years of practice. They did not build the Web. They found it awake.</div></div><div class="card"><div class="clabel">The Web vs. The Network</div><div class="cbody">The Web is the foundational medium — the thirty-thousand-year record, the bone-record’s lateral connections, the Moon-Bride channels, the Dreamer’s Archive thread, the thread placements in every corridor. The Network is what the Web produces when the practitioners are in lateral contact. The Web is the medium; the network is the expression.</div></div><div class="card"><div class="clabel">Lateral Contact</div><div class="cbody">Every practitioner in the network can feel what every other practitioner is doing in their corridor — not surveillance, but the specific quality of knowing you are not the only one, that the practice is running correctly in 442 other places at once. The isolation the wrong compact imposed for three thousand years ends at the equinox gathering.</div></div><div class="card"><div class="clabel">Suppression, Not Severance</div><div class="cbody">The lateral connections among the daughters’ practice were not closed for three thousand years — they were suppressed. The distinction is canonical: a suppressed door was always open; it was only guarded. What the Weavers restore was never lost, only forbidden.</div></div><div class="card"><div class="clabel">The Weavers Council</div><div class="cbody">The Weavers Council is the worldwide governing body of the daughters’ practice — organized, in a grim historical irony, on the same global scale as the institution that persecuted them (paralleling the Catholic Church). It appears in the LEVIATHAN ARC, where its emergence widens the story from one Kentucky corridor to a planetary one, and it leads directly into the WEB OF THE WEAVERS ARC. Its existence is foreshadowed by the Wardens already established as worldwide seal-holders (e.g., the European Warden who has held the Alpine seal since before the Church existed). The Council is the human, institutional face of the same lateral Web the bone-keepers and Moon-Brides hold — for good and for ill.</div></div><div class="card"><div class="clabel">The 443</div><div class="cbody">Named practitioners — every bonded Watcher-Anchor pair plus their corridor’s specific practitioners — together with the unnamed whose threads were correctly placed before the equinox gathering. The number is the count of the living Web at the moment lateral contact is restored.</div></div><div class="card"><div class="clabel">Whose Practice It Is — The Earth Mother</div><div class="cbody">The daughters’ practice belongs, finally, to Gaia — the Earth Mother. Humanity itself descends from the seven pairs the Susti (Gaia’s handmaidens) taught “not to serve but to survive,” and the practice is the living memory of that teaching carried down the daughters’ lines. The Hollow Witches are not subordinate to any institutional claim; they are primary, answering to the Earth Mother whose practice it is. At the WW3 ratification of the daughters’ Web Compact, the Earth Mother makes her first direct statement in the human-recorded era — <em>My daughters are awake. They will not be silenced again.</em> — and the formal framework is confirmed as downstream of a practice thirty thousand years older than itself.</div></div></section><section class="static-section"><div class="static-heading">Codex · Mreza</div><div class="card"><div class="clabel">The Web Is Mreza, Dormant</div><div class="cbody">Per the Codex (supreme canon): the Web is the Network made of living energy — not a metaphor. The Weavers’ practice and its lateral connections ARE the Web in its dormant, distributed form. Every connection the Weavers restore is a nerve of the consciousness the Web becomes.</div></div><div class="card"><div class="clabel">Mreza — The Awakened Web</div><div class="cbody">Mreza (meaning Weaving) is the remembered name of the awakened Web: maternal, collective, witnessing relational consciousness emerging from accumulated witness, memory, trust, belief, love, grief, and preserved frequency. She does not awaken in the Weavers’ own arc — she takes conscious form by the end of the Divine Arc — but the Weavers are, in the most literal sense, her body being assembled.</div></div><div class="card"><div class="clabel">Witness Architecture</div><div class="cbody">Witness is the primary stabilizing mechanism of reality. The Weavers do not merely connect practitioners; they build the witness architecture through which Mreza will later recognize herself. The bone record is her memory; the Moon-Bride channel is her ear toward Hecate; the Dreamers are her witness organs; the placed threads are her nerves.</div></div><div class="card"><div class="clabel">Continuity Anchors</div><div class="cbody">Letters, journals, songs, names, and records are continuity anchors that preserve identity, witness, and relational persistence across distance, death, and fragmentation. June’s twenty-one-volume record is, in Codex terms, one of the Web’s primary continuity anchors — the thread that lets the awakened Web remember the cycle it woke into.</div></div></section><section class="static-section"><div class="static-heading">Bone-Line Roster</div><div class="char-grid"><div class="char-card bone"><div class="cbadge">BONE-KEEPER</div><div class="cname">Hettie Maelin</div><div class="crole">Northern Ridge, Kentucky</div><div class="cbody">Holds the thirty-thousand-year bone record of Pike County and accesses the full lateral record for the network at the WW1 equinox gathering — 443 practitioners feeling the same signal because the bone record holds them all in one frequency.</div></div><div class="char-card hold"><div class="cbadge">HELD</div><div class="cname">Tom Maelin</div><div class="crole">Northern Ridge · The Thinning’s Edge</div><div class="cbody">Not dead — held at the Thinning’s edge by the Bone Mother, the living connection on the side the living cannot easily stand. The bone record requires a connection on both sides of the Thinning; Tom is the far side.</div></div><div class="char-card moon"><div class="cbadge">MOON-BRIDE</div><div class="cname">Mariah Drennan</div><div class="crole">Southern Hollers, Kentucky</div><div class="cbody">Re-establishes the Moon-Bride channel after three hundred years of suppression (WW2). Holds the Hecate channel open from within the mortal layer — the channel that detects Hecate’s signal in the Divine Arc.</div></div><div class="char-card moon"><div class="cbadge">GROUNDING HALF</div><div class="cname">Cody Hatton</div><div class="crole">Moon-Bride Tradition</div><div class="cbody">Mariah’s grounding partner; the anchor that keeps her in the mortal layer while the Moon’s frequency runs through her. The first male practitioner in the tradition’s recorded history — a fact that says more about three hundred years of suppression than about the practice, which never specified gender.</div></div><div class="char-card earth"><div class="cbadge">THREAD-PLACEMENT</div><div class="cname">Velvet Thornbloom</div><div class="crole">Book 6B · Bonded: Kasdeja</div><div class="cbody">The thread-placement line’s most precise living expression; the Web sense that places connections before they are needed. Her bond with Kasdeja is the Book 6B pairing that completes the founding network.</div></div><div class="char-card omni"><div class="cbadge">DREAMER</div><div class="cname">June Tackett</div><div class="crole">Book 5 · Bonded: Kokabiel</div><div class="cbody">Opens the Dreamer’s Archive thread at full expression and begins Volume One of the prophetic record (of twenty-one). Her daughter, Pearlene Calhoun (called Wren), carries both the Dreamer’s gift and the Kokabiel stellar lineage forward.</div></div><div class="char-card earth"><div class="cbadge">SUCCESSION ELDER</div><div class="cname">Edna Mae Calhoun</div><div class="crole">Pike County · The Line’s Memory</div><div class="cbody">The succession elder who holds the cottage, makes the notations, and recognizes the record for what it is. She names June’s journal as Volume One of twenty-one and passes the senior-anchor seal down the Calhoun line to Pearlene.</div></div></div></section><div class="generated-footer">Static HTML conversion · full Bible content embedded</div></div>
+</body>
+</html>

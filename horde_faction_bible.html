@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Horde · Holler &amp; Hellfire Faction Bible</title>
+<meta name="description" content="Updated Holler & Hellfire canon page generated as static HTML from horde_faction_bible.jsx.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── The Horde · Geological Faction Bible ── */
+/* Earth-dark ground. Bronze of the deep seams.  */
+/* Leviathan teal for the family it belongs to.   */
+/* Cool amethyst marks every open question.       */
+
+.bible{max-width:940px;margin:0 auto;padding:32px 20px 70px;background:#0a0704;min-height:100vh;color:#cab690;font-family:'Cormorant Garamond',Georgia,serif;}
+.header{text-align:center;padding:50px 0 36px;border-bottom:1px solid #3a2e16;margin-bottom:32px;position:relative;}
+.header::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,#c9943a);}
+.header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% 0%,rgba(201,148,58,.10) 0%,transparent 70%),radial-gradient(ellipse 40% 30% at 50% 0%,rgba(13,148,136,.06) 0%,transparent 60%);pointer-events:none;}
+.series-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.42em;color:#c9943a;text-transform:uppercase;margin-bottom:14px;}
+.main-title{font-family:'Cinzel Decorative',serif;font-size:clamp(22px,5.5vw,42px);font-weight:700;color:#f2e8d4;line-height:1.15;margin-bottom:10px;text-shadow:0 0 44px rgba(201,148,58,.4),0 0 90px rgba(13,148,136,.14);}
+.sub-title{font-family:'Cinzel',serif;font-size:clamp(10px,2.4vw,15px);color:#e8c06a;letter-spacing:.22em;margin-bottom:18px;}
+.tagline{font-style:italic;font-size:15px;color:#9a8458;max-width:600px;margin:0 auto;line-height:1.8;}
+
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:26px;border-bottom:1px solid #3a2e16;padding-bottom:13px;}
+.tab{font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;padding:7px 13px;border:1px solid #3a2e16;background:transparent;color:#8a7550;cursor:pointer;transition:all .2s;}
+.tab:hover{border-color:#c9943a;color:#e8c06a;}
+.tab.active{background:rgba(201,148,58,.16);border-color:#c9943a;color:#f2e8d4;}
+
+.sec{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:#d4a14a;margin:24px 0 14px;padding-bottom:7px;border-bottom:1px solid #3a2e16;}
+.pull{border-left:3px solid #c9943a;padding:15px 20px;background:rgba(201,148,58,.08);margin:15px 0;font-size:15px;font-style:italic;line-height:1.85;color:#f2e8d4;}
+.pull.tl{border-left-color:#0d9488;background:rgba(13,148,136,.08);}
+hr.rule{border:none;border-top:1px solid #3a2e16;margin:22px 0;}
+
+.card{background:#130d06;border:1px solid #3a2e16;border-left:3px solid #c9943a;padding:15px 19px;margin-bottom:11px;}
+.card.tl{border-left-color:#0d9488;}
+.card.cr{border-left-color:#c0584f;}
+.card.dp{border-left-color:#6b7a72;}
+.card.em{border-left-color:#f2e8d4;background:rgba(242,232,212,.04);}
+.clabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.32em;color:#8a7550;text-transform:uppercase;margin-bottom:5px;}
+.ctitle{font-family:'Cinzel',serif;font-size:15px;color:#f2e8d4;margin-bottom:6px;}
+.ctitle.gd{color:#e8c06a;}.ctitle.tl{color:#5eead4;}.ctitle.cr{color:#ec8f88;}
+.cbody{font-size:13.5px;line-height:1.78;color:#cab690;}
+.cbody em{color:#f6efe0;font-style:italic;}
+.cbody strong{color:#e8c06a;font-weight:600;}
+.cbody strong.tl{color:#5eead4;}
+.cbody strong.cr{color:#ec8f88;}
+
+/* taxonomy grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(265px,1fr));gap:11px;margin-top:12px;}
+.ge{background:#130d06;border:1px solid #3a2e16;border-top:3px solid #c9943a;padding:14px 16px;transition:all .2s;}
+.ge:hover{border-color:#c9943a;box-shadow:0 0 16px rgba(201,148,58,.12);}
+.ge-name{font-family:'Cinzel',serif;font-size:13.5px;color:#f2e8d4;margin-bottom:2px;}
+.ge-sub{font-size:10.5px;font-style:italic;color:#0d9488;margin-bottom:7px;letter-spacing:.03em;}
+.ge-b{font-size:12.5px;line-height:1.66;color:#bca884;}
+.ge-b em{color:#f6efe0;font-style:italic;}
+
+/* roster */
+.rost{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:12px;}
+.rc{background:#130d06;border:1px solid #3a2e16;border-top:3px solid;padding:13px 15px;}
+.rc.active{border-top-color:#5eead4;}
+.rc.emerging{border-top-color:#e8c06a;}
+.rc.sleep{border-top-color:#6b7a72;opacity:.9;}
+.rc.unknown{border-top-color:#a78bfa;}
+.rc-name{font-family:'Cinzel',serif;font-size:13px;color:#f2e8d4;margin-bottom:2px;}
+.rc-loc{font-size:10px;color:#8a7550;font-style:italic;margin-bottom:6px;}
+.rc-b{font-size:12px;line-height:1.6;color:#bca884;}
+.rc-b em{color:#f6efe0;font-style:italic;}
+.stat{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 7px;border:1px solid;margin-bottom:7px;}
+.stat.active{color:#5eead4;border-color:#0d9488;}
+.stat.emerging{color:#e8c06a;border-color:#c9943a;}
+.stat.sleep{color:#9aa89e;border-color:#6b7a72;}
+.stat.unknown{color:#c4b5fd;border-color:#a78bfa;}
+
+/* the river/stack diagram */
+.river{display:flex;flex-direction:column;align-items:center;gap:0;margin:18px 0;}
+.rr{width:100%;max-width:520px;padding:11px 18px;text-align:center;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.18em;border:1px solid;}
+.rr.apex{background:rgba(13,148,136,.2);border-color:#0d9488;color:#5eead4;}
+.rr.gen{background:rgba(201,148,58,.16);border-color:#c9943a;color:#e8c06a;}
+.rr.large{background:rgba(201,148,58,.09);border-color:#9a7430;color:#d8b87a;}
+.rr.carry{background:rgba(167,139,250,.1);border-color:#7c6fa0;color:#c4b5fd;}
+.rr.note{font-family:'Cormorant Garamond',serif;font-size:10.5px;font-style:italic;letter-spacing:.02em;opacity:.85;margin-top:4px;}
+.rarr{font-size:14px;color:#6b5a30;line-height:1;padding:3px 0;}
+
+/* DEVELOPMENT QUESTION cards — cool amethyst, deliberately distinct from the warm bible */
+.q{background:rgba(167,139,250,.05);border:1px dashed #6b5a9a;border-left:3px solid #a78bfa;padding:14px 18px 14px 16px;margin-bottom:10px;position:relative;}
+.q-tag{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;color:#0a0704;background:#a78bfa;padding:2px 8px;margin-bottom:8px;}
+.q-tag.theo{background:#5eead4;}.q-tag.char{background:#e8c06a;}.q-tag.myth{background:#c9943a;color:#0a0704;}.q-tag.plot{background:#ec8f88;}
+.q-q{font-family:'Cinzel',serif;font-size:13.5px;color:#e7defa;line-height:1.5;margin-bottom:6px;}
+.q-why{font-size:12.5px;font-style:italic;color:#9d8fc4;line-height:1.7;}
+.q-why strong{color:#c4b5fd;font-weight:600;font-style:normal;}
+
+.intro-note{font-size:12.5px;color:#9a8458;font-style:italic;line-height:1.7;margin-bottom:6px;}
+.foot{text-align:center;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.3em;color:#6b5a30;text-transform:uppercase;margin-top:40px;padding-top:20px;border-top:1px solid #3a2e16;}
+
+
+/* ── 12-Book Expansion Canon Update ── */
+.expansion-update{margin:18px 0 28px;padding:18px 20px;border:1px solid rgba(201,161,74,.38);border-left:4px solid #c9943a;background:linear-gradient(135deg,rgba(201,161,74,.10),rgba(13,148,136,.04));}
+.expansion-update .eu-eyebrow{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:#c9943a;margin-bottom:6px;}
+.expansion-update .eu-title{font-family:'Cinzel',serif;font-size:17px;letter-spacing:.04em;color:inherit;margin-bottom:8px;}
+.expansion-update .eu-body{font-size:13.5px;line-height:1.72;color:currentColor;opacity:.76;}
+.expansion-update .eu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:12px;}
+.expansion-update .eu-card{border:1px solid rgba(201,161,74,.25);background:rgba(0,0,0,.16);padding:12px 14px;}
+.expansion-update .eu-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:#c9943a;margin-bottom:5px;}
+.expansion-update .eu-card-title{font-family:'Cinzel',serif;font-size:13px;color:inherit;margin-bottom:4px;}
+.expansion-update .eu-card-body{font-size:12.5px;line-height:1.62;color:currentColor;opacity:.74;}
+.expansion-update strong{color:#e8c06a;font-weight:600;}
+.static-section{display:block;margin-top:28px;}
+.static-heading{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:#c9943a;margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(201,161,74,.24);}
+.generated-footer{text-align:center;margin-top:34px;padding-top:18px;border-top:1px solid rgba(201,161,74,.2);font-family:'Cinzel',serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#7d7668;}
+
+
+.fbar{position:sticky;top:0;z-index:9999;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;align-items:center;padding:10px 14px;background:#09090b;border-bottom:1px solid rgba(201,161,74,.35);font-family:Cinzel,Georgia,serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;line-height:1.6;}
+.fbar a{color:#d8cfbd;text-decoration:none;opacity:.86;white-space:nowrap;}
+.fbar a:hover,.fbar a.active{color:#e8c879;opacity:1;}
+.fbar .sep{color:#6f6250;}
+body{margin:0;background:#050506;}
+@media(max-width:700px){.fbar{font-size:9px}.expansion-update .eu-grid{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<nav class="fbar" aria-label="Holler and Hellfire navigation">
+  <a href="index.html">The Universe</a><span class="sep">•</span>
+  <a href="kaylin_renea_author.html">Books · Kaylin Renea</a><span class="sep">•</span>
+  <a href="holler_hellfire_records.html">Music · H&amp;H Records</a><span class="sep">•</span>
+  <a href="brian_lee_webb_website.html">Brian Lee Webb</a><span class="sep">•</span>
+  <a href="webbs_entrepreneurship.html">Webbs Entrepreneurship</a><span class="sep">•</span>
+  <a href="blog.html">The Hollow</a><span class="sep">•</span>
+  <a href="store.html">Merch</a><span class="sep">•</span>
+  <a href="epk.html">EPK</a><span class="sep">•</span>
+  <a href="bible.html" class="active">The Codex</a>
+</nav>
+<div class="bible"><div class="header"><div class="series-label">Holler &amp; Hellfire · Leviathan Arc · WMB1–WMB12 · Faction Bible</div><div class="main-title">The Horde</div><div class="sub-title">The Geological Family · The Earth That Wakes</div><div class="tagline">Not an army. Not an invasion. The oldest living things on the planet, made of the planet.</div></div><section class="expansion-update"><div class="eu-eyebrow">12-Book Expansion Canon Update</div><div class="eu-title">New Expansion Information Integrated</div><div class="eu-body">Updated from the JSX Bible source. The expansion lock is <strong>37 new book slots</strong>, <strong>26 finalized Grigori/practitioner bonds</strong>, and <strong>11 ensemble/plot books</strong>. OS12 remains the Order finale. SC12 remains the Restoration finale.</div><div class="eu-grid"><div class="eu-card"><div class="eu-label">Expansion Lock</div><div class="eu-card-title">The Leviathan Arc Now Runs WMB1–WMB12</div><div class="eu-card-body">The added WMB7–WMB12 sequence moves from Rahab's deep-water reading through Ananiel's storms, Gadreel's defense architecture, Af's righteous anger, Apollyon's void mapping, and the ensemble pressure of WMB12.</div></div><div class="eu-card"><div class="eu-label">Geological Continuity</div><div class="eu-card-title">The Completed Corridor Count Wakes the Deep</div><div class="eu-card-body">Expansion Arc Book 18 completes the count that the Leviathan hears. WMB7 begins because the Web has become large enough for geological consciousness to respond.</div></div><div class="eu-card"><div class="eu-label">Timeline Control</div><div class="eu-card-title">WMB12 Feeds Order of Shadows</div><div class="eu-card-body">WMB12 carries the New Compact's pressure into the Order transition. The Horde does not become an army; it remains geological memory learning trust at a scale humans can barely name.</div></div></div></section><section class="static-section"><div class="static-heading">The Horde</div><div class="pull">
+          The Horde is the Leviathan's extended geological family — the living entities that <em>are</em> the earth's deep structure: its coal seams, its fault lines, its mountain roots, its glacial weight, its volcanic veins. They do not arrive. They were always here, beneath the work. <em>Their emergence is disorientation, not invasion.</em>
+        </div>
+
+        <div class="sec">What the Horde Is</div>
+        <div class="card">
+          <div class="clabel">Core Definition</div>
+          <div class="ctitle gd">The Earth, Awake and in Relationship</div>
+          <div class="cbody">The Horde is not a force summoned into the world. It is the world — the geological body of the planet experienced as a population of ancient living entities. Every member is bound to a physical formation: a seam, a rift, a range, a trench, an ice sheet. Their age is the age of the rock. Their patience is geological. When mortals speak of dragons sleeping under mountains, they are remembering the Horde without language for it.</div>
+        </div>
+        <div class="card tl">
+          <div class="clabel">The Family Principle</div>
+          <div class="ctitle tl">Tributaries to a River</div>
+          <div class="cbody"><strong class="tl">Every Horde entity stands in relationship to the Leviathan the way tributaries stand in relationship to the river they flow toward.</strong> The Horde is not a hierarchy of command. It is a watershed. The Leviathan is the lowest, deepest point everything drains toward — not a ruler, but the center of gravity that makes the others a family instead of a scattering of isolated giants.</div>
+        </div>
+        <div class="card">
+          <div class="clabel">The System Principle</div>
+          <div class="ctitle">Why It Is a Horde and Not a Crowd</div>
+          <div class="cbody">A collection of dragons living near each other is not a Horde. What makes the Horde a single system is the <strong>Ley Line carriers</strong> — the thin, fast entities that move geological frequency between the larger ones. They are the difference between Samyaza being a Horde General and Samyaza simply being a Watcher who lives near dragons. Communication is what makes the family real.</div>
+        </div>
+
+        <div class="q">
+          <span class="q-tag theo">Theology · For You</span>
+          <div class="q-q">If the whole universe runs on a relationship built on trust and belief — what is the Horde's version of belief?</div>
+          <div class="q-why">A mortal believes in what they cannot see. The Grigori believe in a commission. <strong>But the Horde is matter — does it believe in anything, or does it only recognize?</strong> When Brian Lee feels the Leviathan, he says it is "not me recognizing it — it recognizing me." Is recognition the Horde's whole capacity for trust, or can a seam genuinely come to <em>believe</em> in a person the way a person believes in it? Your answer sets the ceiling on every mortal-Horde bond in the arc.</div>
+        </div>
+
+        <div class="pull tl">
+          Read the Taxonomy tab for the kinds of entity, The Leviathan for the apex, General &amp; Wardens for how the family is held together, The Known Horde for the global roster, Mortal Layer for how people reach them, and Theology for where the Horde sits in the cosmological order. Every tab ends with open questions for you.
+        </div>
+      </div>)}</section><section class="static-section"><div class="static-heading">Taxonomy</div><div class="intro-note">The Horde is classified by the geology each entity is bound to. Age, temperament, depth, and reachability all follow from the rock.</div>
+        <div class="grid">
+          <div class="ge">
+            <div class="ge-name">Coal Seam Entities</div>
+            <div class="ge-sub">Sedimentary · shallow · oldest by organic age</div>
+            <div class="ge-b">Born from organic matter compressed over three hundred million years into coal and gas seams. They run shallower than gas deposits, which makes them denser, slower, and more connected to the surface — and the <em>most easily disrupted</em> members of the Horde. The Appalachian seam is the primary. A century of extraction has damaged their habitat as no other industry has.</div>
+          </div>
+          <div class="ge">
+            <div class="ge-name">Methane Wyrms</div>
+            <div class="ge-sub">Natural gas · deep basin</div>
+            <div class="ge-b">Bound to natural-gas deposits, deeper than the coal seams. Distinct from coal entities in their relationship to gas rather than solid carbon. The oldest sit in deep desert basins — old, contained, quiet.</div>
+          </div>
+          <div class="ge">
+            <div class="ge-name">Fault Wyrms</div>
+            <div class="ge-sub">Tectonic · large · territorial</div>
+            <div class="ge-b">The large territorial entities of the Horde — bound to fault systems. Of all the Horde, they are <em>the most awake and the least patient.</em> Where a fault is active, the wyrm is agitated. The East African Rift and the Dead Sea Rift hold some of the most ancient continental wyrms.</div>
+          </div>
+          <div class="ge">
+            <div class="ge-name">Rock Dragons</div>
+            <div class="ge-sub">Orogenic · mountain roots</div>
+            <div class="ge-b">Bound to mountain ranges. The youngest range is the youngest dragon: the Himalayan rock dragons are the most recently formed major entities in the Horde. Rock dragons can share territory with methane wyrms — an unusual cohabitation the Wardens watch closely.</div>
+          </div>
+          <div class="ge">
+            <div class="ge-name">Volcanic Wyrms</div>
+            <div class="ge-sub">Thermal · hottest · most vocal</div>
+            <div class="ge-b">Bound to volcanic systems. Those on subduction zones differ from those on mantle plumes — the Hawaiian hotspot entity draws from a deeper, older thermal source than any surface volcano. The Ring of Fire wyrms are in the most continuous communication of any Horde group.</div>
+          </div>
+          <div class="ge">
+            <div class="ge-name">Glacial Drakes</div>
+            <div class="ge-sub">Cryospheric · deepest sleepers</div>
+            <div class="ge-b">Dormant beneath the polar ice. Among the oldest biological-adjacent entities in the Horde — Antarctic drakes have lain undisturbed for up to thirty million years. Their waking is not categorically dangerous, but a drake's waking frequency moves through the <em>entire</em> Horde at once, and the Horde answers it.</div>
+          </div>
+          <div class="ge">
+            <div class="ge-name">Deep Water Leviathans</div>
+            <div class="ge-sub">Abyssal · least known</div>
+            <div class="ge-b">The least known members of the Horde. The ocean trenches are their territory, and mortal-layer practitioners have almost no access to their frequency. What they are, and what they want, is largely unrecorded.</div>
+          </div>
+          <div class="ge">
+            <div class="ge-name">Ley Line Carriers</div>
+            <div class="ge-sub">The nervous system, made material</div>
+            <div class="ge-b">Thin, fast-moving entities that travel the Ley Line network carrying geological frequency between the larger entities. They are the Horde's communication made physical — <em>the reason the Horde is a system rather than a scattering.</em> When Samyaza feels what is happening in a distant range, it is because a carrier brought him the frequency.</div>
+          </div>
+        </div>
+
+        <div class="q">
+          <span class="q-tag myth">Mythology · For You</span>
+          <div class="q-q">Are there entity types still unnamed — and is the taxonomy itself something the characters are still writing?</div>
+          <div class="q-why">Canon already hints at entities that break the system: the Arctic Deep Entity fits no classification, and the Icelandic ridge-and-hotspot entity is a type "the network does not yet have a classification for." <strong>Is the taxonomy a finished science or a living, incomplete map?</strong> If it's incomplete, every new entity type is a potential mystery to drive a book. Tell me whether you want the classification closed or deliberately open-ended.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag char">Character · For You</span>
+          <div class="q-q">Do individual entities have names, voices, and personalities — or only territories and frequencies?</div>
+          <div class="q-why">We have a few named entities (Vorath in the Andes; the Leviathan itself). <strong>Does each major entity have an individual identity a mortal could come to know, or is identity reserved for the apex and the rest are felt as forces?</strong> This decides whether the Horde can produce characters or only weather.</div>
+        </div>
+      </div>)}</section><section class="static-section"><div class="static-heading">The Leviathan</div><div class="pull tl">
+          The Leviathan is the apex entity of the Horde — singular. Not the largest dragon among dragons, but the point the whole family is oriented around. Everything flows toward it.
+        </div>
+        <div class="card tl">
+          <div class="clabel">Origin · Gaia's First Creation</div>
+          <div class="ctitle tl">A Child's Act of Love, Shaped After the First Gate</div>
+          <div class="cbody">The Leviathan is not a monster that arrived later — it is <strong>Gaia's first real creation</strong>. The child <strong>Hecate</strong> took a life-seed from her mother's Garden without asking, shaped clay to resemble the primordial beast <strong>Agron</strong>, and the clay moved, opened its eyes, stood, and smiled. She named it Leviathan and called it her best friend. <strong>Agron is the First of the twelve Nasilin</strong> — the Gates, the primordial beasts who serve only the Bone Mother — a dragon big enough to swallow a planet. So the apex of the entire Horde is, at its root, a child's act of love modeled after the deepest primordial architecture in creation. <em>(See the Nasilin faction bible and The Codex.)</em></div>
+        </div>
+        <div class="card tl">
+          <div class="clabel">Apex Entity · Singular</div>
+          <div class="ctitle tl">The River Itself</div>
+          <div class="cbody">The Leviathan holds the lowest, deepest position in the watershed of the Horde. Its position beneath the Appalachian system is the seat of the family. Its lateral expression — its frequency at the surface layer — is read by mortals as the Web's geological surface. Brian Lee Combs holds the dual Familiar bond to the Leviathan and to Ravos: <em>the Web's living expression in a single child.</em></div>
+        </div>
+        <div class="card cr">
+          <div class="clabel">What Lies Beneath It</div>
+          <div class="ctitle cr">Satan, Sealed</div>
+          <div class="cbody">Beneath the Leviathan's position lies <strong class="cr">Satan — the giant Red Dragon, Prince of Wrath</strong> — sealed. Arcadia established the first correct compact in the soil above the Leviathan's heart, and was killed by Satan immediately after; her death is the event that required the seal. <em>The first word survives because the geological record cannot be taken.</em> Brian Lee feels it still written in the geology.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag plot">Plot · For You</span>
+          <div class="q-q">Why is the Leviathan stirring now, in Year 2 — and does it know what is sealed beneath it?</div>
+          <div class="q-why">The arc opens with the Horde emerging. <strong>Is the Leviathan waking because of the seal below it, because of the extraction damage above it, because of Brian Lee's bond, or because something is calling the whole Horde at once?</strong> And does the apex entity understand that it is the lid on Satan's prison — is that a burden it carries knowingly, or a fact only the mortals and Watchers grasp? Your answer determines whether the Leviathan is a victim, a guardian, or a danger.</div>
+        </div>
+      </div>)}</section><section class="static-section"><div class="static-heading">General &amp; Wardens</div><div class="sec">How the Family Is Held Together</div>
+        <div class="river">
+          <div class="rr apex">THE LEVIATHAN<div class="rr note">Apex · the point all frequency drains toward</div></div>
+          <div class="rarr">&#x2191;</div>
+          <div class="rr gen">SAMYAZA · HORDE GENERAL<div class="rr note">Chief Watcher · receives every register at once · mediates with the formal framework</div></div>
+          <div class="rarr">&#x2191;</div>
+          <div class="rr large">THE WARDENS<div class="rr note">Govern ranges · concentrated under the Leviathan's primary corridor</div></div>
+          <div class="rarr">&#x2191;</div>
+          <div class="rr carry">THE LEY LINE CARRIERS<div class="rr note">Carry frequency between all of the above · the system's nerves</div></div>
+        </div>
+
+        <div class="card gd">
+          <div class="clabel">The Horde General</div>
+          <div class="ctitle gd">Samyaza</div>
+          <div class="cbody">One of the original Twelve. Chief Watcher and Horde General — <strong>the most effective mediator between the formal framework and the Horde</strong>, and the only figure who can receive all of the Horde's registers simultaneously. Della Combs's partner; Brian Lee's father; the root of the Nephilim line that produced the Web's living expression. The Cain-Abel clause binds Asmodeus to Samyaza permanently — a betrayal that, instead of destroying Samyaza, guaranteed his survival.</div>
+        </div>
+        <div class="card">
+          <div class="clabel">The Wardens</div>
+          <div class="ctitle">Range Governance</div>
+          <div class="cbody">The Wardens govern the Horde's territories range by range, most densely under the Leviathan's primary corridor. Where there is no Warden, there is a governance gap — and the largest gap in the entire Horde system is the <strong>Ring of Fire</strong>, the most continuously communicating and least governed group of entities on the planet.</div>
+        </div>
+        <div class="card tl">
+          <div class="clabel">Monitoring</div>
+          <div class="ctitle tl">Tharael's Watch</div>
+          <div class="cbody">Tharael maintains atmospheric and frequency monitoring across the northernmost ranges via the Ley Line carry network — first to flag emerging situations like the receding fjord and Greenland glaciers exposing drakes and methane wyrms, and the unclassified Icelandic entity. Tharael sees the gaps before they become ruptures.</div>
+        </div>
+
+        <div class="q">
+          <span class="q-tag plot">Plot · For You</span>
+          <div class="q-q">Who, or what, governs the Ring of Fire — and what happens when the biggest governance gap meets the most active entities?</div>
+          <div class="q-why">Canon flags this as "the most significant governance gap in the Horde system." <strong>That is a loaded gun on the wall.</strong> Is the Ring of Fire ungoverned because no Warden can hold it, because a Warden fell, or because the entities there refuse governance? This could be a whole book. Tell me what you want lurking in that gap.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag char">Character · For You</span>
+          <div class="q-q">What is a Warden — a Watcher, a mortal, a bonded entity, or something else?</div>
+          <div class="q-why">We know Wardens govern ranges, but not what they <em>are</em>. <strong>Defining the Warden role opens a whole tier of potential characters</strong> — and clarifies how a human like Della relates to them (is she an unofficial Warden of the Appalachian surface layer?). How does someone become a Warden, and can the role be lost?</div>
+        </div>
+      </div>)}</section><section class="static-section"><div class="static-heading">The Known Horde</div><div class="intro-note">The known Horde, by territory and current state. Status reflects the entity's activity at the arc's present, not its danger.</div>
+        <div class="rost">
+          <div class="rc active">
+            <div class="rc-name">The Appalachian Primary</div>
+            <div class="rc-loc">Pike County, Kentucky · the seam country</div>
+            <span class="stat active">Active · Seat</span>
+            <div class="rc-b">The Leviathan's position and the Horde's heart. Coal seam entities, damaged by a century of extraction. Della reads them; Brian Lee is bonded to the apex beneath them.</div>
+          </div>
+          <div class="rc active">
+            <div class="rc-name">East African Rift Wyrms</div>
+            <div class="rc-loc">Ethiopia · Kenya · Tanzania · Mozambique</div>
+            <span class="stat active">Active</span>
+            <div class="rc-b">A fault wyrm chain along one of Earth's most active rift systems — the most continuously active large fault wyrms in the known Horde, and the most agitated territory outside the Appalachian primary.</div>
+          </div>
+          <div class="rc active">
+            <div class="rc-name">Ring of Fire Wyrms</div>
+            <div class="rc-loc">Pacific Rim · volcanic &amp; fault</div>
+            <span class="stat active">Active · Ungoverned</span>
+            <div class="rc-b">Volcanic and fault wyrms in the most continuous communication of any Horde group — and the single largest governance gap in the system.</div>
+          </div>
+          <div class="rc emerging">
+            <div class="rc-name">Siberian Permafrost Wyrms</div>
+            <div class="rc-loc">Russian Siberia · Lena Basin</div>
+            <span class="stat emerging">Emerging</span>
+            <div class="rc-b">A methane-glacial hybrid and the most urgent emerging situation outside the direct compact territory, as warming permafrost releases what the ice has held.</div>
+          </div>
+          <div class="rc emerging">
+            <div class="rc-name">Antarctic Glacial Drakes</div>
+            <div class="rc-loc">Antarctic ice sheet · full continent</div>
+            <span class="stat emerging">Stirring · Million-year sleep</span>
+            <div class="rc-b">The oldest entities in the known Horde, undisturbed for up to thirty million years. Their waking frequency, if it comes, will move through the whole Horde at once.</div>
+          </div>
+          <div class="rc sleep">
+            <div class="rc-name">Himalayan Rock Dragons</div>
+            <div class="rc-loc">Nepal · Tibet · Northern India</div>
+            <span class="stat sleep">Deep Sleep</span>
+            <div class="rc-b">The most recently formed major entities in the Horde — the youngest range makes the youngest dragons. Deeply asleep.</div>
+          </div>
+          <div class="rc sleep">
+            <div class="rc-name">The Dead Sea Rift Wyrm</div>
+            <div class="rc-loc">Dead Sea Rift · singular</div>
+            <span class="stat sleep">Ancient · Awake-long</span>
+            <div class="rc-b">A singular entity on one of the world's longest exposed fault lines — among the Horde's most ancient continental wyrms, awake longer than the Leviathan's recorded compact history.</div>
+          </div>
+          <div class="rc unknown">
+            <div class="rc-name">The Arctic Deep Entity</div>
+            <div class="rc-loc">Arctic Ocean basin</div>
+            <span class="stat unknown">Unknown · Unclassified</span>
+            <div class="rc-b">An entity that fits no established classification — possibly a deep-water leviathan, possibly something the Horde's taxonomy has not yet encountered. State unknown.</div>
+          </div>
+          <div class="rc unknown">
+            <div class="rc-name">The Icelandic Ridge Entity</div>
+            <div class="rc-loc">Iceland · Mid-Atlantic Ridge &amp; hotspot</div>
+            <span class="stat unknown">Unknown · New type</span>
+            <div class="rc-b">Volcanic-wyrm and glacial-drake characteristics in one geological system — a type the network has no classification for. Tharael monitors.</div>
+          </div>
+        </div>
+
+        <div class="q">
+          <span class="q-tag myth">Mythology · For You</span>
+          <div class="q-q">The roster is global, but the story is in Pike County. How much of the wider Horde do you want to actually use?</div>
+          <div class="q-why">There is a rich global map here — Siberia, Antarctica, the Rift, the Ring of Fire. <strong>Are these living plot threads, atmospheric scale-setting, or seeds for later arcs?</strong> Tell me which territories you want promoted to active story, and which should stay as the vast sleeping background that makes the Appalachian story feel small and enormous at once.</div>
+        </div>
+      </div>)}</section><section class="static-section"><div class="static-heading">Mortal Layer &amp; Compact</div><div class="pull">
+          The Horde lives in the geology; mortals live on the surface. The compact is the agreement that lets the two layers trust each other — and the people who can read the seam are the ones who hold it.
+        </div>
+        <div class="card">
+          <div class="clabel">The Reader</div>
+          <div class="ctitle">Della Combs</div>
+          <div class="cbody">Thirty years of reading the Pike County soil. Della documents the surface-layer signature of the coal seam entities in her contamination notebooks — cataloguing damage long before she had language for what she was reading. <em>Samyaza gave her the language for what her hands already knew.</em> She reads at the same root-frequency layer the Duke Bathym corrupts.</div>
+        </div>
+        <div class="card gd">
+          <div class="clabel">The Bond</div>
+          <div class="ctitle gd">Brian Lee Combs</div>
+          <div class="cbody">Della and Samyaza's son. Nephilim. Age ten. He carries the <strong>dual Familiar bond — to the Leviathan and to Ravos</strong> — the Web's living expression in a single child. Where Della reads the Horde, Brian Lee is recognized <em>by</em> it.</div>
+        </div>
+        <div class="card cr">
+          <div class="clabel">The Threats</div>
+          <div class="ctitle cr">Haagenti &amp; Bathym</div>
+          <div class="cbody"><strong class="cr">Haagenti</strong> operated through the coal industry because coal seam entities are the most easily disrupted and their disruption produces the most visible surface harm; he prepared a fault-line rupture through forty years of systematic extraction — no geological accident. <strong class="cr">Bathym</strong>, Duke of Herbs and Death, hunts the Weaver bloodline by corrupting healing plants at the exact root-frequency Della reads.</div>
+        </div>
+        <div class="card tl">
+          <div class="clabel">The Agreement</div>
+          <div class="ctitle tl">The New Compact</div>
+          <div class="cbody">Ratified at Della Combs's property, July of Year 3, with Samyaza mediating between the formal framework and the Horde. The compact is the arc's central act of trust made formal — the surface layer and the deep layer agreeing to believe each other.</div>
+        </div>
+
+        <div class="q">
+          <span class="q-tag theo">Theology · For You</span>
+          <div class="q-q">What does the New Compact actually promise — what does each side give, and what does each side have to trust?</div>
+          <div class="q-why">This is the beating heart of the arc and of the universe's whole theology of trust. <strong>What does the Horde promise the surface? What do the mortals promise the deep? And what is the irreducible act of belief each side has to make without proof?</strong> Spell this out and I can thread it through every Leviathan-arc book and back into the timeline.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag char">Character · For You</span>
+          <div class="q-q">How does a mortal earn a Familiar bond with a Horde entity — and what does it cost?</div>
+          <div class="q-why">Brian Lee holds a dual bond, but we do not know the mechanism. <strong>Is the bond inherited (Nephilim line), earned, granted by the entity, or a recognition that simply happens?</strong> And does it have a price — does bonding to something thirty million years old change a ten-year-old? Defining this sets the rules for every future bonded character.</div>
+        </div>
+      </div>)}</section><section class="static-section"><div class="static-heading">Theology</div><div class="pull tl">
+          In the cosmological order, the Horde belongs to the Mortal Layer — it is the geological entities' domain, the living body of the earth that the planetary correspondence names <em>Earth</em> itself.
+        </div>
+        <div class="card">
+          <div class="clabel">Place in the Order</div>
+          <div class="ctitle gd">The Body of the Mortal Layer</div>
+          <div class="cbody">The Theology Bible's stack places the geological entities in the Mortal Layer — the compact's jurisdiction, the daughters' home, and the Horde's domain all at once. The Horde is not a layer apart; it is the substance of the layer the daughters practice upon. When the map marks the Web as <em>Earth</em>, the Horde is what Earth is made of.</div>
+        </div>
+        <div class="card em">
+          <div class="clabel">Origin &middot; Doctrine</div>
+          <div class="ctitle gd">Gaia&rsquo;s First Children</div>
+          <div class="cbody">The dragons are <strong>Gaia&rsquo;s first creation</strong> &mdash; her children, made as long ago as she has had her garden. Eden is Gaia&rsquo;s Garden, and the dragons are the living structure of that garden given form: creation itself, made flesh. They are not creatures who arrived later to live on the world; they are the world&rsquo;s first life, the geological memory and structure of the garden, awake. This is why their frequency <em>is</em> the planet&rsquo;s, and why the oldest of them remember what nothing else alive remembers.</div>
+        </div>
+        <div class="card cr">
+          <div class="clabel">Antithesis &middot; Doctrine</div>
+          <div class="ctitle cr">Creation Made Flesh vs. Corruption Taken Form</div>
+          <div class="cbody">Dragons and the monsters of the Abyss are <strong>opposites at the root</strong>, not two kinds of monster. A dragon is <em>creation taken form</em> &mdash; Gaia&rsquo;s garden made alive. An Abyssal monster is <em>corruption taken form</em> &mdash; the Codex&rsquo;s &ldquo;continuity that survived incorrectly,&rdquo; the dark mirror of a dragon. Because the dragons are creation, they feel corruption the way a living body feels the first cell of a disease: they recognize its signature as kin to the thing it would become if it took shape. This is why Berith&rsquo;s corruption of the record reaches them &mdash; it is familiar, and wrong &mdash; and why feeling it turns their dreams to nightmares and broadcasts those nightmares past their normal range, reaching even those whose only frequency they hear is their own.</div>
+        </div>
+        <div class="card">
+          <div class="clabel">Why They Are Barely Seen</div>
+          <div class="ctitle">The Night-Dragons and Hecate</div>
+          <div class="cbody">Not all dragons sleep. Some are Gaia&rsquo;s children who come out at night to play with <strong>Hecate</strong> at the edge of creation, where she keeps her vigil at the Tower. This is part of why the Horde is barely seen in the world until the Leviathan Arc: the waking ones are not hidden monsters but nocturnal companions to the keeper at the wall &mdash; creation&rsquo;s children, keeping company with the one who holds back the dark.</div>
+        </div>
+        <div class="card">
+          <div class="clabel">The First Word</div>
+          <div class="ctitle">Arcadia in the Soil</div>
+          <div class="cbody">The first correct compact was written by Arcadia in the soil above the Leviathan's heart, and it survives <em>because the geological record cannot be taken.</em> The Horde is the universe's incorruptible archive: Berith can make the Older Mechanism's record look false, but he cannot rewrite the rock. The Horde remembers what every faction has tried to overwrite.</div>
+        </div>
+        <div class="card em">
+          <div class="clabel">The Throughline</div>
+          <div class="ctitle">Trust Built on What You Cannot Hold</div>
+          <div class="cbody">The whole universe is a relationship built on trust and belief. The Horde is that theme at its most extreme: the mortal layer must trust something it can never fully perceive, that thinks in epochs and speaks in tremors — and the deep must trust the brief, fast, fragile people on the surface. <em>The compact is faith between two kinds of being that can barely sense each other. That is the Horde's reason to exist in the story.</em></div>
+        </div>
+
+        <div class="q">
+          <span class="q-tag theo">Theology · For You</span>
+          <div class="q-q">Geological entities do not die like mortals — so what is the Horde's relationship to the Bone Mother and to death?</div>
+          <div class="q-why">The cosmological stack runs death down through the Corridor to the Bone Mother's Realm. <strong>But what happens when something thirty million years old finally ends — does an entity's frequency go to the Bone Mother, dissolve back into rock, or something else entirely?</strong> And can a Horde entity be killed, or only silenced, sealed, or scattered? This decides whether the Horde has real stakes of mortality or a different kind of ending altogether.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag myth">Mythology · For You</span>
+          <div class="q-q">Does the Horde have its own theology — a belief about the Arcana, the Sun, the Moon, or the Darkness — seen from inside the earth?</div>
+          <div class="q-why">Every faction reads the cosmology from its own position. <strong>What does the world look like to something that has never seen the sky?</strong> Does the Horde even know about Sano and Hecate, or does it experience the cosmos only as pressure, heat, and the Darkness pressing from below? A Horde-eye theology could be one of the most original textures in the universe.</div>
+        </div>
+      </div>)}</section><section class="static-section"><div class="static-heading">For Development</div><div class="pull">
+          Everything here is open. These are the questions whose answers will let me deepen the Horde across the bibles, the timeline, and the Leviathan-arc storylines — all of it kept in line with the one law of the universe: <em>a relationship built on trust and belief.</em> Answer any of them in any order; each answer I can propagate outward into the other files.
+        </div>
+
+        <div class="sec">Theology &amp; Belief</div>
+        <div class="q">
+          <span class="q-tag theo">Theology</span>
+          <div class="q-q">What is the Horde's capacity for belief — can the earth come to trust a person, or only recognize them?</div>
+          <div class="q-why">Sets the ceiling on every mortal-Horde bond and ties the faction to the universe's core theme.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag theo">Theology</span>
+          <div class="q-q">What does the New Compact actually promise — what does each side give, and what must each side trust without proof?</div>
+          <div class="q-why">The arc's central act of faith; once defined, it threads through every book and the timeline.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag theo">Theology</span>
+          <div class="q-q">What is the Horde's relationship to death and the Bone Mother — how does something geological end?</div>
+          <div class="q-why">Determines the real stakes of the faction and connects it to the cosmological stack.</div>
+        </div>
+
+        <div class="sec">Mythology &amp; World</div>
+        <div class="card gd">
+          <div class="clabel">Genesis · The Horde's True Origin</div>
+          <div class="ctitle gd">Leviathan — Hecate's First Honest Creation</div>
+          <div class="cbody">In the seventh (last) cycle, <strong>Hecate</strong> \u2014 daughter of Sano and Gaia, the Moon \u2014 took a life-seed without asking and pressed it into clay she had shaped to resemble the primordial beast <strong>Agron</strong> (a dragon large enough to eat a planet). The clay moved, opened its eyes, stood, looked at her, and smiled. <strong>Life \u2014 real, honest creation.</strong> She named him <strong>Leviathan</strong>, her best friend. This is the Horde's origin point: the dragons are Gaia's first creation, the living structure of the Garden made flesh, and Leviathan is the first of the new honest life this cycle, made by Hecate's own hand. (See The Codex and Theology Bible for the full Genesis.)</div>
+        </div>
+        <div class="card tl">
+          <div class="clabel">Genesis · The First Sealing</div>
+          <div class="ctitle tl">The Cage Made From Themselves · The 40-Day Flood</div>
+          <div class="cbody">When <strong>Abaddon</strong> (Arcadia's husband, invoking the Strength Arcana) slew <strong>Satan's</strong> dragon form, the dying Satan whispered a last spell in the Davos tongue (Latin) \u2014 one massive explosion, a final attempt to destroy everything. <strong>Leviathan and the Seven Wardens</strong> (the Horde's oldest members, its leaders) chose to help: they sealed that spell and the dragon form inside <strong>a cage made from themselves</strong>, the Horde wrapped layer on layer, reshaping the Garden's surface and causing the great flood. The waters took <strong>forty days</strong> to recede. The Horde's self-sealing IS the long sleep \u2014 twelve thousand years \u2014 and its staged waking is that seal's energy returning. This is why the Horde is barely seen in the world until the Leviathan Arc: most of it has been a sealing cage since the world was last remade.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag myth">Mythology</span>
+          <div class="q-q">Is the entity taxonomy closed science or a living, incomplete map the characters are still writing?</div>
+          <div class="q-why">Decides whether new entity types can be mysteries that drive future books.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag myth">Mythology</span>
+          <div class="q-q">Does the Horde have its own theology — the cosmos seen from inside the earth, with no sky?</div>
+          <div class="q-why">A potentially singular texture: a faction that experiences the universe only as pressure and heat.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag myth">Mythology</span>
+          <div class="q-q">How much of the global roster (Siberia, Antarctica, the Rift, the Ring of Fire) is active story versus sleeping background?</div>
+          <div class="q-why">Tells me which territories to promote into plot and which to keep as scale.</div>
+        </div>
+
+        <div class="sec">Characters &amp; Bonds</div>
+        <div class="q">
+          <span class="q-tag char">Character</span>
+          <div class="q-q">Do individual entities have names, voices, and personalities, or only territories and frequencies?</div>
+          <div class="q-why">Decides whether the Horde can produce true characters or only forces.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag char">Character</span>
+          <div class="q-q">What exactly is a Warden — Watcher, mortal, bonded entity — and how is the role gained or lost?</div>
+          <div class="q-why">Opens an entire tier of potential characters and clarifies Della's standing.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag char">Character</span>
+          <div class="q-q">How does a mortal earn a Familiar bond with a Horde entity, and what does it cost them?</div>
+          <div class="q-why">Sets the rules for Brian Lee and every future bonded character.</div>
+        </div>
+
+        <div class="sec">Plot &amp; Stakes</div>
+        <div class="q">
+          <span class="q-tag plot">Plot</span>
+          <div class="q-q">Why is the Leviathan stirring now — and does it know Satan is sealed beneath it?</div>
+          <div class="q-why">Determines whether the apex is victim, guardian, or danger.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag plot">Plot</span>
+          <div class="q-q">What lurks in the Ring of Fire governance gap — and what happens when it meets the most active entities?</div>
+          <div class="q-why">A loaded gun already on the wall; potentially a whole book.</div>
+        </div>
+        <div class="q">
+          <span class="q-tag plot">Plot</span>
+          <div class="q-q">What is the Arctic Deep Entity, the one thing the Horde's own taxonomy cannot classify?</div>
+          <div class="q-why">A built-in mystery at the edge of the known map.</div>
+        </div></section><div class="generated-footer">Static HTML conversion · full Bible content embedded · updated from JSX source</div></div>
+</body>
+</html>

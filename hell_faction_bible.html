@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hell · Holler &amp; Hellfire</title>
+<meta name="description" content="Updated Holler & Hellfire canon page generated as static HTML from hell_faction_bible.jsx.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── Hell Palette ── */
+/* A rusted, degrading mirror of the Garden. Ember over cold iron. */
+/* Not fire-bright — corroded. Heat that has been left out in the cold. */
+
+.bible{max-width:960px;margin:0 auto;padding:32px 20px 60px;background:#0a0604;min-height:100vh;color:#f0e6df;font-family:'Cormorant Garamond',Georgia,serif;}
+.header{text-align:center;padding:50px 0 36px;border-bottom:1px solid #2a1c14;margin-bottom:36px;position:relative;}
+.header::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,#b45309);}
+.header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 42% at 50% 0%,rgba(180,83,9,.12) 0%,transparent 70%);pointer-events:none;}
+.series-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:#8a5a3a;text-transform:uppercase;margin-bottom:14px;}
+.main-title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,5vw,40px);font-weight:700;color:#f5ede6;line-height:1.1;margin-bottom:8px;text-shadow:0 0 55px rgba(180,83,9,.35);}
+.sub-title{font-family:'Cinzel',serif;font-size:clamp(10px,2.5vw,14px);color:#c2784a;letter-spacing:.25em;margin-bottom:20px;}
+.tagline{font-style:italic;font-size:14px;color:#6b4a38;max-width:660px;margin:0 auto;line-height:1.8;}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:26px;border-bottom:1px solid #2a1c14;padding-bottom:12px;}
+.tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:6px 13px;border:1px solid #2a1c14;background:transparent;color:#6b4a38;cursor:pointer;transition:all .2s;}
+.tab:hover{border-color:#b45309;color:#c2784a;}
+.tab.active{background:rgba(180,83,9,.18);border-color:#b45309;color:#f5ede6;}
+.sec{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;text-transform:uppercase;color:#c2784a;margin:22px 0 14px;padding-bottom:7px;border-bottom:1px solid #2a1c14;}
+.card{background:#120b07;border:1px solid #2a1c14;border-left:3px solid #b45309;padding:16px 20px;margin-bottom:12px;}
+.card.pride{border-left-color:#d4a017;}
+.card.wrath{border-left-color:#dc2626;}
+.card.lust{border-left-color:#be123c;}
+.card.cold{border-left-color:#6b7280;}
+.card.ash{border-left-color:#8a5a3a;}
+.clabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;color:#4a3225;text-transform:uppercase;margin-bottom:5px;}
+.ctitle{font-family:'Cinzel',serif;font-size:15px;color:#f5ede6;margin-bottom:5px;}
+.ctitle.pride{color:#e8b923;}.ctitle.wrath{color:#f87171;}.ctitle.lust{color:#fb7185;}.ctitle.cold{color:#cbd5e1;}.ctitle.ash{color:#c2784a;}
+.cbody{font-size:13px;line-height:1.72;color:#8a7060;}
+.cbody em{color:#f5ede6;font-style:italic;}
+.cbody strong{color:#c2784a;font-weight:600;}
+.cbody strong.pride{color:#e8b923;}
+.cbody strong.wrath{color:#f87171;}
+.cbody strong.lust{color:#fb7185;}
+.pull{border-left:3px solid #b45309;padding:14px 18px;background:rgba(180,83,9,.07);margin:14px 0;font-size:14px;font-style:italic;line-height:1.8;color:#f5ede6;}
+hr.rule{border:none;border-top:1px solid #2a1c14;margin:22px 0;}
+.tag{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 6px;border:1px solid;margin-right:4px;margin-bottom:3px;}
+.tag.pride{color:#e8b923;border-color:#d4a017;}
+.tag.wrath{color:#f87171;border-color:#dc2626;}
+.tag.lust{color:#fb7185;border-color:#be123c;}
+.tag.ash{color:#c2784a;border-color:#b45309;}
+.tag.cold{color:#cbd5e1;border-color:#6b7280;}
+.tag.m{color:#6b4a38;border-color:#2a1c14;}
+.orn{text-align:center;font-size:16px;color:#4a3225;margin:16px 0;letter-spacing:10px;}
+
+/* PRINCE ROSTER */
+.p-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px;margin-top:12px;}
+.pcard{background:#120b07;border:1px solid #2a1c14;border-left:3px solid #b45309;padding:15px 17px;transition:all .2s;}
+.pcard:hover{border-left-color:#d4a017;background:#150d08;}
+.pcard .rank{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.3em;color:#4a3225;}
+.pcard .nm{font-family:'Cinzel',serif;font-size:16px;color:#f5ede6;margin:3px 0 2px;}
+.pcard .dm{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.15em;color:#c2784a;text-transform:uppercase;margin-bottom:6px;}
+.pcard .rl{font-size:12.5px;line-height:1.65;color:#8a7060;}
+.pcard .rl em{color:#e8d5c8;font-style:italic;}
+
+/* TIER LADDER */
+.ladder{margin-top:12px;}
+.rung{background:#120b07;border:1px solid #2a1c14;border-left:3px solid #b45309;padding:13px 18px;margin-bottom:8px;position:relative;}
+.rung .tname{font-family:'Cinzel',serif;font-size:13px;color:#f5ede6;letter-spacing:.08em;}
+.rung .tdesc{font-size:12.5px;line-height:1.6;color:#8a7060;margin-top:3px;}
+.rung.t5{border-left-color:#d4a017;}
+.rung.t4{border-left-color:#c2784a;}
+.rung.t3{border-left-color:#b45309;}
+.rung.t2{border-left-color:#8a5a3a;}
+.rung.t1{border-left-color:#6b7280;}
+
+.foot{text-align:center;margin-top:40px;padding-top:20px;border-top:1px solid #2a1c14;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.3em;color:#4a3225;text-transform:uppercase;}
+
+
+/* ── 12-Book Expansion Canon Update ── */
+.expansion-update{margin:18px 0 28px;padding:18px 20px;border:1px solid rgba(201,161,74,.38);border-left:4px solid #c9943a;background:linear-gradient(135deg,rgba(201,161,74,.10),rgba(13,148,136,.04));}
+.expansion-update .eu-eyebrow{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;color:#c9943a;margin-bottom:6px;}
+.expansion-update .eu-title{font-family:'Cinzel',serif;font-size:17px;letter-spacing:.04em;color:inherit;margin-bottom:8px;}
+.expansion-update .eu-body{font-size:13.5px;line-height:1.72;color:currentColor;opacity:.76;}
+.expansion-update .eu-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:10px;margin-top:12px;}
+.expansion-update .eu-card{border:1px solid rgba(201,161,74,.25);background:rgba(0,0,0,.16);padding:12px 14px;}
+.expansion-update .eu-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.25em;text-transform:uppercase;color:#c9943a;margin-bottom:5px;}
+.expansion-update .eu-card-title{font-family:'Cinzel',serif;font-size:13px;color:inherit;margin-bottom:4px;}
+.expansion-update .eu-card-body{font-size:12.5px;line-height:1.62;color:currentColor;opacity:.74;}
+.expansion-update strong{color:#e8c06a;font-weight:600;}
+.static-section{display:block;margin-top:28px;}
+.static-heading{font-family:'Cinzel',serif;font-size:13px;letter-spacing:.24em;text-transform:uppercase;color:#c9943a;margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid rgba(201,161,74,.24);}
+.generated-footer{text-align:center;margin-top:34px;padding-top:18px;border-top:1px solid rgba(201,161,74,.2);font-family:'Cinzel',serif;font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:#7d7668;}
+
+
+.fbar{position:sticky;top:0;z-index:9999;display:flex;flex-wrap:wrap;justify-content:center;gap:10px;align-items:center;padding:10px 14px;background:#09090b;border-bottom:1px solid rgba(201,161,74,.35);font-family:Cinzel,Georgia,serif;font-size:10px;letter-spacing:.12em;text-transform:uppercase;line-height:1.6;}
+.fbar a{color:#d8cfbd;text-decoration:none;opacity:.86;white-space:nowrap;}
+.fbar a:hover,.fbar a.active{color:#e8c879;opacity:1;}
+.fbar .sep{color:#6f6250;}
+body{margin:0;background:#050506;}
+@media(max-width:700px){.fbar{font-size:9px}.expansion-update .eu-grid{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+<nav class="fbar" aria-label="Holler and Hellfire navigation">
+  <a href="index.html">The Universe</a><span class="sep">•</span>
+  <a href="kaylin_renea_author.html">Books · Kaylin Renea</a><span class="sep">•</span>
+  <a href="holler_hellfire_records.html">Music · H&amp;H Records</a><span class="sep">•</span>
+  <a href="brian_lee_webb_website.html">Brian Lee Webb</a><span class="sep">•</span>
+  <a href="webbs_entrepreneurship.html">Webbs Entrepreneurship</a><span class="sep">•</span>
+  <a href="blog.html">The Hollow</a><span class="sep">•</span>
+  <a href="store.html">Merch</a><span class="sep">•</span>
+  <a href="epk.html">EPK</a><span class="sep">•</span>
+  <a href="bible.html" class="active">The Codex</a>
+</nav>
+<div class="bible"><div class="header"><div class="series-label">Holler &amp; Hellfire · Faction Bible</div><div class="main-title">Hell</div><div class="sub-title">The Rusted Mirror · The Seven Princes · A Realm Built From a Wounded Mind</div><div class="tagline">A cold, corroding echo of the Garden ruled through counterfeit bonds and broken frequencies.</div></div><section class="expansion-update"><div class="eu-eyebrow">12-Book Expansion Canon Update</div><div class="eu-title">New Expansion Information Integrated</div><div class="eu-body">Updated from the JSX Bible source. The expansion lock is <strong>37 new book slots</strong>, <strong>26 finalized Grigori/practitioner bonds</strong>, and <strong>11 ensemble/plot books</strong>. OS12 remains the Order finale. SC12 remains the Restoration finale.</div><div class="eu-grid"><div class="eu-card"><div class="eu-label">Expansion Lock</div><div class="eu-card-title">Hell Presses the New Domains But Cannot Own Them</div><div class="eu-card-body">The expanded saga lets Hell test coin, dust, hidden water, threshold, anger, void, and false purity. It can counterfeit pressure, extraction, and isolation, but it cannot counterfeit a bond freely chosen.</div></div><div class="eu-card"><div class="eu-label">Order Renumbering</div><div class="eu-card-title">OS12 Is the Preserved Order Finale</div><div class="eu-card-body">Order of Shadows now inserts OS5–OS11 before the original finale. References to the final sealing must read as <strong>OS12</strong>, not the old OS5 placement.</div></div><div class="eu-card"><div class="eu-label">Theology Control</div><div class="eu-card-title">Hell Loses Where Witness Holds</div><div class="eu-card-body">Every Hell operation fails at the same point: a person is seen correctly, given choice, and held in relationship instead of extracted into function.</div></div></div></section><section class="static-section"><div class="static-heading">Origin</div><div class="pull">This was his Hell, so the balance created his Heaven. Parallel, connected to the Garden — both born of the same wound.</div><div class="card cold"><div class="clabel">What Hell Is</div><div class="ctitle cold">A Realm Built From a Wounded Mind · Now a Parallel Universe</div><div class="cbody">Hell is not a place of judgment that was designed. It is the <em>shape an insane grief took</em>. When <strong>Nepisano</strong> — the Darkness, corrupted by <strong class="wrath">Andras’s first lie</strong> — fled the Garden saying “Out. I want out of here,” the realm built itself around him: a reflection of his mind’s state. Cold, desolate, lightless. <strong>This was his Hell, so the balance created his Heaven</strong> — parallel, connected to the Garden, both born of the same wound.
+
+<strong>LOCKED CANON · PARALLEL UNIVERSE STATUS:</strong> Hell was never meant to become a self-sustaining structure. It was meant to be a temporary holding state, regulated by the Bone Mother’s Gate. With the Gate sealed the entire Seventh Cycle and billions of distorted souls arriving without First Resonance Contact — drifting in the death-darkness until the cold, icy, desolate pole of Nepisano’s insanity found the resonance of their specific distortions and pulled them through — Hell expanded beyond its original scale. It grew. It stabilized. It is now a parallel universe in its own right: <strong>sheer, icy, evil</strong> in its cold completeness, governed by a twisted Formal Framework mechanism where the Davos’ anti-relational logic runs as universal law. It is the pole of Nepisano’s wound expressed without limit or correction.</div></div><div class="card ash"><div class="clabel">The Landscape</div><div class="ctitle ash">A Rusted, Degrading Mirror</div><div class="cbody">To a creator-force’s mind, Hell renders as a <em>cold, desolate, isolated, rusted, degrading version of the Garden</em> — and it changes as the Garden changes, always a corroded echo a beat behind. It grew <strong>more solid, more concrete each cycle</strong> rather than fading back to nothing, because each cycle Nepisano stayed longer, letting the timeline run further. Seven cycles of accumulation. This is the seventh. By the Seventh Cycle’s midpoint it is no longer merely a degraded echo. It is a universe.</div></div><div class="card cold"><div class="clabel">Who Arrives</div><div class="ctitle cold">The Death-Darkness · The Overflow of a Closed Gate</div><div class="cbody">The <strong>Bone Mother’s</strong> Gates have been closed since the cycle began — the longest cycle yet. Souls who die find themselves lost in a <em>darkness</em>: no guide, no path, no First Resonance Contact. They drift carrying whatever frequency distortions accumulated in their mortal lives. Eventually — inevitably — those distortions find the same insanity frequency that the corruption drove Nepisano to. The souls whose distortions run toward the cold, isolated, cruel pole find Hell’s resonance and follow it through. <strong>The door reads each soul’s frequency: the morally inept fall to Hell; the morally self-righteous fall to Heaven.</strong> Both are the same mechanism: frequency matching to a broken creator-mind’s two poles. Neither is the soul’s true destination. Neither is judgment. Both are what happens when the Gate is sealed and there is nowhere else to go.</div></div><div class="card pride"><div class="clabel">The First Regent</div><div class="ctitle pride">Cain Becomes Lucifer</div><div class="cbody">Cain — driven past normal frequency by the Leviathan — found the side door into Hell still alive, still holding his humanity and his Pride. Nepisano watched him suffer and endure, then offered not sanctuary but <em>a job</em>: a new name, one rule. “Never lose your self, <strong class="pride">Lucifer, Prince of Pride and first regent of Hell.</strong>” Then Nepisano named him regent ruler and left to heal. Lucifer was stunned — and from a landscape of insanity, he carved out the authority to earn the title.</div></div></section><section class="static-section"><div class="static-heading">The Seven Princes</div><div class="p-grid"><div class="pcard"><div class="rank">Second-Ranked</div><div class="nm">Lucifer</div><div class="dm">Prince of Pride · Regent</div><div class="rl">pride</div></div><div class="pcard"><div class="rank">First-Ranked Threat</div><div class="nm">Satan</div><div class="dm">Prince of Wrath · The Giant Red Dragon</div><div class="rl">wrath</div></div><div class="pcard"><div class="rank">Second on the Council</div><div class="nm">Asmodeus</div><div class="dm">Prince of Lust · Hell’s Administrative Council</div><div class="rl">lust</div></div><div class="pcard"><div class="rank">The Envy Domain</div><div class="nm">Barbatos</div><div class="dm">Prince of Envy · Order Patron</div><div class="rl">ash</div></div><div class="pcard"><div class="rank">The Remaining Three</div><div class="nm">Greed, Gluttony, Sloth</div><div class="dm">The Council’s Lower Seats</div><div class="rl">cold</div></div></div></section><section class="static-section"><div class="static-heading">Hierarchy</div><div class="ladder"><div class="rung"><div class="tname">t5</div><div class="tdesc">V · The Seven Princes</div></div><div class="rung"><div class="tname">t4</div><div class="tdesc">IV · The Dukes</div></div><div class="rung"><div class="tname">t3</div><div class="tdesc">III · Lesser Demons</div></div><div class="rung"><div class="tname">t2</div><div class="tdesc">II · Feral Pack Leaders</div></div><div class="rung"><div class="tname">t1</div><div class="tdesc">I · The Ferals</div></div></div></section><section class="static-section"><div class="static-heading">Operations</div><div class="card wrath"><div class="clabel">The Wrong Compact</div><div class="ctitle wrath">Hell’s Three-Century Instrument</div><div class="cbody">For three centuries the corridor ran on the <strong>wrong compact</strong> — a fear-and-control architecture that treated the Watcher bond as containment, the Thinning as a lock, the daughters’ practice as a problem to manage. Satan sold the six Princes on it as a weapon against practitioners. The deeper truth: it was the <em>maintenance structure of Satan’s own prison</em>, preserving the Leviathan’s geological suppression above his sealed position. The New Compact (Book 6) removes the maintenance structure — which is why the seal substrate then fails.</div></div><div class="card lust"><div class="clabel">The Acquisition</div><div class="ctitle lust">Writs Against the Nephilim Child</div><div class="cbody">Hell’s clearest operational move in the original arc: <strong>Asmodeus’s writ of acquisition for Brian Lee Combs</strong>, commissioned through Barbatos’s reading of the undefended door at the end of Book 1. The legal idiom of Hell — writs, acquisition, jurisdiction — is the corruption-mirror of the Older Mechanism’s bond law. It loses every time the network’s bonds are <em>voluntary and recorded</em>, because freely-chosen architecture cannot be acquired.</div></div><div class="card ash"><div class="clabel">The Harvest</div><div class="ctitle ash">Vine, 1414, and the Order</div><div class="cbody">When Satan’s locks began degrading in <strong>1414</strong>, Lucifer needed a power source. The Duke <strong>Vine</strong> — a practitioner-hunter in life — had learned to wield corrupt arcana to harvest practitioner frequency, the stronger the death-emotion the stronger the yield. This founds the harvesting machinery the <strong>Order of the Shadows</strong> runs through the Church and the Web for six hundred years: Hell’s long con to power the prison and, eventually, free the prisoner.</div></div><div class="card cold"><div class="clabel">The Through-Line</div><div class="ctitle cold">Corruption Is Isolation</div><div class="cbody">Every Hell antagonist embodies the same thesis turned inside-out: <em>corruption is the bond severed, the holding done alone.</em> Asmodeus held the older idiom nine hundred years without the Web. Satan chose betrayal as architecture and bound himself. The wrong compact isolated everything that worked. Hell loses, again and again, to the one thing it cannot counterfeit — a bond freely chosen and freely held. <strong>That is the whole war in one sentence.</strong></div></div></section><section class="static-section"><div class="static-heading">Standing Canon</div><div class="card wrath"><div class="clabel">Locked Canon</div><div class="ctitle wrath">What Is Fixed</div><div class="cbody"><strong>Hell is the realm built from Nepisano’s wounded mind</strong> — a rusted, degrading mirror of the Garden, growing more solid each cycle. <strong class="pride">Lucifer</strong> = Cain remade, first regent, Prince of Pride, the seal’s eventual anchor. <strong class="wrath">Satan</strong> = Prince of Wrath, the Red Dragon, killer of Arcadia, sealed beneath the Leviathan. <strong class="lust">Asmodeus</strong> = Prince of Lust, Book 4 antagonist, Cain-Abel bound to Samyaza. <strong>Barbatos</strong> = Prince of Envy, Order patron, his daughter the defecting ritual architect. Five-tier hierarchy: Ferals → Feral Pack Leaders → lesser demons → Dukes → Seven Princes. Vine / 1414 / the harvest founds the Order. <strong class="pride">At the OS12 sealing, Lucifer owns both his wrongs (Abel at Babel; locking Satan away), heals his own soul frequency, and sacrifices himself as the new seal’s anchor — returning BOTH his and Satan’s souls to the 0 state.</strong> Abel and Satan are distinct beings and must never be conflated.</div></div><div class="card m"><div class="clabel">Open / Reserved</div><div class="ctitle m">Held for Later</div><div class="cbody">The <em>individual arcs of Mammon, Beelzebub, and the Sloth Prince</em> are named but not yet drawn. The full Duke roster beyond those referenced (the Viper, the Bull-Transmuter, Herbs &amp; Death, Vine) is open. Hell’s internal politics during the later arcs — who moves when Satan’s seal fails in Year 5 — are developed in the Order of Shadows and Divine arc bibles, not here.</div></div><div class="card cold"><div class="clabel">Authority</div><div class="ctitle cold">Where This Sits</div><div class="cbody">This faction bible <em>specializes and displays</em> canon; it does not supersede <strong>The Codex</strong>. The cosmogony master (THE ORIGIN), the theology bible, and the arc bibles are upstream for every fact above. Where this file and The Codex differ, The Codex wins. Hell’s objective metaphysics live in The Codex; what the Princes <em>believe</em> about their own war may differ from what is true.</div></div></section><div class="generated-footer">Static HTML conversion · full Bible content embedded · updated from JSX source</div></div>
+</body>
+</html>
