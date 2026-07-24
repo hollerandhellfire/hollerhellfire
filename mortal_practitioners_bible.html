@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mortal Practitioners Bible</title>
+  <meta name="description" content="Converted HTML version of mortal_practitioners_bible.jsx for the Holler & Hellfire Universe." />
+  <style>
+    html, body { margin: 0; min-height: 100%; background: #04020a; }
+    #root { min-height: 100vh; }
+    .conversion-note {
+      font-family: Georgia, serif;
+      background: #100603;
+      color: #e8c06a;
+      border: 1px solid #3d1a08;
+      padding: 12px 16px;
+      max-width: 900px;
+      margin: 16px auto;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <noscript><div class="conversion-note">JavaScript is required to display this converted H&amp;H bible.</div></noscript>
+  <div id="root"></div>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script>
+const { useState, useMemo, useEffect, useRef } = React;
+const css = `
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+
+/* ── Red-to-Gold Gradient Palette ── */
+/* From the first word in the soil to the star named for the finding. */
+/* Deep red of what was taken. Gold of what was returned.             */
+
+.bible{max-width:960px;margin:0 auto;padding:32px 20px 60px;background:#04020a;min-height:100vh;color:#fdf3e0;font-family:'Cormorant Garamond',Georgia,serif;}
+.header{text-align:center;padding:50px 0 36px;border-bottom:1px solid #3d1a08;margin-bottom:36px;position:relative;}
+.header::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:1px;height:50px;background:linear-gradient(to bottom,transparent,#c9943a);}
+.header::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 45% at 30% 0%,rgba(185,28,28,.09) 0%,transparent 55%),radial-gradient(ellipse 50% 35% at 70% 0%,rgba(201,148,58,.07) 0%,transparent 60%);pointer-events:none;}
+.series-label{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.4em;color:#c9943a;text-transform:uppercase;margin-bottom:14px;}
+.main-title{font-family:'Cinzel Decorative',serif;font-size:clamp(20px,5vw,38px);font-weight:700;color:#fdf3e0;line-height:1.15;margin-bottom:8px;text-shadow:0 0 40px rgba(185,28,28,.4),0 0 80px rgba(201,148,58,.2);}
+.sub-title{font-family:'Cinzel',serif;font-size:clamp(10px,2vw,14px);color:#e8c06a;letter-spacing:.22em;margin-bottom:20px;}
+.tagline{font-style:italic;font-size:14px;color:#7a4020;max-width:640px;margin:0 auto;line-height:1.8;}
+.tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:26px;border-bottom:1px solid #3d1a08;padding-bottom:12px;}
+.tab{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:6px 13px;border:1px solid #3d1a08;background:transparent;color:#7a4020;cursor:pointer;transition:all .2s;}
+.tab:hover{border-color:#c9943a;color:#e8c06a;}
+.tab.active{background:linear-gradient(135deg,rgba(185,28,28,.2),rgba(201,148,58,.18));border-color:#c9943a;color:#fdf3e0;}
+.sec{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.35em;text-transform:uppercase;background:linear-gradient(90deg,#b91c1c,#c9943a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin:22px 0 14px;padding-bottom:7px;border-bottom:1px solid #3d1a08;}
+.card{background:#100603;border:1px solid #3d1a08;border-left:3px solid #b91c1c;padding:16px 20px;margin-bottom:12px;}
+.card.g{border-left-color:#c9943a;}
+.card.r{border-left-color:#7f1d1d;}
+.card.t{border-left-color:#0d9488;}
+.card.sl{border-left-color:#94a3b8;}
+.card.pu{border-left-color:#7c3aed;}
+.card.lv{border-left-color:#c9943a;background:rgba(201,148,58,.04);}
+.clabel{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;color:#5c2810;text-transform:uppercase;margin-bottom:5px;}
+.ctitle{font-family:'Cinzel',serif;font-size:15px;color:#fdf3e0;margin-bottom:5px;}
+.ctitle.gr{color:#e8c06a;}.ctitle.g{color:#e8c06a;}.ctitle.t{color:#5eead4;}.ctitle.cr{color:#f87171;}.ctitle.pu{color:#c4b5fd;}.ctitle.sl{color:#cbd5e1;}
+.cbody{font-size:13px;line-height:1.72;color:#7a4020;}
+.cbody em{color:#fdf3e0;font-style:italic;}
+.cbody strong{color:#e8c06a;font-weight:600;}
+.cbody strong.g{color:#e8c06a;}
+.cbody strong.t{color:#5eead4;}
+.cbody strong.r{color:#f87171;}
+.pull{border-left:3px solid transparent;border-image:linear-gradient(to bottom,#b91c1c,#c9943a) 1;padding:14px 18px;background:linear-gradient(135deg,rgba(185,28,28,.07),rgba(201,148,58,.05));margin:14px 0;font-size:14px;font-style:italic;line-height:1.8;color:#fdf3e0;}
+hr.rule{border:none;border-top:1px solid #3d1a08;margin:22px 0;}
+.tag{display:inline-block;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.18em;text-transform:uppercase;padding:2px 6px;border:1px solid;margin-right:4px;margin-bottom:3px;}
+.tag.gr{color:#e8c06a;border-color:#c9943a;}
+.tag.g{color:#e8c06a;border-color:#c9943a;}
+.tag.t{color:#5eead4;border-color:#0d9488;}
+.tag.r{color:#f87171;border-color:#b91c1c;}
+.tag.pu{color:#c4b5fd;border-color:#7c3aed;}
+.tag.sl{color:#94a3b8;border-color:#4a5a70;}
+.tag.m{color:#7a4020;border-color:#3d1a08;}
+.orn{text-align:center;font-size:16px;color:#5c2810;margin:16px 0;letter-spacing:10px;}
+
+/* PRACTITIONER CARDS */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:11px;margin-top:11px;}
+.pcard{background:#100603;border:1px solid #3d1a08;border-left:3px solid #b91c1c;padding:14px 16px;position:relative;transition:all .2s;}
+.pcard:hover{border-color:#c9943a;box-shadow:0 0 16px rgba(185,28,28,.1);}
+.pcard.calhoun{border-left-color:#c9943a;background:rgba(201,148,58,.04);}
+.pcard.first{border-left-color:#fdf3e0;background:rgba(253,243,224,.02);}
+.pcard.anchor{border-left-color:#dc2626;}
+.pcard.expansion{border-left-color:#0d9488;}
+.pcard.weaver{border-left-color:#7c3aed;}
+.pcard.moon{border-left-color:#94a3b8;}
+.pcard.bone{border-left-color:#78716c;}
+.pcard.penitent{border-left-color:#c2410c;}
+.pcard.special{border-left-color:#e8c06a;}
+.pcard.omni{border-left-color:#fbbf24;background:rgba(251,191,36,.04);}
+.pbadge{position:absolute;top:9px;right:10px;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.15em;text-transform:uppercase;padding:2px 7px;border:1px solid;}
+.pb-first{color:#fdf3e0;border-color:#5c2810;}
+.pb-anchor{color:#e8c06a;border-color:#c9943a;}
+.pb-omni{color:#fbbf24;border-color:#92400e;}
+.pb-expan{color:#5eead4;border-color:#0d9488;}
+.pb-senior{color:#e8c06a;border-color:#c9943a;}
+.pb-moon{color:#94a3b8;border-color:#4a5a70;}
+.pb-bone{color:#a8a29e;border-color:#57534e;}
+.pb-penitent{color:#fdba74;border-color:#c2410c;}
+.pb-special{color:#e8c06a;border-color:#92400e;}
+.pb-weaver{color:#c4b5fd;border-color:#7c3aed;}
+.pcat{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.22em;color:#5c2810;text-transform:uppercase;margin-bottom:5px;}
+.pname{font-family:'Cinzel',serif;font-size:15px;color:#fdf3e0;margin-bottom:2px;}
+.pgift{font-size:10px;font-style:italic;margin-bottom:7px;letter-spacing:.04em;}
+.pbody{font-size:12px;line-height:1.62;color:#7a4020;}
+.pbody em{color:#fdf3e0;font-style:italic;}
+.pbody strong{font-weight:600;}
+.ploc{margin-top:7px;padding-top:6px;border-top:1px solid #3d1a08;font-size:11px;color:#c9943a;font-style:italic;}
+.ppartner{margin-top:4px;font-family:'Cinzel',serif;font-size:9px;letter-spacing:.12em;color:#e8c06a;}
+
+/* GIFT TABLE */
+.gift-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;margin-top:12px;}
+.gcard{background:#100603;border:1px solid #3d1a08;border-top:2px solid #b91c1c;padding:13px 15px;}
+.gname{font-family:'Cinzel',serif;font-size:12px;color:#fdf3e0;margin-bottom:4px;}
+.gdesc{font-size:12px;color:#7a4020;line-height:1.58;}
+.gdesc em{color:#fdf3e0;font-style:italic;}
+.gholders{margin-top:7px;font-size:11px;color:#c9943a;font-style:italic;}
+
+/* SUCCESSION CHAIN */
+.chain{display:flex;flex-direction:column;gap:0;margin:14px 0;}
+.clink{display:grid;grid-template-columns:120px 1fr;background:#100603;border:1px solid #3d1a08;margin-bottom:4px;overflow:hidden;}
+.clink.active{border-color:#c9943a;background:rgba(201,148,58,.05);}
+.cl-when{padding:10px 14px;border-right:1px solid #3d1a08;font-family:'Cinzel',serif;font-size:10px;color:#c9943a;display:flex;align-items:flex-start;}
+.cl-body{padding:10px 14px;font-size:12px;color:#7a4020;line-height:1.55;}
+.cl-body em{color:#fdf3e0;font-style:italic;}
+.cl-body strong{color:#e8c06a;font-weight:600;}
+`;
+const TABS = [
+    { id: "arcadia", l: "Arcadia" },
+    { id: "sevenpairs", l: "The Seven Pairs" },
+    { id: "practitioners", l: "Practitioners" },
+    { id: "gifts", l: "Practice Types" },
+    { id: "web443", l: "The 443" },
+    { id: "canon", l: "Canon" },
+];
+const SEVEN_PAIRS = [
+    { pair: "Awalaan & Zawja", susti: "Nguvu \u00b7 Africa",
+        body: "The map-line. From this pair descends the manuscript tradition \u2014 the only fully accurate record of the cosmological architecture ever made in the Mortal Layer, drawn by their untouched governess Nguvu (later known, in distorted form, as the Kabbalistic Tree of Life). The line carried the manuscript through the nomad peoples down to <strong>King David</strong> (closest of his line to the Enlightened State) and <strong>Solomon</strong> (the cautionary near-OMNI who made the Seals)." },
+    { pair: "Akin & Lestile", susti: "Patience \u00b7 The Asiatic Continent",
+        body: "The OMNI line. Trained by Patience on the far Asiatic continent, this pair produced <strong>Arcadia</strong> \u2014 the first OMNI Practitioner, the only early human able to receive any frequency and translate it correctly on every level. The whole <strong>Calhoun succession</strong>, down through Mama Calhoun, Edna Mae, and Dixie, descends from Akin and Lestile." },
+    { pair: "Adam & Eve", susti: "Temprance \u00b7 North America",
+        body: "The North American line. Trained by Temprance to survive at full frequency on their continent. The names humanity\u2019s later traditions remember as the first man and woman are, in the H&amp;H cosmology, one of seven origin pairs \u2014 not the only one, but the one a particular tradition kept." },
+    { pair: "Castigo & Estabel", susti: "Alegria \u00b7 South America",
+        body: "The South American line. Trained by Alegria to hold full frequency in the conditions of their land, taking root and, in time, helping populate the continent as more pairs were sent." },
+    { pair: "Dickon & Rhiannon", susti: "Constance \u00b7 Europe",
+        body: "The European line. Trained by Constance, untouched keeper of the European Garden-domain, in the survival-knowledge specific to their continent\u2019s frequency-character." },
+    { pair: "Radnja & Tranjenje", susti: "Sloboda \u00b7 Australia",
+        body: "The Australian line. Trained by Sloboda to survive at full frequency in the oldest of lands \u2014 their lifeway one of the seven branches of the original human diversity." },
+    { pair: "Khanso & Sierra", susti: "Leden \u00b7 Antarctica",
+        body: "The Antarctic line. Trained by Leden, untouched keeper at the cold edge of the Garden, in survival at the harshest frontier of the apportioned world." },
+];
+const PRAC_GROUPS = [
+    {
+        group: "The Calhoun Anchor Succession",
+        desc: "Seven generations of Calhoun women holding the Pike County Thinning before the compact was ratified. The succession is the waiting. The compact is the opening.",
+        members: [
+            {
+                cls: "calhoun", badge: "SUCCESSION ELDER", badgeCls: "pb-omni",
+                cat: "The Original Line", name: "The First Calhoun Anchor",
+                gift: "The founding of the succession \u00b7 ~1700s",
+                body: "The first Calhoun woman to hold the Thinning above the Leviathan's heart. She did not know what she was above. She knew the door was hers to hold and she held it. Seven generations of succession begin with her yes. The Strength Arcana noticed the Calhoun line without them knowing \u2014 and kept noticing, through every generation, until the configuration was right.",
+                loc: "Pike County, Kentucky \u00b7 ~1700s", partner: null,
+            },
+            {
+                cls: "calhoun", badge: "SUCCESSION ELDER", badgeCls: "pb-omni",
+                cat: "The Succession", name: 'Eudora "Mama" Calhoun',
+                gift: "Primary Anchor \u00b7 53 Years \u00b7 The Door That Waited",
+                body: "Began holding the Thinning in 1909. Held it for 53 years by Book 6. At 89 years old in 1962, Anselm was sent to kill her. She was in her garden. She said: <em>you look tired. Come in.</em> He sat at her kitchen table for 40 minutes. She filed no report because he filed a false one.\n\nAt the dinner table in Book 6 she says: <em>I have been holding this door for fifty-three years. The holding was the waiting. The waiting was for the configuration that made the opening possible.</em> She gives Dixie the succession. She tells her: <em>you're the configuration.</em>",
+                loc: "Pike County, Kentucky \u00b7 Active through Book 6", partner: null,
+            },
+            {
+                cls: "calhoun", badge: "PRIMARY ANCHOR", badgeCls: "pb-anchor",
+                cat: "The Compact", name: 'Raelee "Dixie" Calhoun',
+                gift: "OMNI \u00b7 Enlightened State of Being \u00b7 Fourth in History \u00b7 Primary Anchor \u00b7 Compact Ratified \u00b7 Musician",
+                body: "LOCKED CANON: Dixie is the most recent recorded OMNI Practitioner in history — the fourth, after Arcadia (12,000 BCE), Yeshua (~2,000 years ago), and Edna Mae Calhoun. She is the first OMNI-state acceptance event in the Mortal Layer since Yeshua. An OMNI Practitioner is not merely a practitioner with broad gifts \u2014 she is a practitioner operating at the full range of the daughters\u2019 practice simultaneously, at the precise frequency that makes reception without distortion possible. This is the capacity that made the correct compact with Azazel structurally possible at the cosmological scale, not merely the relational one.\n\nThe seventh Calhoun generation. She did not plan to ratify a compact \u2014 she turned down a road she\u2019d never taken before and the compact she built was real, which Mama Calhoun says is stronger than the planned arrangement would have been.\n\nTHE BONE MOTHER\u2019S NOTICE: Dixie\u2019s act of acceptance \u2014 taking Azazel at his word, not questioning, not judging, not disbelieving, but receiving him as he is \u2014 was the catalyst, the spark of NEW. The Bone Mother, behind her sealed Gate for the entire Seventh Cycle, noticed it. It was the hope that gave her the strength to hold on a little longer. The signal that broke through was not the Pentacle Ceremony\u2019s frequency alone \u2014 it was the OMNI Practitioner\u2019s acceptance frequency, the specific resonance that a damaged and isolated Gate-keeper could still recognize as the right kind of new.\n\nDixie Deadshot is her stage name. Three outstanding warrants, a second album out, a third half-built. Her music carries the compact\u2019s frequency in its production \u2014 Sandalphon has it in his archive and doesn\u2019t know what to do with it.",
+                loc: "Pike County, Kentucky \u00b7 Year 0 onward", partner: "Azazel",
+            },
+            {
+                cls: "calhoun", badge: "SENIOR ANCHOR", badgeCls: "pb-senior",
+                cat: "The Succession", name: "Pearlene Calhoun",
+                gift: "Senior Anchor \u00b7 Born Year 0 \u00b7 The Configuration's Child",
+                body: "June Tackett's daughter. Born in July, Year 0, under a very specific star \u2014 Kokabiel was certain. Carries the Dreamer's gift and the Kokabiel stellar lineage simultaneously. Edna Mae passes the senior anchor seal to Pearlene in OS5.\n\nBy Year 5 she is 20 years old and Senior Anchor. She receives Anselm's six weeks of testimony in OS4 \u2014 <em>what the document doesn't carry: the weight.</em> The succession's designed culmination.",
+                loc: "Pike County / Western Kentucky \u00b7 Year 5 Senior Anchor", partner: "Tobias Vale",
+            },
+        ],
+    },
+    {
+        group: "Pike County Corridor \u2014 Books 1\u20136",
+        desc: "The original network. Five practitioners who built the compact's foundation in Year 0.",
+        members: [
+            {
+                cls: "anchor", badge: "HERBALIST", badgeCls: "pb-anchor",
+                cat: "The Practice", name: "Della Combs",
+                gift: "Herbalist \u00b7 20 Years Reading Pike County Soil \u00b7 Brian Lee's Mother",
+                body: "Held the east fence alone for fifteen years. Herbalist since her grandmother passed the practice at fourteen. The most technically precise practitioner the corridor has produced in a generation.\n\nHer twenty-year documentation practice is the specific counter to Bathym's herb corruption operations \u2014 the contamination signatures in her notebooks allow the network to identify and isolate his work. She read Haagenti's fault line preparation in the soil compound without yet having language for it.\n\n<em>She screamed into a dish towel for forty-five seconds. Then she washed it. Then she went back to work.</em>",
+                loc: "Pike County, Kentucky", partner: "Samyaza",
+            },
+            {
+                cls: "anchor", badge: "WARM ROOM", badgeCls: "pb-anchor",
+                cat: "The Practice", name: "Carla June Maynard",
+                gift: "Warm Room Keeper \u00b7 26 Years of the Right Decision",
+                body: "Twenty-six years of one decision made every morning: everyone who comes in gets treated like a person who deserves to be warm. The Strength Arcana noticed. The Darkness finds it resistant. Beelzebub's consumption domain finds no purchase.\n\nShe was waitressing the night the Feral attacked the diner. When it was over she asked the man responsible for the lightning if he wanted more coffee.\n\nCassius Vale defected at her counter. Marisol Drake walked the complete Order archive through her door on a Friday morning. The network convened in her diner through every arc.",
+                loc: "Hollow Diner, Route 119, Pike County", partner: "Baraqiel",
+            },
+            {
+                cls: "anchor", badge: "GREY AREA", badgeCls: "pb-anchor",
+                cat: "The Practice", name: "Mercy Tackett",
+                gift: "Grey-Area Practitioner \u00b7 The Older Idiom \u00b7 Tri-County",
+                body: "Works the tri-county space the formal framework forgot to close. Fox blood, chalk, her grandmother's thread. The holding, the releasing, the Earth Mother's oldest idiom \u2014 taught to herself by accident while waiting tables.\n\nThe Book 4 discovery: Asmodeus had been working the same idiom alone for nine hundred years. Mercy wins not by out-powering him but by being the thing he gave up on being: a practitioner in the lateral Web, held and holding. <em>Not alone.</em>",
+                loc: "Tri-County, Pike County adjacent", partner: "Armaros",
+            },
+            {
+                cls: "anchor", badge: "DREAMER", badgeCls: "pb-anchor",
+                cat: "The Practice", name: "June Tackett",
+                gift: "Dreamer \u00b7 High Priestess Archive Thread \u00b7 21 Volumes",
+                body: "The corridor responds to her. The Thinning shifts when the Dreamer is present \u2014 with the specific quality of everything leaning slightly toward her.\n\nVolume One began when the gift opened fully. Twenty-one volumes by Year 5. The record does not give everything. It gives enough \u2014 always exactly enough. Volume Twenty-One, page forty-two: <em>she is transmitting. She can be found.</em>",
+                loc: "Pike County, Kentucky", partner: "Kokabiel",
+            },
+            {
+                cls: "weaver", badge: "WEB APEX", badgeCls: "pb-weaver",
+                cat: "The Practice", name: "Velvet Thornbloom",
+                gift: "Web Apex \u00b7 Thread-Placement Specialist \u00b7 Blue Ridge",
+                body: "Her gift is the specific capacity to feel where a Web thread belongs \u2014 not where precedent suggests, not where the formal architecture points, but where the thread actually sits in the geological and relational record.\n\nThe Blue Ridge thread she places in Book 6B is the template for every subsequent corridor in the Expansion Arc. Everything that follows is built on the pattern she establishes here.",
+                loc: "Blue Ridge Corridor", partner: "Kasdeja",
+            },
+        ],
+    },
+    {
+        group: "Western Kentucky \u2014 Edna Mae\u2019s Circle",
+        desc: "The Omni Witch's specific sphere. The third in history (after Arcadia and Yeshua). The circle that holds the archive layer.",
+        members: [
+            {
+                cls: "omni", badge: "OMNI WITCH", badgeCls: "pb-omni",
+                cat: "The Practice", name: "Edna Mae Calhoun",
+                gift: "Omni Witch \u00b7 Third in History \u00b7 Retired Senior Anchor",
+                body: "The third OMNI in history — after Arcadia (12,000 BCE) and Yeshua (~2,000 years ago) — and the OMNI of the current era before Dixie. Her gift encompasses the full range of the daughters' practice simultaneously \u2014 not one expression but all of them at once, the specific capacity that makes the Web Compact brokering in WW3 possible.\n\nShe has been painting Dantalion's face for six months before he arrives at her studio \u2014 the Omni Witch gift saw him coming. She opens the archive layer for Brian Lee. She passes the senior anchor seal to Pearlene in OS5: <em>the work continues. But not by me.</em>\n\nShe holds the archive of what every Calhoun woman held, every decision made at every Thinning, every morning the door was kept. She is the living record of the succession.",
+                loc: "Western Kentucky", partner: "Dantalion (Penitent\u2019s Road)",
+            },
+            {
+                cls: "bone", badge: "BONE-KEEPER", badgeCls: "pb-bone",
+                cat: "The Practice", name: "Hettie Maelin",
+                gift: "Bone-Keeper \u00b7 Northern Ridge \u00b7 30,000-Year Record",
+                body: "The bone-keeper's practice is the oldest in the daughters' tradition \u2014 the Bone Mother's channel, the thirty-thousand-year record of what the earth has held. Hettie accesses this record through the Maelin bone-line at the equinox gathering in WW1.\n\nHer partner Tom Maelin is held by the Bone Mother \u2014 held at the Thinning's edge, not lost. The bone-line allows this: the Bone Mother holds what the mortal layer cannot yet carry.",
+                loc: "Northern Ridge, Kentucky", partner: "Tom Maelin (held)",
+            },
+            {
+                cls: "anchor", badge: "LINEAGE", badgeCls: "pb-anchor",
+                cat: "The Lineage", name: "Rosalie Maelin-Combs",
+                gift: "Maelin-Combs Lineage \u00b7 The Two Lines Joined",
+                body: "The junction of the Maelin bone-keeper line and the Combs practitioner line. Her specific significance in the network: she carries the Maelin record's access alongside the Combs corridor practice. The two oldest Pike County practitioner families joined in one lineage.",
+                loc: "Louisville / Northern Ridge", partner: null,
+            },
+        ],
+    },
+    {
+        group: "Expansion Arc \u2014 Books 7\u201311",
+        desc: "Five corridor practitioners who extend the network across the eastern seaboard in Year 1.",
+        members: [
+            {
+                cls: "expansion", badge: "HEAD ANCHOR", badgeCls: "pb-expan",
+                cat: "Southern Network", name: "Aria Webb",
+                gift: "Documentary Witness \u00b7 Head Anchor \u00b7 Journalist",
+                body: "Her journalist's practice is the daughters' tradition expressed as institutional memory \u2014 the Weaver gift applied to keeping records that survive suppression. The southern network's documentary anchor.\n\nHaniel's quiet enforcement operation targets her documentation center's frequency specifically: making recording gradually impossible without appearing to prevent it. Purson competes with Tamiel for knowledge dominance in her corridor. Her gift's architecture means the archive survives both.",
+                loc: "Tensaw Delta, Alabama", partner: "Tamiel",
+            },
+            {
+                cls: "expansion", badge: "CHIEF SEER", badgeCls: "pb-expan",
+                cat: "Virginia Corridor", name: "Carolyn Roberts",
+                gift: "Chief Seer \u00b7 Temporal-Frequency Monitoring",
+                body: "Her practice is oriented in time. The corridor's condition readable not just in the present but in its accumulated history and forward resonance \u2014 the first network practitioner with temporal-frequency monitoring.\n\nIn Book 8 she reads Jeremiel's enforcement history back to him. Her vision of his record is what stops the review. The record is accurate. He is not yet ready to file what it says.",
+                loc: "Virginia Corridor", partner: "Ramiel",
+            },
+            {
+                cls: "expansion", badge: "WV THREAD", badgeCls: "pb-expan",
+                cat: "West Virginia", name: "Abigail Ebony",
+                gift: "WV Thread Head Anchor \u00b7 Coal Country Practice",
+                body: "Kanawha County \u2014 one valley over from Pike County. Her practice operates at the intersection of human industry and geological depth: the same coal country terrain as Brian Lee's corridor, one ridge across.\n\nThe WV Thread she anchors is the first corridor in the Leviathan's direct geological range outside the primary. The Leviathan feels the WV Thread being placed.",
+                loc: "Kanawha County, West Virginia", partner: "Danel",
+            },
+            {
+                cls: "expansion", badge: "ATMOSPHERIC", badgeCls: "pb-expan",
+                cat: "Pennsylvania", name: 'Dianna "D" Coale',
+                gift: "Atmospheric Monitoring Layer \u00b7 The Instrument Builder",
+                body: "Scientific in method. Weaver in nature. Her atmospheric monitoring maps the Ley Line network's surface expression in weather patterns \u2014 the specific medium the Wardens use to communicate.\n\nShe calls on a Thursday in July, Year 2. She has run the models forty times. <em>At thirty-one threads the Web frequency is sufficient for the compact's authority.</em> She is also building the instrument that will document the Veil's deterioration before the Divine Arc begins. She does not know this yet. She is running the models.",
+                loc: "Penn State, Pennsylvania", partner: "Ezeqeel",
+            },
+            {
+                cls: "expansion", badge: "WRITTEN TRADITION", badgeCls: "pb-expan",
+                cat: "New York", name: "Emily Keldren",
+                gift: "Written Tradition Anchor \u00b7 Catskill Valley",
+                body: "The practice's documentation meets its oldest archive here. Her bond with Penemue is the network's connection to every word ever written \u2014 including Arcadia's first word, which Penemue has been carrying for twelve thousand years without knowing why it felt different.\n\nBrian Lee mediates a rock dragon in her corridor in WMB4. The Catskill corridor is the first evidence of how far the Leviathan's geological range extends beyond Pike County.",
+                loc: "Catskill Valley, New York", partner: "Penemue",
+            },
+        ],
+    },
+    {
+        group: "The Keldren Family",
+        desc: "The written and spoken tradition in one family. Three generations of the Catskill corridor's practice.",
+        members: [
+            {
+                cls: "anchor", badge: "ELDER", badgeCls: "pb-anchor",
+                cat: "The Keldren Line", name: "Delila Keldren",
+                gift: "Elder Practitioner \u00b7 Corridor History Keeper",
+                body: "Emily Keldren's grandmother. Held the written tradition's thread before Emily came into her full gift. The Catskill corridor's institutional memory \u2014 the history of the Keldren practice that Emily carries forward and Penemue's archive eventually holds.\n\nHer lineage is the reason the written tradition anchor is specifically a Keldren. The Keldren line's specific capacity for the written-tradition practice runs through Delila's teaching to Emily and Lilandra.",
+                loc: "Catskill Valley, New York", partner: null,
+            },
+            {
+                cls: "weaver", badge: "SPOKEN WORD", badgeCls: "pb-weaver",
+                cat: "The Keldren Line", name: "Lilandra Keldren",
+                gift: "Gift of the Spoken Word \u00b7 Familiar Bonded to Tharael",
+                body: "Emily's younger sister. Her gift is the oral tradition's specific expression: the capacity to speak things into the record that written language cannot hold. Together the Keldren sisters hold both halves of the daughters' most ancient practice \u2014 the tradition that predates writing entirely.\n\n<strong>Familiar Bonded to Tharael of the Alps</strong> \u2014 the oldest voluntary seal in the Eastern hemisphere. The Spoken Word bond brings the first living practitioner connection across the Atlantic Ley Line. Tharael began detecting the North American signal during the Expansion Arc. Lilandra is why he kept listening.",
+                loc: "Catskill Valley, New York", partner: "Tharael (Alps Warden)",
+            },
+        ],
+    },
+    {
+        group: "Web of Weavers \u2014 Special Practitioners",
+        desc: "The Moon-Bride tradition restored. The channel that will detect Hecate's signal in the Divine Arc.",
+        members: [
+            {
+                cls: "moon", badge: "MOON-BRIDE", badgeCls: "pb-moon",
+                cat: "The Tradition", name: "Mariah Drennan",
+                gift: "Moon-Bride \u00b7 Hecate Signal Channel",
+                body: "The Moon-Bride tradition \u2014 the specific practice of maintaining the living signal channel between the daughters' practice and the Moon's frequency \u2014 had not been practiced in 300 years. Mariah re-establishes it in WW2.\n\nThe Moon-Bride addendum to the Pike County compact ratified. The channel between the Earth's daughters and Hecate (the Moon Arcana) formally opened. <strong>This is the channel that detects Hecate's signal in the Divine Arc.</strong> When Hecate is displaced into the Unwritten, Mariah's channel is the first to register the transmission.",
+                loc: "Southern Hollers, Kentucky", partner: "Caleb Hatton",
+            },
+        ],
+    },
+    {
+        group: "The Penitent\u2019s Road \u2014 Corridor Practitioners",
+        desc: "Two practitioners on the Penitent's Road. Their corridors hold what the arc required.",
+        members: [
+            {
+                cls: "penitent", badge: "LAND ATTORNEY", badgeCls: "pb-penitent",
+                cat: "The Bray Corridor", name: "Willa Bray",
+                gift: "Land Rights Attorney \u00b7 9 Years on the Family Case",
+                body: "37 years old. Land rights attorney. Nine years working the Bray family's legal case against the 1923 broad-form deed that stripped the mineral rights. She has been building an undefeatable legal argument for nine years without the geological record's evidence.\n\nGremory walks 400+ acres for 18 days reading three generations of wrongful taking in the geological record. He combines it with her legal argument until it is undefeatable. He uses the last of his restoration gift as a free choice. The Bray land returns after 93 years. <em>They couldn't take that.</em>",
+                loc: "Pike County, Kentucky \u00b7 Bray Ridge", partner: "Gremory (Penitent\u2019s Road)",
+            },
+            {
+                cls: "penitent", badge: "CROSSROADS", badgeCls: "pb-penitent",
+                cat: "The Bayou", name: "Taia Mountainjoy",
+                gift: "Crossroads Practice \u00b7 Veil Maintenance \u00b7 Hoodoo-Voodoo Tradition",
+                body: "Creole. Hoodoo/Voodoo practitioner. Louisiana bayou crossroads tradition. She has been asking her grandmother the same question for twenty years: <em>how do we stop what's coming.</em>\n\nMurmur translates three hours of Celestine's seventeen-year urgency: the Darkness is the Veil deteriorating; the Veil-maintenance ceremony was lost in the Reconstruction era suppression; here is the technique. Taia runs the ceremony at the new moon. Celestine finally heard. Taia joins the lateral Web. <em>The water endures. So do we.</em>",
+                loc: "Louisiana Bayou", partner: "Murmur (Penitent\u2019s Road)",
+            },
+        ],
+    },
+    {
+        group: "Special \u2014 Outside the Standard Classifications",
+        desc: "Practitioners whose gifts don't map cleanly to established practice types.",
+        members: [
+            {
+                cls: "special", badge: "HEART CHANGER", badgeCls: "pb-special",
+                cat: "The Specific Gift", name: "Loren Ritcher",
+                gift: "Heart Changer \u00b7 Pike County Assessor's Office",
+                body: "Her gift is the specific capacity to change the emotional and energetic state of a hardened thing \u2014 not manipulation, not compulsion, but the genuine softening that requires the recipient to allow it. The heart changer does not reach in and turn the lock. She makes it possible for the person holding the key to use it.\n\nSaraqael's enforcement instrument \u2014 two hundred years of finding the specific frequency that distinguishes a correct practice from a prohibited one \u2014 turned toward her and reported: <em>correct. Deeply correct.</em>\n\nShe works in the Pike County assessor's office. She has been there since she was twenty-two. The Web recognized her. The Older Mechanism has her in its record. Heaven's formal framework does not \u2014 which is why Saraqael was supposed to file a correction notice. He did not.",
+                loc: "Pike County Assessor\u2019s Office", partner: "Saraqael (returned from enforcement)",
+            },
+        ],
+    },
+    {
+        "group": "Expansion Plan · 26 Finalized Grigori/Practitioner Anchors",
+        "desc": "Final canon from the twelve-books-per-arc expansion plan. Each practitioner anchor carries a corridor function that serves the core theology: trust, belief, consent, relationship, and correct witness.",
+        "members": [
+            {
+                "cls": "expansion",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-expan",
+                "cat": "Holler & Hellfire",
+                "name": "Ruthanne Sizemore",
+                "gift": "Book 6C · Geological Voice",
+                "body": "Corridor function: quarry stone-listener; reads pressure, patience, and the mountain's warnings. Bonded Grigori: Turiel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "Book 6C",
+                "partner": "Turiel"
+            },
+            {
+                "cls": "expansion",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-expan",
+                "cat": "Holler & Hellfire",
+                "name": "Nadine Skaggs",
+                "gift": "Book 6D · Angel of Shadows",
+                "body": "Corridor function: plain-sight witness; reveals what Pike County has learned not to see. Bonded Grigori: Bezaliel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "Book 6D",
+                "partner": "Bezaliel"
+            },
+            {
+                "cls": "expansion",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-expan",
+                "cat": "Holler & Hellfire",
+                "name": "Wren Justice",
+                "gift": "Book 6E · Angel of the Waning Moon",
+                "body": "Corridor function: waning-moon practitioner; releases, lessens, and returns what the full moon cannot touch. Bonded Grigori: Sariel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "Book 6E",
+                "partner": "Sariel"
+            },
+            {
+                "cls": "expansion",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-expan",
+                "cat": "Expansion Arc",
+                "name": "Marlene Byrd",
+                "gift": "Book 12 · Angel of Calculations",
+                "body": "Corridor function: thread-count mathematics; derives the Web's equation from public weather data. Bonded Grigori: Butator. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "Book 12",
+                "partner": "Butator"
+            },
+            {
+                "cls": "expansion",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-expan",
+                "cat": "Expansion Arc",
+                "name": "Everett Marsh",
+                "gift": "Book 13 · Angel of Coin",
+                "body": "Corridor function: moral accounting; protects corridor land through debt, deed, and refusal to foreclose. Bonded Grigori: Sachiel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "Book 13",
+                "partner": "Sachiel"
+            },
+            {
+                "cls": "expansion",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-expan",
+                "cat": "Expansion Arc",
+                "name": "Fern Ridley",
+                "gift": "Book 14 · Angel of Mists",
+                "body": "Corridor function: fogbound Gulf corridor anchor; reads concealment without surrendering to confusion. Bonded Grigori: Chazaqiel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "Book 14",
+                "partner": "Chazaqiel"
+            },
+            {
+                "cls": "expansion",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-expan",
+                "cat": "Expansion Arc",
+                "name": "Opal Truitt",
+                "gift": "Book 15 · Angel of Dust",
+                "body": "Corridor function: Dust Bowl memory-holder; proves reduced land can still carry a thread. Bonded Grigori: Suphlatus. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "Book 15",
+                "partner": "Suphlatus"
+            },
+            {
+                "cls": "expansion",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-expan",
+                "cat": "Expansion Arc",
+                "name": "Delphine Ashworth",
+                "gift": "Book 16 · Signs of the Earth",
+                "body": "Corridor function: geomantic surveyor; maps Ley geometry into property boundaries. Bonded Grigori: Arakiel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "Book 16",
+                "partner": "Arakiel"
+            },
+            {
+                "cls": "moon",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-special",
+                "cat": "Leviathan Arc",
+                "name": "Marisol Ochoa",
+                "gift": "WMB7 · Angel of the Deep",
+                "body": "Corridor function: deep-water frequency reader; hears the Leviathan through ocean trenches and drowned riverbeds. Bonded Grigori: Rahab. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WMB7",
+                "partner": "Rahab"
+            },
+            {
+                "cls": "moon",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-special",
+                "cat": "Leviathan Arc",
+                "name": "Wyatt Sorrel",
+                "gift": "WMB8 · Angel of Storms",
+                "body": "Corridor function: storm-pattern interpreter; tracks Leviathan waking through impossible weather. Bonded Grigori: Ananiel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WMB8",
+                "partner": "Ananiel"
+            },
+            {
+                "cls": "moon",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-special",
+                "cat": "Leviathan Arc",
+                "name": "Colton Vance",
+                "gift": "WMB9 · Defensive Tactics",
+                "body": "Corridor function: corridor defense architect; turns the network from reactive survival to protected perimeter. Bonded Grigori: Gadreel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WMB9",
+                "partner": "Gadreel"
+            },
+            {
+                "cls": "moon",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-special",
+                "cat": "Leviathan Arc",
+                "name": "Judith Calloway",
+                "gift": "WMB10 · Angel of Anger",
+                "body": "Corridor function: anger-as-justice practitioner; converts inherited rage into a shield instead of a wound. Bonded Grigori: Af. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WMB10",
+                "partner": "Af"
+            },
+            {
+                "cls": "moon",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-special",
+                "cat": "Leviathan Arc",
+                "name": "Noor Fen",
+                "gift": "WMB11 · Angel of the Void",
+                "body": "Corridor function: astronomical void-mapper; gives absence shape without mistaking it for Abaddon's Abyss watch. Bonded Grigori: Apollyon. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WMB11",
+                "partner": "Apollyon"
+            },
+            {
+                "cls": "weaver",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-weaver",
+                "cat": "Web of Weavers",
+                "name": "Coral Whitfield",
+                "gift": "WW4 · Solar Domain",
+                "body": "Corridor function: solar corridor anchor; makes witness public and reveals what cannot survive daylight. Bonded Grigori: Shamsiel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WW4",
+                "partner": "Shamsiel"
+            },
+            {
+                "cls": "weaver",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-weaver",
+                "cat": "Web of Weavers",
+                "name": "Ivy Marchetti",
+                "gift": "WW5 · Phases & Patience",
+                "body": "Corridor function: slow-phase practitioner; proves a corridor can be correct before it is fast. Bonded Grigori: Satarel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WW5",
+                "partner": "Satarel"
+            },
+            {
+                "cls": "weaver",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-weaver",
+                "cat": "Web of Weavers",
+                "name": "Birdie Loach",
+                "gift": "WW6 · The Unspoken Name",
+                "body": "Corridor function: private naming-rite keeper; protects identity before public record. Bonded Grigori: Jomjael. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WW6",
+                "partner": "Jomjael"
+            },
+            {
+                "cls": "weaver",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-weaver",
+                "cat": "Web of Weavers",
+                "name": "Solveig Ashby",
+                "gift": "WW7 · Angel of the Eclipse",
+                "body": "Corridor function: eclipse corridor anchor; opens only under totality and handles dangerous alignment. Bonded Grigori: Samshiel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WW7",
+                "partner": "Samshiel"
+            },
+            {
+                "cls": "weaver",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-weaver",
+                "cat": "Web of Weavers",
+                "name": "Nova Calhoun",
+                "gift": "WW8 · The Heir's Portion",
+                "body": "Corridor function: lineage-pressure practitioner; activates a dormant Calhoun/Nephilim thread without making bloodline ownership. Bonded Grigori: Scion. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WW8",
+                "partner": "Scion"
+            },
+            {
+                "cls": "weaver",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-weaver",
+                "cat": "Web of Weavers",
+                "name": "Clementine Osei",
+                "gift": "WW9 · The Accounting of Days",
+                "body": "Corridor function: sacred calendar keeper; detects the stolen/missing day in the Web's record. Bonded Grigori: Yomiel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WW9",
+                "partner": "Yomiel"
+            },
+            {
+                "cls": "weaver",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-weaver",
+                "cat": "Web of Weavers",
+                "name": "Persephone Winter",
+                "gift": "WW10 · The Unclaimed Frequency",
+                "body": "Corridor function: erased-line restorer; proves omitted history still has frequency. Bonded Grigori: Yocun. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "WW10",
+                "partner": "Yocun"
+            },
+            {
+                "cls": "penitent",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-penitent",
+                "cat": "Order of Shadows",
+                "name": "Delacroix Vane",
+                "gift": "OS5 · Angel of Deception",
+                "body": "Corridor function: counter-intelligence witness; finds the lie the Order cannot survive. Bonded Grigori: Sathriel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "OS5",
+                "partner": "Sathriel"
+            },
+            {
+                "cls": "penitent",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-penitent",
+                "cat": "Order of Shadows",
+                "name": "Lior Bellweather",
+                "gift": "OS6 · The Art of Being Seen",
+                "body": "Corridor function: public-face defector; turns visibility from institutional polish into witness. Bonded Grigori: Asael. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "OS6",
+                "partner": "Asael"
+            },
+            {
+                "cls": "penitent",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-penitent",
+                "cat": "Order of Shadows",
+                "name": "Constance Reyes",
+                "gift": "OS7 · Hidden Waters",
+                "body": "Corridor function: river-route truth carrier; redirects hidden channels and smuggling paths toward liberation. Bonded Grigori: Batariel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "OS7",
+                "partner": "Batariel"
+            },
+            {
+                "cls": "penitent",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-penitent",
+                "cat": "Order of Shadows",
+                "name": "Threnody Ash",
+                "gift": "OS8 · The Threshold",
+                "body": "Corridor function: threshold keeper; opens the doors the Order built to keep people functions instead of persons. Bonded Grigori: Samsapeel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "OS8",
+                "partner": "Samsapeel"
+            },
+            {
+                "cls": "special",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-special",
+                "cat": "Seventh Cycle",
+                "name": "Vesper Cole",
+                "gift": "SC9 · The Empty Places",
+                "body": "Corridor function: uncategorized corridor anchor; honors the space between definitions without filling it. Bonded Grigori: Rumjal. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "SC9",
+                "partner": "Rumjal"
+            },
+            {
+                "cls": "special",
+                "badge": "FINAL PAIRING",
+                "badgeCls": "pb-special",
+                "cat": "Seventh Cycle",
+                "name": "Amara Voss",
+                "gift": "SC10 · Angel of Purity",
+                "body": "Corridor function: purity-domain refuser; rejects false restoration through erasure and protects imperfect mercy. Bonded Grigori: Zaqiel. This anchor is part of the 26 final expansion pairings and must be carried forward into storyline, timeline, and canon updates.",
+                "loc": "SC10",
+                "partner": "Zaqiel"
+            }
+        ]
+    },
+];
+const GIFTS = [
+    { name: "Anchor Practice", top: "#b91c1c", desc: "Holding the Thinning above a corridor's primary geological point. The compact's jurisdiction expressed through the practitioner's specific presence. The anchor does not power the Thinning — she holds it. The distinction is everything.", holders: "Dixie (primary), Pearlene, the Calhoun succession, Aria Webb, Abigail Ebony" },
+    { name: "Herbalist Practice", top: "#dc2626", desc: "The daughters' tradition expressed as botanical-geological reading. Thirty years of notebooks. The specific frequency of a plant that grows above a Ley Line is different from the same plant elsewhere. Della reads the soil compound the way D reads the weather patterns.", holders: "Della Combs (primary). The practice runs through most daughters' lines at some level." },
+    { name: "Warm Room Practice", top: "#c9943a", desc: "Accumulated frequency. The Strength Arcana's specific expression in a physical space held deliberately warm for long enough that the warmth becomes load-bearing. Cannot be manufactured. Can only be decided, daily, for decades.", holders: "Carla June Maynard \u2014 26 years, Route 119" },
+    { name: "Grey-Area Practice", top: "#c2410c", desc: "The older idiom in the tri-county space the formal framework forgot to close. The holding, the releasing, the Earth Mother's practice before the institutional framework had language for it. The same idiom as Asmodeus — but Mercy does not hold alone.", holders: "Mercy Tackett (primary)" },
+    { name: "Dreamer Practice", top: "#7c3aed", desc: "The High Priestess Archive thread running through the practitioner. The gift receives — it does not project. It gives enough, always exactly enough, never the full picture until the full picture is needed. The twenty-one volumes are the gift's cumulative record.", holders: "June Tackett (primary). Pearlene Calhoun (inheriting the thread)" },
+    { name: "Web Thread Placement", top: "#0d9488", desc: "The specific capacity to feel where a thread belongs in the geological and relational record — not where precedent suggests but where the thread actually sits. The apex practice: the practitioner whose gift constitutes the Web rather than maintaining a part of it.", holders: "Velvet Thornbloom (apex). Lilandra Keldren (spoken tradition threading)." },
+    { name: "Documentary Witness", top: "#1e40af", desc: "The daughters' tradition expressed as institutional memory. Journalism, archival practice, the keeping of records in forms that survive institutional suppression. The Weaver gift applied to documentation.", holders: "Aria Webb (primary) \u2014 Tensaw Delta" },
+    { name: "Temporal Practice", top: "#334155", desc: "The corridor's condition readable not just in the present but in accumulated history and forward resonance. The first human-scale practice that reads the geological record in time rather than just space.", holders: "Carolyn Roberts \u2014 Virginia" },
+    { name: "Atmospheric Monitoring", top: "#0d9488", desc: "Scientific in method, Weaver in nature. Weather patterns as the Ley Line network's surface expression. The Warden communication medium mapped at the instrument level. The tool that will detect the Veil's deterioration before the Divine Arc begins.", holders: "D Coale \u2014 Penn State" },
+    { name: "Written Tradition", top: "#c9943a", desc: "The practice's documentation meets its oldest archive. The bond between the written tradition anchor and Penemue is the network's connection to every word ever written \u2014 including the first.", holders: "Emily Keldren \u2014 Catskill Valley" },
+    { name: "Spoken Word", top: "#e8c06a", desc: "The oral tradition's specific expression. Speaks things into the record that written language cannot hold. The tradition that predates writing entirely — the daughters' practice in its oldest vocal form.", holders: "Lilandra Keldren \u2014 Catskill Valley" },
+    { name: "Bone-Keeper Practice", top: "#78716c", desc: "The Bone Mother's channel. Access to the thirty-thousand-year record through the bone-line. The oldest of all the daughters' practice expressions \u2014 predating written record, predating the Web's current structure.", holders: "Hettie Maelin \u2014 Northern Ridge, KY" },
+    { name: "Moon-Bride Practice", top: "#94a3b8", desc: "The living signal channel between the daughters' practice and the Moon's frequency. The specific practice that detects Hecate's position — in the Moon, in the Unwritten, wherever the signal can reach. Lost for 300 years, restored in WW2.", holders: "Mariah Drennan \u2014 Southern Hollers, KY" },
+    { name: "OMNI \u00b7 Enlightened State of Being", top: "#fbbf24", desc: "OMNI means ALL. The Omni Practitioner practices all things \u2014 all expressions of the daughters\u2019 practice simultaneously, all frequencies received and translated correctly on all levels and accepted. The OMNI is not a classification above other classifications. It is an enlightened state of being: the full activation of the practitioner\u2019s frequency architecture with nothing filtered, nothing distorted, nothing required to be different before it arrives. This is the daughters\u2019 practice taken all the way \u2014 not one gift, not several gifts in combination, but all gifts as one continuous and integrated state of reception. Four recorded in history: ARCADIA (12,000 BCE \u2014 the first, whose yes built the Web), YESHUA (~2,000 years ago \u2014 the second, the OMNI-state demonstration that the sacred is directly accessible, whose death the Bone Mother recognized as the act most like Arcadia\u2019s), EDNA MAE CALHOUN (the third \u2014 expressed through the Hollow Witch tradition as OMNI Witch, the living record of the succession, makes the Web Compact brokering in WW3 possible), and RAELEE \u2018DIXIE\u2019 CALHOUN (the fourth \u2014 OMNI Practitioner, the full expression across all traditions, the Bone Mother\u2019s notice).", holders: "Arcadia (12,000 BCE) \u00b7 Yeshua (~2,000 years ago) \u00b7 Edna Mae Calhoun \u00b7 Dixie Calhoun (Year 0)" },
+    { name: "Crossroads Practice", top: "#c2410c", desc: "Veil maintenance, crossroads tradition, the bayou's specific relationship to the boundary between living and dead. Expressed through Hoodoo/Voodoo practice in the Louisiana corridor. The ceremony that addresses Veil deterioration.", holders: "Taia Mountainjoy \u2014 Louisiana Bayou" },
+    { name: "Heart Changer", top: "#e8c06a", desc: "The genuine softening that requires the recipient to allow it. Not manipulation. The making-possible of the person's own choice to open. The gift that stopped Heaven's most effective enforcer mid-assessment and produced the most important defection in the series.", holders: "Loren Ritcher \u2014 Pike County" },
+];
+const CANON = [
+    "Arcadia is the first practitioner and the first OMNI in history (12,000 BCE). The Web is built from her yes. The recorded OMNI lineage runs Arcadia → Yeshua (~2,000 years ago) → Edna Mae Calhoun → Dixie. Satan killed her in 12,000 BCE immediately after she established the first correct compact. The first word \u2014 here \u2014 survived in the geological record because the geological record cannot be taken.",
+    "The Calhoun succession is seven generations. The holding was the waiting. The correct compact's opening is the designed culmination of what seven generations of Calhoun women held in place.",
+    "Edna Mae Calhoun is the third OMNI in history (after Arcadia and Yeshua) and the OMNI of the current era before Dixie. Her gift makes the Web Compact brokering in WW3 possible. 443 practitioners enter lateral contact at the equinox gathering.",
+    "Pearlene Calhoun is born July Year 0 under a specific star Kokabiel named before it was needed. She carries both the Dreamer's Archive thread (June's gift) and Kokabiel's stellar lineage. Senior Anchor by Year 5.",
+    "Lilandra Keldren (Gift of the Spoken Word) is Familiar Bonded to Tharael of the Alps \u2014 the first living practitioner connection across the Atlantic Ley Line. The spoken and written tradition anchors held simultaneously by two sisters in the same corridor.",
+    "D Coale's atmospheric monitoring is the instrument that confirms 31 threads = sufficient for the New Compact (WMB6) and will document the Veil's deterioration before the Divine Arc begins. She does not yet know the second function.",
+    "Mariah Drennan's Moon-Bride channel is the specific practice that will detect Hecate's signal in the Divine Arc. Restored after 300 years in WW2. This is why its restoration is load-bearing for everything in Year 6.",
+    "Taia Mountainjoy's Veil-maintenance ceremony was lost in the Reconstruction era's suppression of the Hoodoo tradition. Murmur translates Celestine Mountainjoy's seventeen-year attempt to give her granddaughter the technique. Celestine finally heard.",
+    "Loren Ritcher's heart-changer gift stopped Saraqael's assessment and produced the most important defection in the series. The Older Mechanism has her in its record. Heaven's formal framework does not.",
+    "The 443 practitioners in lateral contact after WW1 represent the daughters' practice at its largest coordinated expression in three thousand years. The correct compact's frequency continues activating dormant practitioner lines in corridors where the thread is newly placed.",
+    "The expansion plan's 26 Grigori/practitioner pairings are final. The earlier 25-pairing count is superseded.",
+    "Every new practitioner anchor must make a relationship-serving domain legible. No gift functions as raw power detached from consent, trust, belief, and correct witness.",
+];
+function PractitionersBible() {
+    const [tab, setTab] = useState("arcadia");
+    return (React.createElement(React.Fragment, null,
+        React.createElement("style", null, css),
+        React.createElement("div", { className: "bible" },
+            React.createElement("header", { className: "header" },
+                React.createElement("div", { className: "series-label" }, "Faction Bible \\u00b7 The Holler & Hellfire Universe"),
+                React.createElement("h1", { className: "main-title" }, "The Mortal Practitioners"),
+                React.createElement("div", { className: "sub-title" }, "Hollow Witches \\u00b7 Weavers \\u00b7 Anchors \\u00b7 The Daughters\\u2019 Tradition"),
+                React.createElement("p", { className: "tagline" },
+                    React.createElement("em", null, "The daughters\\u2019 practice is thirty thousand years old."),
+                    React.createElement("br", null),
+                    "It was running before the Watchers were commissioned.",
+                    React.createElement("br", null),
+                    "Before the Older Mechanism had language for it.",
+                    React.createElement("br", null),
+                    "Before the formal framework existed to suppress it.",
+                    React.createElement("br", null),
+                    React.createElement("em", null, "It has always been here. It has always been theirs."))),
+            React.createElement("nav", { className: "tabs" }, TABS.map(t => React.createElement("button", { key: t.id, className: `tab${tab === t.id ? " active" : ""}`, onClick: () => setTab(t.id) }, t.l))),
+            tab === "arcadia" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The First Practitioner"),
+                React.createElement("div", { className: "pull" },
+                    "She was not the first daughter to practice.",
+                    React.createElement("br", null),
+                    "She was the first to choose across the geological scale.",
+                    React.createElement("br", null),
+                    React.createElement("em", null, "The choosing built the Web.")),
+                React.createElement("div", { className: "card lv" },
+                    React.createElement("div", { className: "clabel" }, "12,000 BCE \\u00b7 Pike County, Kentucky"),
+                    React.createElement("div", { className: "ctitle gr" }, "Arcadia \\u2014 The First Practitioner \\u00b7 The Omni Witch"),
+                    React.createElement("div", { className: "cbody" },
+                        "She stood above the Leviathan's heart in the Pike County back field. The oldest living thing in the Appalachian system had been in the deep position since the geological record began. No one before her had spoken to it across the scale difference. She did not know, exactly, what she was doing. She knew she was choosing. She chose.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "The Familiar bond's first correct expression. The Leviathan chose back. The Web is built from both their yes's. The choosing that runs both directions \\u2014 the Older Mechanism's foundational record of how the bond is constituted \\u2014 was written in this back field, above this specific ridge, on this specific morning.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "She wrote the first word in the soil above the Leviathan's heart: ",
+                        React.createElement("em", null, "here."),
+                        " Not a marking. Not a record for someone else. A word said to the thing she was above, to let it know she was there. The geological record cannot be taken. The word is still there. Brian Lee can feel it when he puts his hands in the soil above the first word \\u2014 ",
+                        React.createElement("em", null, "not me recognizing it. It recognizing me."),
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "She is the first OMNI in history (12,000 BCE)."),
+                        " The recorded OMNI lineage that follows runs Yeshua (~2,000 years ago), then Edna Mae Calhoun (the OMNI of the current era), then Dixie. The gift that allows the full range of the daughters' practice simultaneously \\u2014 the gift that makes the Web Compact brokering possible \\u2014 Arcadia carried it in 12,000 BCE and used it to constitute the first correct bond.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "Satan killed her immediately after. Her death is the event that required the seal. The wrong compact \\u2014 the fear-and-control architecture that ran the corridor for twelve thousand years \\u2014 was built on the absence of what she established. The first word survived. The geological record held it. ",
+                        React.createElement("em", null, "The soil did not let it go."))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "The Calhoun Anchor Succession"),
+                React.createElement("p", { style: { fontSize: 13, color: "#7a4020", marginBottom: 14, lineHeight: 1.7 } }, "Seven generations of Calhoun women holding the Thinning above the Leviathan's heart. Each generation a link in the chain from Arcadia's first word to the compact's correct establishment."),
+                React.createElement("div", { className: "chain" }, [
+                    { w: "~1700s", t: "The First Calhoun Anchor", n: "Seven generations begin. The first Calhoun woman to hold the Thinning. She did not know what was beneath her. She held the door because the door was hers to hold.", a: false },
+                    { w: "1909", t: "Eudora 'Mama' Calhoun begins holding", n: "She will hold it for 53 years. The Strength Arcana notices her. Anselm is sent to kill her in 1962. She says: <em>you look tired. Come in.</em>", a: false },
+                    { w: "1962", t: "Anselm refuses", n: "His first refusal. He sits at her kitchen table. He files a false report. His second refusal will come 73 years later, when he arrives at Edna Mae's kitchen.", a: false },
+                    { w: "Year 0", t: "Dixie ratifies the compact", n: "<strong>The door opens.</strong> The holding was the waiting. <em>You're the configuration.</em> Seven generations of Calhoun women held this door so the correct compact could be established correctly rather than inevitably.", a: true },
+                    { w: "Year 0 — July", t: "Pearlene Calhoun born", n: "June's daughter. Under a specific star. Kokabiel is certain. She carries the Dreamer's gift and the stellar lineage. She is the succession's continuation.", a: true },
+                    { w: "Year 5", t: "Pearlene becomes Senior Anchor", n: "Edna Mae passes the seal. <em>The work continues. But not by me.</em> The succession reaches its new expression: not the holding, the doing.", a: true },
+                ].map(r => (React.createElement("div", { key: r.t, className: `clink${r.a ? " active" : ""}` },
+                    React.createElement("div", { className: "cl-when" }, r.w),
+                    React.createElement("div", { className: "cl-body" },
+                        React.createElement("strong", null, r.t),
+                        React.createElement("br", null),
+                        React.createElement("span", { dangerouslySetInnerHTML: { __html: r.n } })))))))),
+            tab === "sevenpairs" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Seven Original Pairs"),
+                React.createElement("div", { className: "pull" },
+                    "All humanity descends from seven pairs.",
+                    React.createElement("br", null),
+                    "Each was sent to a Susti governess \\u2014 not to serve, but to survive.",
+                    React.createElement("br", null),
+                    React.createElement("em", null, "The path to holding full frequency has always run through one untouched guide.")),
+                React.createElement("div", { className: "card lv" },
+                    React.createElement("div", { className: "clabel" }, "The Origin of Humanity"),
+                    React.createElement("div", { className: "ctitle gr" }, "Seven Pairs, Seven Untouched Teachers"),
+                    React.createElement("div", { className: "cbody" },
+                        "After Hecate made the Leviathan and Gaia saw what real creation looked like, it took several failed attempts before the first human pair was made \\u2014 then more, ",
+                        React.createElement("strong", null, "seven pairs in all"),
+                        ". Each mated pair was sent, pair by pair, to one of the seven ",
+                        React.createElement("strong", null, "Susti"),
+                        " (Gaia\\u2019s untouched handmaidens, one per continent) to learn how to survive at full frequency.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "The first humans could not hold their frequency in the Mortal Layer alone"),
+                        " \\u2014 not in a sphere where the corruption seed was already sealed inside. They needed an untouched guide to teach them to exist at full frequency. This is the foundational teacher-student relationship of the entire human story \\u2014 the original of every later master-student bond, from the Sufi murshid and seeker to the Calhoun succession.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "The Susti taught ",
+                        React.createElement("strong", null, "two things"),
+                        ": first, ",
+                        React.createElement("em", null, "survival of the land"),
+                        " \\u2014 the continent-specific knowledge that is the origin of human geographic and cultural diversity; and second, ",
+                        React.createElement("em", null, "the power of frequency tuned right"),
+                        " \\u2014 the central thesis of the universe, that a relationship built on test-proven trust, with belief as its foundation and acceptance as its resonance, makes anything possible. The Susti had witnessed this themselves in the love of Sano and Gaia, the relationship from which the stable cosmos was made.")),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "sec" }, "The Seven Lines"),
+                React.createElement("p", { style: { fontSize: 13, color: "#7a4020", marginBottom: 14, lineHeight: 1.7 } }, "Each pair, the Susti who trained them, and the line they founded. The continent-by-continent distribution under seven untouched governesses is the origin of human diversity \\u2014 each line carrying the frequency-training of its specific Susti."),
+                React.createElement("div", { className: "pgrid" }, SEVEN_PAIRS.map(p => (React.createElement("div", { key: p.pair, className: "pcard calhoun" },
+                    React.createElement("div", { className: "pcat" }, p.susti),
+                    React.createElement("div", { className: "pname" }, p.pair),
+                    React.createElement("div", { className: "pbody", style: { whiteSpace: "pre-line", marginTop: 6 }, dangerouslySetInnerHTML: { __html: p.body } }))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "card g" },
+                    React.createElement("div", { className: "clabel" }, "The Line That Matters Most to This Saga"),
+                    React.createElement("div", { className: "ctitle g" }, "From Akin & Lestile to the Calhoun Succession"),
+                    React.createElement("div", { className: "cbody" },
+                        "Of the seven lines, the one this saga follows most closely is the OMNI line: ",
+                        React.createElement("strong", null, "Akin and Lestile"),
+                        ", trained by ",
+                        React.createElement("strong", null, "Patience"),
+                        " on the Asiatic continent, produced ",
+                        React.createElement("strong", null, "Arcadia"),
+                        " \\u2014 the first OMNI Practitioner (12,000 BCE) and the origin of the line. From her flows the entire ",
+                        React.createElement("strong", null, "Calhoun Anchor Succession"),
+                        " that holds the Pike County Thinning: across the last three centuries, the seven generations of Calhoun women, Mama Calhoun\\u2019s fifty-three years, Edna Mae (the third OMNI in history, after Arcadia and Yeshua, and the OMNI of the current era), and Dixie, who ratifies the compact. ",
+                        React.createElement("em", null, "The first teaching the Susti gave \\u2014 how to hold what you are \\u2014 is the same work the Calhoun women have done for three hundred years."))))),
+            tab === "practitioners" && (React.createElement("div", null, PRAC_GROUPS.map(g => (React.createElement("div", { key: g.group },
+                React.createElement("div", { className: "sec" }, g.group),
+                g.desc && React.createElement("p", { style: { fontSize: 13, color: "#7a4020", marginBottom: 12, lineHeight: 1.7 } }, g.desc),
+                React.createElement("div", { className: "pgrid" }, g.members.map(p => (React.createElement("div", { key: p.name, className: `pcard ${p.cls}` },
+                    React.createElement("span", { className: `pbadge ${p.badgeCls}` }, p.badge),
+                    React.createElement("div", { className: "pcat" }, p.cat),
+                    React.createElement("div", { className: "pname" }, p.name),
+                    React.createElement("div", { className: "pgift", style: { color: p.cls === "calhoun" ? "#e8c06a" : p.cls === "omni" ? "#fbbf24" : p.cls === "expansion" ? "#5eead4" : p.cls === "weaver" ? "#c4b5fd" : p.cls === "moon" ? "#94a3b8" : p.cls === "penitent" ? "#fdba74" : p.cls === "special" ? "#e8c06a" : "#e8c06a" } }, p.gift),
+                    React.createElement("div", { className: "pbody", style: { whiteSpace: "pre-line" }, dangerouslySetInnerHTML: { __html: p.body.replace(/\n\n/g, "<br/><br/>") } }),
+                    p.loc && React.createElement("div", { className: "ploc" }, p.loc),
+                    p.partner && React.createElement("div", { className: "ppartner" },
+                        "\\u27a1 ",
+                        p.partner)))))))))),
+            tab === "gifts" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The Daughters\\u2019 Practice \\u2014 Gift Taxonomy"),
+                React.createElement("div", { className: "pull" }, "The daughters\\u2019 tradition is thirty thousand years old. It does not have one expression. It has as many expressions as there are practitioners \\u2014 each gift the tradition's specific form in the specific woman who carries it."),
+                React.createElement("div", { className: "gift-grid" }, GIFTS.map(g => (React.createElement("div", { key: g.name, className: "gcard", style: { borderTopColor: g.top } },
+                    React.createElement("div", { className: "gname", style: { color: g.top } }, g.name),
+                    React.createElement("div", { className: "gdesc", dangerouslySetInnerHTML: { __html: g.desc } }),
+                    React.createElement("div", { className: "gholders" }, g.holders))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "card lv" },
+                    React.createElement("div", { className: "clabel" }, "The Common Thread"),
+                    React.createElement("div", { className: "ctitle gr" }, "What All the Gifts Share"),
+                    React.createElement("div", { className: "cbody" },
+                        "Every gift in the daughters' tradition is a specific form of the same relationship: the practitioner and the Web, in the specific expression that practitioner carries.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "The gift is not the practitioner's power. It is the specific frequency at which the practitioner contacts the Web. Della's twenty years of soil reading and June's twenty-one volumes of dream record and D's atmospheric monitoring and Mariah's Moon-Bride channel are all the same contact made at different frequencies in different registers.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "The Web is not the network. The network is what the Web produces when the practitioners are in lateral contact."),
+                        " The gift is prior. The Web was always there. ",
+                        React.createElement("em", null, "You don't build the Web. You find that it was always there."))))),
+            tab === "web443" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "The 443 \\u2014 The Lateral Network"),
+                React.createElement("div", { className: "pull" },
+                    "At the equinox gathering in WW1, the lateral connections are restored across the full daughters' network for the first time in three thousand years.",
+                    React.createElement("br", null),
+                    "443 Hollow Witch practitioners enter real-time lateral contact.",
+                    React.createElement("br", null),
+                    React.createElement("br", null),
+                    React.createElement("em", null, "The daughters are no longer practicing in isolation.")),
+                React.createElement("div", { className: "card lv" },
+                    React.createElement("div", { className: "clabel" }, "The Equinox Gathering"),
+                    React.createElement("div", { className: "ctitle gr" }, "WW1 \\u2014 The Bone Mother's Daughter \\u2014 Year 3"),
+                    React.createElement("div", { className: "cbody" },
+                        "Hettie Maelin's access to the thirty-thousand-year bone record at the equinox gathering opens the lateral connection structure that had been suppressed for three thousand years. The 443 practitioners who enter lateral contact are not all present at the gathering physically. The lateral connection is frequency-based \\u2014 each practitioner in the network feels the same shift simultaneously through the Web's restored channel.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "What ",
+                        React.createElement("em", null, "lateral contact"),
+                        " means in practice: every practitioner in the network can feel what every other practitioner is doing in their corridor. Not surveillance \\u2014 the specific quality of knowing you are not the only one, that the practice is running correctly in 442 other places simultaneously, that the isolation the wrong compact imposed for three thousand years is over.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", { class: "g" },
+                            "The Earth Mother's first direct statement in the human-recorded era: ",
+                            React.createElement("em", null, "My daughters are awake. They will not be silenced again.")))),
+                React.createElement("div", { className: "card" },
+                    React.createElement("div", { className: "clabel" }, "The 443\\u2019s Composition"),
+                    React.createElement("div", { className: "ctitle gr" }, "Who Is in the Network"),
+                    React.createElement("div", { className: "cbody" },
+                        "The 443 practitioners in lateral contact as of Year 3 include:",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "The named practitioners"),
+                        " across all corridors \\u2014 every practitioner with a Watcher bond adds their corridor thread to the count.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "The unnamed practitioners"),
+                        " in every corridor where the Web's thread was correctly placed before the equinox gathering \\u2014 the full Pike County network, the Expansion Arc's five corridors, and all previously placed threads running through the Warden positions.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("strong", null, "The reactivated lines"),
+                        " \\u2014 practitioners who did not know they carried the daughters' gift until the equinox gathering's lateral contact signal reached their corridor's frequency. The wrong compact had suppressed these lines for three thousand years. The correct compact's establishment removed the suppression. Some practitioners wake to their gift in the moment of lateral contact.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "The 443 is not a ceiling. It is the count at Year 3. The number grows as new corridors establish correct threads and dormant Nephilim lines activate.")),
+                React.createElement("div", { className: "card g" },
+                    React.createElement("div", { className: "clabel" }, "The Broader Significance"),
+                    React.createElement("div", { className: "ctitle g" }, "The Daughters\\u2019 Tradition at Full Expression"),
+                    React.createElement("div", { className: "cbody" },
+                        "The daughters' practice is thirty thousand years old. For three thousand years it ran in isolation \\u2014 each practitioner holding their corridor without knowing another practitioner existed who was doing the same work in the same tradition.\\n\\nThe 443 in lateral contact is the tradition at its designed expression: not individual practices in individual corridors but a living Web of interconnected frequency, each practitioner's gift informed by and informing every other.\\n\\n",
+                        React.createElement("strong", { class: "g" }, "The Hollow Witches are no longer junior to anyone."),
+                        " The Web's authority is primary. The formal framework is downstream. The daughters' practice constituted the Web thirty thousand years before the Older Mechanism encoded the compact law. The lateral connection's restoration makes this explicit at the practitioner level: they were never subordinate. The wrong compact made them invisible. The correct compact makes them visible again.")))),
+            tab === "canon" && (React.createElement("div", null,
+                React.createElement("div", { className: "sec" }, "Permanent Canon"),
+                React.createElement("div", { style: { display: "flex", flexDirection: "column", gap: 7 } }, CANON.map((c, i) => (React.createElement("div", { key: i, className: "card", style: { borderLeftColor: ["#fdf3e0", "#c9943a", "#fbbf24", "#e8c06a", "#7c3aed", "#0d9488", "#94a3b8", "#c2410c", "#e8c06a", "#c9943a"][i] } },
+                    React.createElement("div", { className: "cbody", dangerouslySetInnerHTML: { __html: c.replace(/\*(.*?)\*/g, "<em>$1</em>") } }))))),
+                React.createElement("hr", { className: "rule" }),
+                React.createElement("div", { className: "card lv" },
+                    React.createElement("div", { className: "clabel" }, "The Central Truth"),
+                    React.createElement("div", { className: "ctitle gr" }, "What the Practitioners\\u2019 Faction Establishes"),
+                    React.createElement("div", { className: "cbody" },
+                        "The daughters' practice is not a supporting structure for the Watcher bonds. The Watcher bonds are what the daughters' practice attracted when the correct compact made relationship possible.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        "The practitioners did not need the Watchers to practice. They had been practicing for thirty thousand years without them. The Watchers' correct function \\u2014 accompaniment, relationship, presence \\u2014 is what the daughters' practice makes possible when the practitioner chooses it. The choosing is always the practitioner's first.",
+                        React.createElement("br", null),
+                        React.createElement("br", null),
+                        React.createElement("em", null, "Samyaza waited twenty-three mornings at the east wood. Della walked to the fence."),
+                        " The bond was constituted when she walked to the fence. Not when he stood there.")),
+                React.createElement("div", { className: "orn" }, "\\u2726 \\u2726 \\u2726"),
+                React.createElement("div", { style: { textAlign: "center", color: "#5c2810", fontSize: 12, fontStyle: "italic", lineHeight: 1.8 } },
+                    "Thirty thousand years.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: "#e8c06a" } }, "The practice was always here."),
+                    React.createElement("br", null),
+                    "443 in lateral contact. The daughters awake.",
+                    React.createElement("br", null),
+                    React.createElement("em", { style: { color: "#7a4020" } }, "They will not be silenced again.")))))));
+}
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(PractitionersBible));
+
+  </script>
+</body>
+</html>
