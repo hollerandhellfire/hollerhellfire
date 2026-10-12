@@ -50,14 +50,14 @@ const SITE = {
 const NAV = [
   { label: "Home",     href: "/index.html" },
   { label: "Universe", href: "/bible.html" },
-  { label: "Music",    href: "/holler_hellfire_records.html" },
+  { label: "Music",    href: "https://records.hollerandhellfire.net" },
   { label: "Books",    href: "/books.html" },
-  { label: "Author",   href: "/kaylin_renea_author.html" },
-  { label: "Merch",    href: "/store.html" },
+  { label: "Author",   href: "https://author.hollerandhellfire.net" },
+  { label: "Merch",    href: "https://holler-n-hellfire-shop.fourthwall.com" },
   { label: "Blog",     href: "/blog.html" },
   { label: "EPK",      href: "/epk.html" },
-  { label: "WEBBS ENTREPENURESHIP",   href: "/webbs_entrepenureship.html" },
-  { label: "Brian Lee - Founder",  href: "/brian_lee_webb_website.html" }
+  { label: "WEBBS ENTREPENURESHIP",   href: "https://business.hollerandhellfire.net" },
+  { label: "Brian Lee - Founder",  href: "https://brianwebb.hollerandhellfire.net" }
 ];
 
 
@@ -68,7 +68,7 @@ const NAV = [
 const SOCIAL = {
   youtube:    "https://www.youtube.com/@dixiedeadshot",   // update handle
   tiktok:     "https://www.tiktok.com/@dixiedeadshot",
-  instagram:  "https://www.instagram.com/dixiedeadshot",
+  instagram:  "https://www.instagram.com/hollerandhellfire",
   facebook:   "",
   spotify:    "",     // add when distributed
   appleMusic: "",
