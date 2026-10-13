@@ -23,7 +23,7 @@ const SITE = {
   label:      "Holler & Hellfire Records",
   baseUrl:    "https://hollerandhellfire.net",   // no trailing slash
   logoPath:   "/assets/images/banners_logos/main.png",          // update path as needed
-  faviconPath:"/assets/images/banner_logos/favicon.png",
+  faviconPath:"/assets/images/banner_logos/HH_Universe_Favicon.ico",
 
   // Email capture — paste your MailerLite / Kit (ConvertKit) form POST URL
   emailEndpoint: "",
