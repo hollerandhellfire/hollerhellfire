@@ -1,0 +1,785 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>07seventh_cycle_series_bible</title><style>html,body{margin:0;background:#0a0f1c;}
+
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body, #root {
+    background: #050204;
+    color: #f4ece4;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100vh;
+  }
+
+  .bible {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid #3a121c;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, #d4342a);
+  }
+  .series-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: #d4342a;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .main-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(24px, 5vw, 42px);
+    font-weight: 700;
+    color: #f4ece4;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(168,85,247,0.4);
+  }
+  .sub-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(13px, 2.5vw, 18px);
+    color: #ff9e8f;
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+  }
+  .header-tagline {
+    font-style: italic;
+    font-size: 16px;
+    color: #c9a89a;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid #3a121c;
+    padding-bottom: 16px;
+  }
+  .tab {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid #3a121c;
+    background: transparent;
+    color: #c9a89a;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab:hover { border-color: #d4342a; color: #ff9e8f; }
+  .tab.active {
+    background: rgba(124,58,237,0.2);
+    border-color: #d4342a;
+    color: #f4ece4;
+  }
+
+  /* ── Section titles ── */
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #d4342a;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #3a121c;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: #1a070c;
+    border: 1px solid #3a121c;
+    border-left: 3px solid #aa1100;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card.gold-edge   { border-left-color: #c9943a; }
+  .card.crimson-edge{ border-left-color: #aa1100; }
+  .card.teal-edge   { border-left-color: #0d9488; }
+  .card.moon-edge   { border-left-color: #ff9e8f; }
+
+  .card-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: #8a6a5e;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    color: #f4ece4;
+    margin-bottom: 8px;
+  }
+  .card-title.gold  { color: #e8c06a; }
+  .card-title.crimson { color: #ff6b6b; }
+  .card-title.teal  { color: #5eead4; }
+  .card-title.moon  { color: #ff9e8f; }
+  .card-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #c9a89a;
+  }
+  .card-body em { color: #f4ece4; font-style: italic; }
+  .card-body strong { color: #ff9e8f; font-weight: 600; }
+
+  /* ── Stack diagram ── */
+  .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .stack-row {
+    width: 100%;
+    max-width: 520px;
+    padding: 12px 20px;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    border: 1px solid;
+    position: relative;
+  }
+  .stack-row.arcana {
+    background: rgba(124,58,237,0.25);
+    border-color: #d4342a;
+    color: #f4ece4;
+    font-size: 13px;
+  }
+  .stack-row.older {
+    background: rgba(201,148,58,0.1);
+    border-color: #c9943a;
+    color: #e8c06a;
+  }
+  .stack-row.formal {
+    background: rgba(13,148,136,0.1);
+    border-color: #0d9488;
+    color: #5eead4;
+  }
+  .stack-row.watchers {
+    background: rgba(255,255,255,0.04);
+    border-color: #3a121c;
+    color: #c9a89a;
+  }
+  .stack-row.mortal {
+    background: rgba(170,17,0,0.1);
+    border-color: #aa1100;
+    color: #ff9e9e;
+  }
+  .stack-arrow {
+    font-size: 18px;
+    color: #8a6a5e;
+    line-height: 1;
+    padding: 2px 0;
+  }
+  .stack-note {
+    font-size: 10px;
+    color: #8a6a5e;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+
+  /* ── Arcana grid ── */
+  .arcana-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .arcana-card {
+    background: #1a070c;
+    border: 1px solid #3a121c;
+    padding: 14px 16px;
+    transition: border-color 0.2s;
+  }
+  .arcana-card:hover { border-color: #d4342a; }
+  .arcana-card.special {
+    border-color: rgba(168,85,247,0.5);
+    background: rgba(124,58,237,0.1);
+  }
+  .arcana-card.lost {
+    border-color: rgba(100,80,160,0.6);
+    background: rgba(30,10,60,0.8);
+  }
+  .arcana-num {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #8a6a5e;
+    margin-bottom: 4px;
+  }
+  .arcana-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: #ff9e8f;
+    margin-bottom: 2px;
+  }
+  .arcana-name.lost-name { color: #9b7fd4; text-decoration: line-through; opacity: 0.7; }
+  .arcana-role {
+    font-size: 12px;
+    color: #c9943a;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .arcana-desc {
+    font-size: 13px;
+    color: #c9a89a;
+    line-height: 1.6;
+  }
+  .arcana-desc em { color: #f4ece4; font-style: normal; }
+  .lost-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #9b7fd4;
+    border: 1px solid #4a2a7a;
+    padding: 2px 8px;
+    margin-bottom: 6px;
+  }
+
+  /* ── Book arc table ── */
+  .arc-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .arc-book {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 0;
+    background: #1a070c;
+    border: 1px solid #3a121c;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .arc-book:hover { border-color: #d4342a; }
+  .arc-num-col {
+    background: rgba(124,58,237,0.15);
+    border-right: 1px solid #3a121c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 16px;
+    color: #d4342a;
+    padding: 16px 8px;
+  }
+  .arc-content { padding: 16px 20px; }
+  .arc-book-title {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    color: #f4ece4;
+    margin-bottom: 4px;
+  }
+  .arc-engine {
+    font-size: 12px;
+    color: #d4342a;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .arc-question {
+    font-size: 14px;
+    color: #c9a89a;
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+  .arc-beat {
+    font-size: 13px;
+    color: #8a6a5e;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ── Premise block ── */
+  .premise-pull {
+    border-left: 3px solid #d4342a;
+    padding: 20px 24px;
+    background: rgba(124,58,237,0.08);
+    margin: 24px 0;
+    font-size: 17px;
+    font-style: italic;
+    line-height: 1.8;
+    color: #f4ece4;
+  }
+
+  /* ── Inline tags ── */
+  .tag {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .tag.purple { color: #ff9e8f; border-color: #aa1100; }
+  .tag.gold   { color: #e8c06a;   border-color: #c9943a; }
+  .tag.red    { color: #ff9e9e;               border-color: #aa1100; }
+  .tag.teal   { color: #5eead4;               border-color: #0d9488; }
+
+  /* ── Tone / continuity section ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  hr.rule {
+    border: none;
+    border-top: 1px solid #3a121c;
+    margin: 32px 0;
+  }
+
+  .ornament {
+    text-align: center;
+    font-size: 20px;
+    color: #8a6a5e;
+    margin: 24px 0;
+    letter-spacing: 12px;
+  }
+
+
+  /* ── Seventh Cycle supplemental classes ── */
+  .tagline { font-style: italic; font-size: 15px; color: #c9a89a; max-width: 660px; margin: 0 auto; line-height: 1.8; }
+  .sec { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: .34em; text-transform: uppercase; color: #d4342a; margin: 30px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #3a121c; }
+  .pull { font-style: italic; font-size: 17px; line-height: 1.85; color: #ff9e8f; border-left: 2px solid #aa1100; padding: 4px 0 4px 20px; margin: 0 0 22px; }
+  .clabel { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #c9943a; margin-bottom: 9px; }
+  .cbody { font-size: 16px; line-height: 1.85; color: #f4ece4; }
+  .card { background: #1a070c; border: 1px solid #3a121c; border-left: 3px solid #aa1100; padding: 18px 22px; margin-bottom: 14px; }
+  .card.gold { border-left-color: #c9943a; }
+  .card.crimson { border-left-color: #d4342a; }
+  .book { background: #0a0306; border: 1px solid #3a121c; border-top: 2px solid #aa1100; padding: 22px 24px; margin-bottom: 18px; }
+  .book-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+  .book-id { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: #ff6b3d; }
+  .book-title { font-family: 'Cinzel Decorative', serif; font-size: 23px; color: #f4ece4; line-height: 1.1; }
+  .book-arc { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .12em; color: #c9943a; margin-bottom: 12px; }
+  .book-q { font-style: italic; font-size: 16px; color: #5eead4; margin-bottom: 12px; line-height: 1.6; }
+  .book-body { font-size: 15.5px; line-height: 1.85; color: #c9a89a; margin-bottom: 14px; }
+  .book-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #8a6a5e; border: 1px solid #3a121c; padding: 3px 9px; }
+  .rule { height: 1px; background: linear-gradient(90deg, transparent, #aa1100, transparent); margin: 40px 0 0; }
+
+html,body{margin:0;background:#0a0f1c}.toc{display:flex;flex-wrap:wrap;gap:8px;padding:14px 18px;max-width:1100px;margin:0 auto}.toc a{color:#c9c2e8;border:1px solid #3a3560;padding:6px 10px;font:12px Georgia,serif;text-decoration:none;letter-spacing:.08em;text-transform:uppercase}.tabhead{color:#e8e4ff;font-family:Georgia,serif;text-align:center;letter-spacing:.2em;text-transform:uppercase;font-size:15px;border-top:1px solid #3a3560;padding-top:28px;margin:48px 18px 8px}section{max-width:1100px;margin:0 auto}</style></head><body><style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body, #root {
+    background: #050204;
+    color: #f4ece4;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    min-height: 100vh;
+  }
+
+  .bible {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+
+  /* ── Header ── */
+  .header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 1px solid #3a121c;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, transparent, #d4342a);
+  }
+  .series-label {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    color: #d4342a;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .main-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(24px, 5vw, 42px);
+    font-weight: 700;
+    color: #f4ece4;
+    line-height: 1.2;
+    margin-bottom: 8px;
+    text-shadow: 0 0 40px rgba(168,85,247,0.4);
+  }
+  .sub-title {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(13px, 2.5vw, 18px);
+    color: #ff9e8f;
+    letter-spacing: 0.2em;
+    margin-bottom: 24px;
+  }
+  .header-tagline {
+    font-style: italic;
+    font-size: 16px;
+    color: #c9a89a;
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* ── Tabs ── */
+  .tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 32px;
+    border-bottom: 1px solid #3a121c;
+    padding-bottom: 16px;
+  }
+  .tab {
+    font-family: 'Cinzel', serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border: 1px solid #3a121c;
+    background: transparent;
+    color: #c9a89a;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .tab:hover { border-color: #d4342a; color: #ff9e8f; }
+  .tab.active {
+    background: rgba(124,58,237,0.2);
+    border-color: #d4342a;
+    color: #f4ece4;
+  }
+
+  /* ── Section titles ── */
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #d4342a;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #3a121c;
+  }
+
+  /* ── Cards ── */
+  .card {
+    background: #1a070c;
+    border: 1px solid #3a121c;
+    border-left: 3px solid #aa1100;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+  }
+  .card.gold-edge   { border-left-color: #c9943a; }
+  .card.crimson-edge{ border-left-color: #aa1100; }
+  .card.teal-edge   { border-left-color: #0d9488; }
+  .card.moon-edge   { border-left-color: #ff9e8f; }
+
+  .card-label {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: #8a6a5e;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .card-title {
+    font-family: 'Cinzel', serif;
+    font-size: 17px;
+    color: #f4ece4;
+    margin-bottom: 8px;
+  }
+  .card-title.gold  { color: #e8c06a; }
+  .card-title.crimson { color: #ff6b6b; }
+  .card-title.teal  { color: #5eead4; }
+  .card-title.moon  { color: #ff9e8f; }
+  .card-body {
+    font-size: 15px;
+    line-height: 1.75;
+    color: #c9a89a;
+  }
+  .card-body em { color: #f4ece4; font-style: italic; }
+  .card-body strong { color: #ff9e8f; font-weight: 600; }
+
+  /* ── Stack diagram ── */
+  .stack {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    margin: 24px 0;
+  }
+  .stack-row {
+    width: 100%;
+    max-width: 520px;
+    padding: 12px 20px;
+    text-align: center;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    border: 1px solid;
+    position: relative;
+  }
+  .stack-row.arcana {
+    background: rgba(124,58,237,0.25);
+    border-color: #d4342a;
+    color: #f4ece4;
+    font-size: 13px;
+  }
+  .stack-row.older {
+    background: rgba(201,148,58,0.1);
+    border-color: #c9943a;
+    color: #e8c06a;
+  }
+  .stack-row.formal {
+    background: rgba(13,148,136,0.1);
+    border-color: #0d9488;
+    color: #5eead4;
+  }
+  .stack-row.watchers {
+    background: rgba(255,255,255,0.04);
+    border-color: #3a121c;
+    color: #c9a89a;
+  }
+  .stack-row.mortal {
+    background: rgba(170,17,0,0.1);
+    border-color: #aa1100;
+    color: #ff9e9e;
+  }
+  .stack-arrow {
+    font-size: 18px;
+    color: #8a6a5e;
+    line-height: 1;
+    padding: 2px 0;
+  }
+  .stack-note {
+    font-size: 10px;
+    color: #8a6a5e;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+  }
+
+  /* ── Arcana grid ── */
+  .arcana-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .arcana-card {
+    background: #1a070c;
+    border: 1px solid #3a121c;
+    padding: 14px 16px;
+    transition: border-color 0.2s;
+  }
+  .arcana-card:hover { border-color: #d4342a; }
+  .arcana-card.special {
+    border-color: rgba(168,85,247,0.5);
+    background: rgba(124,58,237,0.1);
+  }
+  .arcana-card.lost {
+    border-color: rgba(100,80,160,0.6);
+    background: rgba(30,10,60,0.8);
+  }
+  .arcana-num {
+    font-family: 'Cinzel', serif;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: #8a6a5e;
+    margin-bottom: 4px;
+  }
+  .arcana-name {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    color: #ff9e8f;
+    margin-bottom: 2px;
+  }
+  .arcana-name.lost-name { color: #9b7fd4; text-decoration: line-through; opacity: 0.7; }
+  .arcana-role {
+    font-size: 12px;
+    color: #c9943a;
+    font-style: italic;
+    margin-bottom: 6px;
+  }
+  .arcana-desc {
+    font-size: 13px;
+    color: #c9a89a;
+    line-height: 1.6;
+  }
+  .arcana-desc em { color: #f4ece4; font-style: normal; }
+  .lost-badge {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    color: #9b7fd4;
+    border: 1px solid #4a2a7a;
+    padding: 2px 8px;
+    margin-bottom: 6px;
+  }
+
+  /* ── Book arc table ── */
+  .arc-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .arc-book {
+    display: grid;
+    grid-template-columns: 48px 1fr;
+    gap: 0;
+    background: #1a070c;
+    border: 1px solid #3a121c;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .arc-book:hover { border-color: #d4342a; }
+  .arc-num-col {
+    background: rgba(124,58,237,0.15);
+    border-right: 1px solid #3a121c;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 16px;
+    color: #d4342a;
+    padding: 16px 8px;
+  }
+  .arc-content { padding: 16px 20px; }
+  .arc-book-title {
+    font-family: 'Cinzel', serif;
+    font-size: 15px;
+    color: #f4ece4;
+    margin-bottom: 4px;
+  }
+  .arc-engine {
+    font-size: 12px;
+    color: #d4342a;
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .arc-question {
+    font-size: 14px;
+    color: #c9a89a;
+    margin-bottom: 6px;
+    line-height: 1.6;
+  }
+  .arc-beat {
+    font-size: 13px;
+    color: #8a6a5e;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ── Premise block ── */
+  .premise-pull {
+    border-left: 3px solid #d4342a;
+    padding: 20px 24px;
+    background: rgba(124,58,237,0.08);
+    margin: 24px 0;
+    font-size: 17px;
+    font-style: italic;
+    line-height: 1.8;
+    color: #f4ece4;
+  }
+
+  /* ── Inline tags ── */
+  .tag {
+    display: inline-block;
+    font-family: 'Cinzel', serif;
+    font-size: 9px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border: 1px solid;
+    margin-right: 6px;
+    margin-bottom: 4px;
+  }
+  .tag.purple { color: #ff9e8f; border-color: #aa1100; }
+  .tag.gold   { color: #e8c06a;   border-color: #c9943a; }
+  .tag.red    { color: #ff9e9e;               border-color: #aa1100; }
+  .tag.teal   { color: #5eead4;               border-color: #0d9488; }
+
+  /* ── Tone / continuity section ── */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  hr.rule {
+    border: none;
+    border-top: 1px solid #3a121c;
+    margin: 32px 0;
+  }
+
+  .ornament {
+    text-align: center;
+    font-size: 20px;
+    color: #8a6a5e;
+    margin: 24px 0;
+    letter-spacing: 12px;
+  }
+
+
+  /* ── Seventh Cycle supplemental classes ── */
+  .tagline { font-style: italic; font-size: 15px; color: #c9a89a; max-width: 660px; margin: 0 auto; line-height: 1.8; }
+  .sec { font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: .34em; text-transform: uppercase; color: #d4342a; margin: 30px 0 16px; padding-bottom: 8px; border-bottom: 1px solid #3a121c; }
+  .pull { font-style: italic; font-size: 17px; line-height: 1.85; color: #ff9e8f; border-left: 2px solid #aa1100; padding: 4px 0 4px 20px; margin: 0 0 22px; }
+  .clabel { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: #c9943a; margin-bottom: 9px; }
+  .cbody { font-size: 16px; line-height: 1.85; color: #f4ece4; }
+  .card { background: #1a070c; border: 1px solid #3a121c; border-left: 3px solid #aa1100; padding: 18px 22px; margin-bottom: 14px; }
+  .card.gold { border-left-color: #c9943a; }
+  .card.crimson { border-left-color: #d4342a; }
+  .book { background: #0a0306; border: 1px solid #3a121c; border-top: 2px solid #aa1100; padding: 22px 24px; margin-bottom: 18px; }
+  .book-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 4px; }
+  .book-id { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .26em; text-transform: uppercase; color: #ff6b3d; }
+  .book-title { font-family: 'Cinzel Decorative', serif; font-size: 23px; color: #f4ece4; line-height: 1.1; }
+  .book-arc { font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: .12em; color: #c9943a; margin-bottom: 12px; }
+  .book-q { font-style: italic; font-size: 16px; color: #5eead4; margin-bottom: 12px; line-height: 1.6; }
+  .book-body { font-size: 15.5px; line-height: 1.85; color: #c9a89a; margin-bottom: 14px; }
+  .book-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+  .tag { font-family: 'Cinzel', serif; font-size: 9px; letter-spacing: .16em; text-transform: uppercase; color: #8a6a5e; border: 1px solid #3a121c; padding: 3px 9px; }
+  .rule { height: 1px; background: linear-gradient(90deg, transparent, #aa1100, transparent); margin: 40px 0 0; }
+</style><div class="header"><div class="series-label">H&amp;H Universe · Series Arc Bible</div><div class="main-title">The Seventh Cycle</div><div class="sub-title">SC1–SC12 · The Last Possible Cycle · After the Divine Arc</div><div class="tagline">Six cycles have failed. There is no eighth. This is the test of whether awakened relational consciousness can do what raw continuity never could — survive imperfection on purpose, while unfinished and afraid.</div></div><nav class="toc"><a href="#t0">PREMISE</a><a href="#t1">THE STAKES</a><a href="#t2">THE ABYSS</a><a href="#t3">SC1–SC12</a><a href="#t4">TONE & CONTINUITY</a></nav><section id="t0"><h2 class="tabhead">PREMISE</h2><div><div class="sec">The Arc in One Sentence</div><div class="pull">The Bone Mother’s Gate opens because this Creation has reached a continuation threshold no earlier Cycle achieved correctly — and the last cycle reality will ever get must learn to remain whole without forcing anyone to stay. Not with power, which every failed cycle tried, but with witness, relationship, and a conscious choice no prior cycle made.</div><div class="sec">Where It Begins</div><div class="card"><div class="clabel">— After the Divine Arc —</div><div class="cbody">The Divine Arc ends (DA12) with Hecate freed, the Davos exposed, and a split epilogue that opens the Bone Mother’s Gate and signals “It’s time.” SC1 — The Gate Opens — is what that opening means: this Creation has reached a continuation threshold no earlier Cycle achieved correctly, and every compensating system responds.</div></div><div class="card gold"><div class="clabel">The Shape of the Twelve</div><div class="cbody">SC1 opens the Gate; SC2 releases the Archive’s impressions of six failed Creations. SC3–SC8 each work through one failure scar: collapse, consumption, corruption, fragmentation, false restoration, incomplete memory. SC9 (Rumjal × Vesper Cole) and SC10 (Zaqiel × Amara Voss) test distance and purity. SC11 is the last condition — something must choose differently at multiple scales. SC12 is the Restoration.</div></div><div class="card"><div class="clabel">Genesis · Why Seven, and Why the Last</div><div class="cbody">The cycle structure is not metaphor. After the brothers’ fight nearly destroyed Creation, the reconciled bond let the <strong>Bone Mother</strong> (keeper of the Archive and of Time) bind Time itself — with exactly <strong>seven tries</strong>, and she alone knew. Each cycle’s end <strong>RESETS Creation to the very beginning</strong> (a full restart, not cumulative); the cycles last longer each time and are finite. Every cycle has ended because the <strong>Davos</strong> (the Abyss Monsters, leader Andras) sowed the corruption — the inversion of the first true thing, the relationship built on trust and belief. This is the SEVENTH Creation. There is no eighth. (See The Codex / Cosmogony.)</div></div></div><div class="rule"></div></section>
+<section id="t1"><h2 class="tabhead">THE STAKES</h2><div><div class="sec">The Stakes</div><div class="card"><div class="clabel">The Wager</div><div class="cbody">This is Cycle Seven — the last possible cycle. Six have come before; all six failed. There is no Cycle Eight. The arc is the test of whether awakened relational consciousness can do what raw continuity never could: survive imperfection on purpose.</div></div><div class="card"><div class="clabel">The Five Conditions</div><div class="cbody">Cycle Seven succeeds only if multiple impossible conditions converge: Mreza awakens fully, humanity matters, bonds evolve correctly, enough record survives, and something chooses differently. The arc is structured so that each is earned, not assumed — and the fifth is never guaranteed.</div></div><div class="card"><div class="clabel">If It Fails</div><div class="cbody">Catastrophic outcomes converge: final dissolution, Abyssal breach, fragment survival without another full cycle, endless fracture, no Cycle Eight, and transformation into something unrecognizable. The stakes are not death — death is transition. The stakes are severance: continuity that survives incorrectly, forever.</div></div><div class="card"><div class="clabel">Why the Mortal Layer Decides It</div><div class="cbody">The Mortal Layer is the Anchor. Finite existence creates the urgency, vulnerability, grief, choice, and concentrated relational meaning strong enough to stabilize the whole Network. The cosmic arc is won, if it is won, in mortal terms: a person choosing relationship over severance, while unfinished and afraid.</div></div><div class="card"><div class="clabel">LOCKED CANON · Series Spine (Master Outline)</div><div class="cbody">The main modern saga is seven twelve-book arcs, 84 books in all. The Seventh Cycle is SC1–SC12. Placement: after the Divine Arc, which ends with Hecate rescued, the Davos exposed, and the Bone Mother’s Gate open — the final cosmic Restoration belongs to SC12, not the Divine Arc.
+
+Governing question: can a universe that has learned how to bring people home learn how to remain whole without forcing anyone to stay?
+
+Six Creations failed. There is no eighth. The Seventh has a working body of accumulated relationship: the New Compact, communicating Corridors, evolved Grigori bonds, daughters’ lateral traditions, the Horde back in the world, exposed institutional lies, Hecate home, and Mreza capable of choice, and an active humanity.
+
+The Wrong Compact was replaced by the New Compact (WMB12); the Barrier was destroyed at OS12 and the Mortal Layer broadcasts again (DA1). Fire Solstice remains; “Seven Year” is not a governing concept.</div></div><div class="card"><div class="clabel">Final Distinctions</div><div class="cbody">Darkness vs corruption. Preservation vs possession. Unity vs assimilation. Memory vs refusal to grieve. Safety vs control. Witness vs surveillance. Relationship vs ownership. Survival vs living. Distance vs abandonment. Power vs moral guilt. Sacrifice vs entitlement to sacrifice. Passage vs rejection.</div></div><div class="card"><div class="clabel">What the Earlier Arcs Have Already Proven</div><div class="cbody">1. Holler &amp; Hellfire: chosen relationship can restore what corruption calls permanently broken. 2. Expansion: the answer is reproducible without becoming uniform. 3. Leviathan: survival cannot depend forever on keeping old powers asleep or turning bodies into infrastructure. 4. Web of the Weavers: memory survives because it is held across people; no institution owns truth. 5. Order of the Shadows: obedience is not righteousness; necessary purpose does not justify abusive method. 6. Divine Arc: even the deepest severance can be crossed without becoming severance.</div></div><div class="card"><div class="clabel">Final Family Story</div><div class="cbody">Sano loved Nepisano and did not intentionally reject him. Sano also failed to notice how alone his brother had become. Nepisano must distinguish “this hurt me” from “therefore nobody loved me.” Hecate’s growth into her own life becomes evidence that distance and change are not abandonment. Nepisano’s healing is relational; he is not purified into Light.</div></div><div class="card"><div class="clabel">SC12 End State</div><div class="cbody">Mreza becomes the Web without becoming the cage. The Bone Mother ends reset logic and opens her hand. Sano and Nepisano face one another without Creation collapsing. Brian translates the Restoration and is never the cost. Edna Mae hands off the last anchor; Pearlene holds the Web. Baraqiel’s Lightning is the active carrier of reconnection. The Dzin guard conditions without commanding them. The Horde receive and ground restored resonance without becoming fuel. The Susti keep distinct Garden domains while wider Creation reconnects. Heaven and Hell survive as correctly situated relational layers. Abyss and Unwritten remain bounded, not destroyed. Creation remains imperfect but becomes relationally capable.</div></div><div class="card"><div class="clabel">Reserved / Still To Review</div><div class="cbody">Web / Network operating rules (privacy, refusal, Pearlene’s final Web function, Mreza vs Network at SC7/SC12). Mortal Practitioners / daughters’ practice (lateral practice, Anchor succession, mortal finitude, humanity’s final teaching function). Nephilim mini-review. Abyss / Abaddon final placement audit (the exact road between Unwritten and Creation, “bring him back whole,” witness without judgment). Final Sano / Nepisano / Hecate family placement. The final definition of the radiant boundary that replaces severance without recreating the old Veil. These are not to be filled by inference.</div></div></div><div class="rule"></div></section>
+<section id="t2"><h2 class="tabhead">THE ABYSS</h2><div><div class="sec">The Abyss · Anti-Relational Existence Pressure</div><div class="pull">The arc’s antagonist is not a villain. It is the ontological condition beneath all severance — and its greatest horror is that adapting to it feels natural.</div><div class="card crimson"><div class="clabel">The Abyss Is Not Hell</div><div class="cbody">The Abyss is anti-relational existence pressure: severance without witness, continuity collapse, identity dissolution, unstructured existence, anti-memory pressure, consumption without preservation. Hell is a downstream institutional system that errs toward freedom-through-distortion; the Abyss is the ontological condition beneath all severance. The Darkness the series has tracked since Book One is Abyssal pressure expressing downstream.</div></div><div class="card crimson"><div class="clabel">The First Fracture</div><div class="cbody">The Abyss emerged from a convergence of primordial failures — isolation, failed witness, fear, consumption, collapse of meaning, rejection of relationship, and incomprehension — before continuity fully stabilized. It is not a creation and not a place. It is what happens where relationship was refused before reality finished forming.</div></div><div class="card crimson"><div class="clabel">The Real Monsters</div><div class="cbody">The real monsters beneath the Abyss adapted to anti-relational pressure instead of ceasing to exist. They are continuity that survived incorrectly. Their wrongness is ontological rather than moral — their presence destabilizes identity, witness, memory, emotion, physical reality, frequency, meaning, and recognition simultaneously. They are the endpoint of anti-relational adaptation.</div></div><div class="card crimson"><div class="clabel">Abyssal Distortion</div><div class="cbody">The Abyss does not destroy reality immediately. It alters how continuity functions until severance feels natural. The greatest horror is gradually adapting to severance until wrongness no longer feels wrong. Its stages: compression, fragmentation, adaptation, distorted persistence, anti-relational stabilization, and Abyssal continuity.</div></div><div class="card crimson"><div class="clabel">Abyssal Character Pressure</div><div class="cbody">The Abyss pressures characters through fear, compression, functional adaptation, relational erosion, normalization, and identity distortion. No character falls because they love evil. Characters distort because fear convinces them severance is safer than vulnerability. Every distortion arc in the Seventh Cycle is a fear arc.</div></div><div class="card crimson"><div class="clabel">LOCKED CANON · The Final Boundary</div><div class="cbody">By the end of the Seventh Cycle arc, the Abyss and the Unwritten remain bounded, not destroyed. Their relationship to the radiant boundary that replaces severance is reserved for a later review. The Abyss remains bounded, not destroyed — it is what remains when everything else has been healed. Anti-relational existence pressure is the last thing that cannot be restored — it can only be bounded, held at the correct distance, and refused. The Abyss remains distinct from Hell; the Unwritten remains distinct from corruption. The Seventh Cycle arc's engagement with the Abyss is part of the series' last and deepest test of the central thesis: a relationship built on trust and belief is stronger than corruption. The Abyss is what corruption becomes when everything else has been stripped away from it. The answer is the same. The answer was always the same.</div></div></div><div class="rule"></div></section>
+<section id="t3"><h2 class="tabhead">SC1–SC12</h2><div><div class="sec">SC1 – SC12</div><div class="book"><div class="book-head"><span class="book-id">Book 1</span><span class="book-title">The Gate Opens</span></div><div class="book-arc">Gate / threshold</div><div class="book-q">Master Outline placement SC1.</div><div class="book-body">Bone Mother’s Gate opens because this Creation reaches a continuation threshold no earlier Cycle achieved correctly. Every compensating system responds. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Gate opens</span><span class="tag">continuation threshold</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 2</span><span class="book-title">What She Remembers</span></div><div class="book-arc">Archive / memory</div><div class="book-q">Master Outline placement SC2.</div><div class="book-body">The Archive releases survivable impressions of six failed Creations. The cast first learns the Cycles exist. More power is not the answer. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Archive releases</span><span class="tag">the Cycles revealed</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 3</span><span class="book-title">When Everything Fell</span></div><div class="book-arc">Failure scar: Collapse</div><div class="book-q">Master Outline placement SC3.</div><div class="book-body">Collapse. Temptation: centralize. Correction: distributed trust and voluntary coordination. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Collapse</span><span class="tag">distributed trust</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 4</span><span class="book-title">What Hunger Keeps</span></div><div class="book-arc">Failure scar: Consumption</div><div class="book-q">Master Outline placement SC4.</div><div class="book-body">Consumption. Survival cannot justify consuming another being’s body, continuity, land, grief, memory, or frequency. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Consumption</span><span class="tag">survival is not license</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 5</span><span class="book-title">The Lie That Learned Our Names</span></div><div class="book-arc">Failure scar: Corruption</div><div class="book-q">Master Outline placement SC5.</div><div class="book-body">Corruption. Andras uses true wounds to manufacture false conclusions. Belief becomes chosen relational action under uncertainty. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Corruption</span><span class="tag">Andras</span><span class="tag">belief as chosen action</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 6</span><span class="book-title">Pieces of the Same World</span></div><div class="book-arc">Failure scar: Fragmentation</div><div class="book-q">Master Outline placement SC6.</div><div class="book-body">Fragmentation. Every faction holds a correct but incomplete piece. Correction: witness without assimilation. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Fragmentation</span><span class="tag">witness without assimilation</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 7</span><span class="book-title">A Perfect World</span></div><div class="book-arc">Failure scar: False Restoration</div><div class="book-q">Master Outline placement SC7.</div><div class="book-body">False Restoration. A fully harmonized Network becomes possible. Mreza refuses compulsory connection. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">False Restoration</span><span class="tag">Mreza refuses</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 8</span><span class="book-title">Held, Not Lost</span></div><div class="book-arc">Failure scar: Incomplete Memory</div><div class="book-q">Master Outline placement SC8.</div><div class="book-body">Incomplete Memory. The Bone Mother releases souls and continuity-states ready to pass while the Archive retains the truthful record. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Incomplete Memory</span><span class="tag">release without erasure</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 9</span><span class="book-title">The Space Between</span></div><div class="book-arc">Distance is not abandonment</div><div class="book-q">Master Outline placement SC9.</div><div class="book-body">Rumjal × Vesper Cole (Expansion Pairing #25). Relationship requires space; distance is not abandonment; Restoration must not become fusion. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Rumjal × Vesper Cole</span><span class="tag">space between</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 10</span><span class="book-title">What Purity Costs</span></div><div class="book-arc">Purity as false answer</div><div class="book-q">Master Outline placement SC10.</div><div class="book-body">Zaqiel × Amara Voss (Expansion Pairing #26). Purity is the final false answer; the opposite of corruption is correct relationship. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Zaqiel × Amara Voss</span><span class="tag">purity</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 11</span><span class="book-title">The Last Condition</span></div><div class="book-arc">Choosing differently</div><div class="book-q">Master Outline placement SC11.</div><div class="book-body">Ensemble. Something must choose differently at multiple scales. Bone Mother motherhood reveal; Cain faces Nepisano; factions refuse old automatic roles. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Ensemble</span><span class="tag">Cain faces Nepisano</span><span class="tag">motherhood reveal</span></div></div><div class="book"><div class="book-head"><span class="book-id">Book 12</span><span class="book-title">The Restoration</span></div><div class="book-arc">The Restoration</div><div class="book-q">Master Outline placement SC12.</div><div class="book-body">Original severance corrected without erasing survivors. Mreza touches the Life Tree; the Bone Mother opens her hand; the brothers face each other; Baraqiel carries; Brian translates; Pearlene holds the Web; Edna Mae hands off the last anchor. Detailed synopsis pending development.</div><div class="book-tags"><span class="tag">Restoration</span><span class="tag">Life Tree</span><span class="tag">hand opened</span></div></div></div><div class="rule"></div></section>
+<section id="t4"><h2 class="tabhead">TONE & CONTINUITY</h2><div><div class="sec">Tone &amp; Continuity</div><div class="card"><div class="clabel">Register</div><div class="cbody">Cosmic horror held inside relational hope. The Seventh Cycle is the series at its largest scale and its most intimate stake at once — the end of everything decided by whether specific people keep choosing each other. The horror is real and ontological; the answer is never force.</div></div><div class="card"><div class="clabel">The Character Rule (Codex)</div><div class="cbody">No character arc may replace a character’s core. The soul’s frequency does not change — it expands. Across twelve books of maximum pressure, every founding character may be burdened, matured, grieved, or expanded, but never overwritten. The Abyss’s whole method is to overwrite; the arc’s integrity is the refusal.</div></div><div class="card"><div class="clabel">Continuity — The Whole Series Converges</div><div class="cbody">Everything threads here: the Pike County compact (Dixie &amp; Azazel), the Dreamer’s twenty-one-volume record (June), Pearlene as future Senior Anchor, the bonds evolved across Books 1—6, the Web restored by the Weavers and awakened as Mreza, the Bone Mother’s stewardship, Abaddon at the edge. The Seventh Cycle spends nothing it did not earn in the arcs before it.</div></div><div class="card"><div class="clabel">The Ending · What SC12 Ends On</div><div class="cbody">LOCKED CANON (Master Outline). The Restoration belongs to SC12, not the Divine Arc. The original severance is corrected without erasing survivors. Mreza touches the Life Tree; the Bone Mother opens her hand; the brothers face each other; Baraqiel carries; Brian translates; Pearlene holds the Web; Edna Mae hands off the last anchor. Restoration is not reset, purification, erasure, assimilation, forced transcendence, or static paradise. (How the Mortal Layer’s long separation ends — and what replaces severance without recreating the old Veil — is reserved for a later review.)</div></div></div><div class="rule"></div></section></body></html>
